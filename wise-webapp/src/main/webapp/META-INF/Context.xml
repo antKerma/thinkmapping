@@ -11,6 +11,6 @@
             username="root"
             password=""
             driverClassName="com.mysql.jdbc.Driver"
-            url="jdbc:mysql://localhost/wisemapping?autoReconnect=true"/>
+            url="${DATABASE_URL}"/>
 
 </Context>

@@ -1,0 +1,1 @@
+web: java $JAVA_OPTS -jar wise-webapp/target/dependency/jetty-runner.jar --port $PORT wise-webapp/target/*.war
