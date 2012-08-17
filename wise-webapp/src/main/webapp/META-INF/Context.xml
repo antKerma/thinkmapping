@@ -9,6 +9,6 @@
             maxActive="100"
             maxIdle="30" maxWait="10000"
             driverClassName="com.mysql.jdbc.Driver"
-            url="${DATABASE_URL}"/>
+            url="jdbc:mysql://localhost/wisemapping?autoReconnect=true"/>
 
 </Context>

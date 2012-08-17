@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -jar wise-webapp/target/dependency/jetty-runner.jar --port $PORT wise-webapp/target/*.war -Ddatabase.url=jdbc:mysql://us-cdbr-east.cleardb.com/heroku_f2f7e9e753c2efa?reconnect=true -Ddatabase.driver=com.mysql.jdbc.Driver -Ddatabase.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect -Ddatabase.username=b5798d31725e7e -Ddatabase.password=8ed7bb7e
+web: java $JAVA_OPTS -Dspring.profiles.active=production -jar wise-webapp/target/dependency/jetty-runner.jar --port $PORT wise-webapp/target/*.war
