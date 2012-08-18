@@ -93,7 +93,7 @@
             // Customize search action ...
             $('#mindmapListTable_filter').appendTo("#tableActions");
             $('#mindmapListTable_filter input').addClass('input-medium search-query');
-            $('#mindmapListTable_filter input').attr('placeholder', 'Search');
+            $('#mindmapListTable_filter input').attr('placeholder', '<spring:message code="SEARCH"/>');
             $("#mindmapListTable_info").appendTo("#pageInfo");
 
             // Re-arrange pagination actions ...
