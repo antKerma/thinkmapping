@@ -29,15 +29,24 @@
     <div id="headerToolbar">
         <c:choose>
             <c:when test="${principal != null}">
-                <div id="headerActions">
-                    <spring:message code="WELCOME"/>, ${principal.firstname}
-                    | <span><a href="c/maps/"><spring:message
-                        code="MY_WISEMAPS"/></a></span>
-                    | <span><a id="userSettingsBtn" href="#"
-                               title="<spring:message code="ACCOUNT_DETAIL"/>"><spring:message
-                        code="ACCOUNT"/></a></span>
-                    | <span><a href="c/logout"
-                               title="<spring:message code="LOGOUT"/>"><spring:message code="LOGOUT"/></a></span>
+                <div class="wrapper">
+                    <span><spring:message code="WELCOME"/>, <strong>${principal.firstname}</strong></span>
+                    <nav class="main-menu">
+                        <ul>
+                            <li id="call-home">
+                                <a href="c/home"><spring:message code="HOME"/></a>
+                            </li>
+                            <li id="call-maps" class="maps">
+                                <a href="c/maps/"><spring:message code="MY_WISEMAPS"/></a>
+                            </li>
+                            <li id="call-settings">
+                                <a id="userSettingsBtn" href="#" title="<spring:message code="ACCOUNT_DETAIL"/>"><spring:message code="SETTINGS"/></a>
+                            </li>
+                            <li id="call-logout">
+                                <a href="c/logout" title="<spring:message code="LOGOUT"/>"><spring:message code="LOGOUT"/></a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </c:when>
             <c:when test="${param.removeSignin!=true}">
@@ -50,18 +59,15 @@
             </c:when>
         </c:choose>
     </div>
-</div>
-<c:if test="${param.onlyActionHeader!=true}">
-    <div id="headerContent">
-        <a href="c/home" title="Homepage">
-            <div id="headerLogo">&nbsp;</div>
-        </a>
-
-        <div id="headerSlogan">
-            <spring:message code="SITE.SLOGAN"/>
+    <c:if test="${param.onlyActionHeader!=true}">
+        <div class="wrapper">
+            <a id="logo" href="#">
+                <img src="/images/thinkmapping-logo.png" alt="Think Mapping" title="Think Mapping">
+            </a>
         </div>
-    </div>
-</c:if>
+    </c:if>
+</div>
+
 
 
 <script type="text/javascript">

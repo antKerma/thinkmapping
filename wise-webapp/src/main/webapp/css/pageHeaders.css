@@ -4,21 +4,139 @@
     height: 78px;
     width: 100%;
     background: white;
-    border-bottom: 1px solid #bbb4d6;
     position: absolute;
     top: 0;
     left: 0;
 }
 
 #headerToolbar {
-    height: 30px;
+    height: 42px;
     width: 100%;
-    background-color: #171a17;
-    border-top: 1px solid #999999;
-    border-bottom: 1px solid #424141;
+    background: #494542;
     color: white;
     font-size: small;
     font-style: normal;
+}
+
+#header .wrapper {
+    width: 990px;
+    margin: 0 auto;
+    position: relative;
+}
+
+#header .wrapper:first-child {
+    margin: 0 auto 0 auto;
+}
+
+#header .wrapper {
+    margin: 0 auto 50px auto;
+}
+
+
+
+#headerToolbar .wrapper span {
+    float: right;
+    margin-right: 36px;
+    background: url(../images/sprite.png) no-repeat 0px 3px;
+    padding-left: 18px;
+    font-family: Arial, Helvetica, "Sans Serif";
+    font-size: 0.625em;
+    font-weight: bold;
+    line-height: 2.25em;
+    color: #fff;
+    text-transform: uppercase;
+    text-shadow: black 0 -1px 1px;
+}
+
+#headerToolbar .main-menu {
+    clear: right;
+    float: right;
+    height: 34px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -ms-border-radius: 6px;
+    -o-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: black 0 -1px 1px;
+    -moz-box-shadow: black 0 -1px 1px;
+    box-shadow: black 0 -1px 1px;
+    background-color: #8495ce;
+    background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #8fa2e0), color-stop(100%, #7989bd));
+    background: -webkit-linear-gradient(top, #8fa2e0 0%, #7989bd 100%);
+    background: -moz-linear-gradient(top, #8fa2e0 0%, #7989bd 100%);
+    background: -o-linear-gradient(top, #8fa2e0 0%, #7989bd 100%);
+    background: -ms-linear-gradient(top, #8fa2e0 0%, #7989bd 100%);
+    -pie-background: linear-gradient(top, #8fa2e0 0%, #7989bd 100%);
+    background: linear-gradient(top, #8fa2e0 0%, #7989bd 100%);
+}
+
+#headerToolbar .main-menu ul, #headerToolbar .main-menu ol {
+    list-style: none;
+}
+
+#headerToolbar .main-menu li {
+    float: left;
+    line-height: 1;
+}
+
+#headerToolbar .main-menu li a {
+    float: left;
+    padding: 10px 20px;
+    font-family: Arial, Helvetica, "Sans Serif";
+    font-size: 0.625em;
+    font-weight: bold;
+    color: white;
+    text-shadow: #5275C4 0 -1px 1px;
+    text-transform: uppercase;
+}
+
+/* line 228, ../sass/styles.scss */
+#headerToolbar .main-menu li#call-home a {
+    padding: 10px 0 14px 55px;
+    background: url(../images/sprite.png) no-repeat 20px -35px;
+}
+/* line 229, ../sass/styles.scss */
+#headerToolbar .main-menu li#call-home a:after {
+    content: " |";
+}
+/* line 234, ../sass/styles.scss */
+#headerToolbar .main-menu li#call-home a:hover {
+    background-position: -100px -35px;
+}
+/* line 236, ../sass/styles.scss */
+#headerToolbar .main-menu li#call-maps a {
+    padding: 10px 0 14px 28px;
+    background: url(../images/sprite.png) no-repeat 10px -110px;
+}
+/* line 237, ../sass/styles.scss */
+#headerToolbar .main-menu li#call-maps a:after {
+    content: " |";
+}
+/* line 241, ../sass/styles.scss */
+#headerToolbar .main-menu li#call-maps a:hover {
+    background-position: -110px -110px;
+}
+/* line 243, ../sass/styles.scss */
+#headerToolbar .main-menu li#call-settings a {
+    padding: 10px 0 14px 28px;
+    background: url(../images/sprite.png) no-repeat 10px -70px;
+}
+/* line 244, ../sass/styles.scss */
+#headerToolbar .main-menu li#call-settings a:after {
+    content: " |";
+}
+/* line 248, ../sass/styles.scss */
+#headerToolbar .main-menu li#call-settings a:hover {
+    background-position: -110px -70px;
+}
+/* line 250, ../sass/styles.scss */
+#headerToolbar .main-menu li#call-logout a {
+    padding: 10px 25px 14px 28px;
+    background: url(../images/sprite.png) no-repeat 10px -150px;
+}
+/* line 254, ../sass/styles.scss */
+#headerToolbar .main-menu li#call-logout a:hover {
+    background-position: -110px -150px;
 }
 
 #headerContent {
@@ -52,6 +170,17 @@
     padding-left: 7px;
     font-weight: bold;
     vertical-align: middle;
+}
+
+#header #logo {
+    float: left;
+    width: 324px;
+    height: 98px;
+    margin: 25px 0 0 15px;
+}
+
+#header #logo {
+    margin: 25px 0 50px 15px;
 }
 
 #headerButtons {
