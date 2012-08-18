@@ -165,12 +165,9 @@
                             code="DELETE"/></button>
                 </div>
 
-                <div id="infoBtn" class="btn-group act-single" style="display:none">
+                <div id="actionsBtn" class="btn-group act-single" style="display:none">
                     <button class="btn btn-primary"><i class="icon-exclamation-sign icon-white"></i> <spring:message
                             code="INFO"/></button>
-                </div>
-
-                <div id="actionsBtn" class="btn-group act-single" style="display:none">
                     <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                         <i class="icon-asterisk icon-white"></i> <spring:message code="MORE"/>
                         <span class="caret"></span>
