@@ -49,7 +49,7 @@ mindplot.DragTopic = new Class({
         // All topic element must be positioned based on the innerShape.
         var draggedNode = this._draggedNode;
         var size = draggedNode.getSize();
-        var cx = Math.ceil(position.x - (size.width / 2));
+        var cx = position.x - (position.x > 0 ? 0 : size.width);
         var cy = Math.ceil(position.y - (size.height / 2));
         this._elem2d.setPosition(cx, cy);
 
@@ -93,29 +93,6 @@ mindplot.DragTopic = new Class({
         // Clear connection line ...
         var dragPivot = this._getDragPivot();
         dragPivot.disconnect(workspace);
-    },
-
-    canBeConnectedTo:function (targetTopic) {
-        $assert(targetTopic, 'parent can not be null');
-
-        var result = true;
-        if (!targetTopic.areChildrenShrunken() && !targetTopic.isCollapsed()) {
-            // Dragged node can not be connected to himself.
-            if (targetTopic == this._draggedNode) {
-                result = false;
-            } else {
-                var draggedNode = this.getDraggedTopic();
-                var topicPosition = this.getPosition();
-
-                var targetTopicModel = targetTopic.getModel();
-                var childTopicModel = draggedNode.getModel();
-
-                result = targetTopicModel.canBeConnected(childTopicModel, topicPosition, targetTopic.getSize());
-            }
-        } else {
-            result = false;
-        }
-        return result;
     },
 
     connectTo:function (parent) {
