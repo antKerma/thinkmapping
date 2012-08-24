@@ -24,11 +24,11 @@
 /* ----------------------------- General -------------------------------- */
 
 #mindmapListContainer {
-    background: #FFFFFF;
     margin: 0 auto;
     width: @body-width;
     padding: @base-padding;
     margin-top: 150px;
+    color: #494542;
 }
 
 .rounded-corners(@radius: 5px){
@@ -36,6 +36,13 @@
     -webkit-border-radius: @radius;
     -moz-border-radius: @radius;
 }
+
+body {
+    background: #fbfbfb;
+}
+
+a { color: #494542 }
+a:hover { color: #494542; text-decoration: underline }
 
 /* ------------------------------ Table --------------------------------- */
 
@@ -198,6 +205,11 @@ input#selectAll {
     float: left;
     margin-right: 2%;
     margin-top: 80px
+}
+
+#foldersContainer .nav-list > .active > a,
+#foldersContainer .nav-list > .active > a:hover {
+  background-color: #9DB900;
 }
 
 span.starredOff {
