@@ -89,7 +89,6 @@
 
     <bean id="localeResolver"
           class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
-       <property name="defaultLocale" value="en" />
     </bean>
 
     <bean id="reCaptcha" class="net.tanesha.recaptcha.ReCaptchaImpl">
@@ -112,9 +111,9 @@
         </property>
     </bean>
 
-    <beans profile="production">
+    <beans profile="heroku">
         <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-            <property name="location" value="/WEB-INF/prod.properties" />
+            <property name="location" value="/WEB-INF/heroku.properties" />
         </bean>
     </beans>
 </beans>
