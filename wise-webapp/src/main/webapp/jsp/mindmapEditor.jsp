@@ -17,6 +17,7 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <![endif]-->
     <link rel="stylesheet/less" type="text/css" href="css/editor.less"/>
+    <link rel="stylesheet/less" type="text/css" href="css/mindmapList.less"/>
     <script type='text/javascript' src='js/mootools-core.js'></script>
     <script type='text/javascript' src='js/mootools-more.js'></script>
     <script type='text/javascript' src='js/core.js'></script>
@@ -60,30 +61,36 @@
 
 <div id="actionsContainer"></div>
 
-<div id="header">
-    <div id="headerInfo">
-        <div id="headerActions">
-            <c:if test="${!memoryPersistence}">
+<jsp:include page="header.jsp">
+    <jsp:param name="removeSignin" value="false"/>
+    <jsp:param name="showLogout" value="true"/>
+    <jsp:param name="onlyActionHeader" value="true"/>
+</jsp:include>
 
-                <spring:message code="WELCOME"/>, ${principal.firstname} |
-                <span><a href="c/maps/"><spring:message code="MY_WISEMAPS"/></a></span> |
-                <span><a href="c/keyboard" id="keyboardShortcuts"><spring:message code="SHORTCUTS"/></a></span> |
-                <span><a href="c/logout" title="<spring:message code="LOGOUT"/>"><spring:message
-                        code="LOGOUT"/></a></span>
-            </c:if>
-            <c:if test="${memoryPersistence}">
-                <span><a href="c/keyboard" id="keyboardShortcuts"><spring:message code="SHORTCUTS"/></a></span> |
-                <span><a href="c/user/registration" title="<spring:message code="REGISTER"/>"><spring:message code="REGISTER"/></a></span>
-            </c:if>
-        </div>
-        <a href="c/maps/">
-            <div id="headerLogo"></div>
-        </a>
+<%--<div id="header">--%>
+    <%--<div id="headerInfo">--%>
+        <%--<div id="headerActions">--%>
+            <%--<c:if test="${!memoryPersistence}">--%>
 
-        <div id="headerMapTitle"><spring:message code="NAME"/>: <span>${mindmap.title}</span></div>
-    </div>
-    <%@ include file="/jsp/mindmapEditorToolbar.jsf" %>
-</div>
+                <%--<spring:message code="WELCOME"/>, ${principal.firstname} |--%>
+                <%--<span><a href="c/maps/"><spring:message code="MY_WISEMAPS"/></a></span> |--%>
+                <%--<span><a href="c/keyboard" id="keyboardShortcuts"><spring:message code="SHORTCUTS"/></a></span> |--%>
+                <%--<span><a href="c/logout" title="<spring:message code="LOGOUT"/>"><spring:message--%>
+                        <%--code="LOGOUT"/></a></span>--%>
+            <%--</c:if>--%>
+            <%--<c:if test="${memoryPersistence}">--%>
+                <%--<span><a href="c/keyboard" id="keyboardShortcuts"><spring:message code="SHORTCUTS"/></a></span> |--%>
+                <%--<span><a href="c/user/registration" title="<spring:message code="REGISTER"/>"><spring:message code="REGISTER"/></a></span>--%>
+            <%--</c:if>--%>
+        <%--</div>--%>
+        <%--<a href="c/maps/">--%>
+            <%--<div id="headerLogo"></div>--%>
+        <%--</a>--%>
+
+        <%--<div id="headerMapTitle"><spring:message code="NAME"/>: <span>${mindmap.title}</span></div>--%>
+    <%--</div>--%>
+    <%--<%@ include file="/jsp/mindmapEditorToolbar.jsf" %>--%>
+<%--</div>--%>
 
 <div id="mindplot" onselectstart="return false;"></div>
 <script type="text/javascript" src="js/editor.js"></script>
