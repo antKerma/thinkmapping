@@ -55,8 +55,6 @@
             var mindmap = mindplot.PersistenceManager.loadFromDom(mapId, domDocument);
             designer.loadMap(mindmap);
 
-            // Toolabar
-
         });
     </script>
 </head>
