@@ -1,0 +1,145 @@
+<%--@elvariable id="mindmap" type="com.wisemapping.model.Mindmap"--%>
+<script type="text/javascript" language="javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+    jQuery.noConflict();
+
+    jQuery(document).ready(function(){
+        //Sidebar show/hide page edition
+        jQuery('#sidebar-left').hover(function(){
+            jQuery(this).stop(true).animate({left:0});
+            //jQuery('#sidebar-left').stop(true, true).animate({left:-20});
+            jQuery("#title-toolbar").fadeToggle('fast', function(){});
+        },function(){
+            jQuery(this).stop(true).animate({left:-80});
+            //jQuery('#sidebar-left').stop(true, true).animate({left:-100});
+            jQuery("#title-toolbar").fadeToggle('slow', function(){});
+        });
+
+        // Sidebar masquer le module customize lorsque l'on ne survole plus la sidebar ou le module
+        jQuery('#sidebar-left').mouseleave(function(){
+            jQuery(".customize-options").fadeOut('fast', function() {});
+        });
+
+        // Sidebar btn personnaliser
+        jQuery(".customize a").click(function () {
+            jQuery(".customize-options").fadeToggle('fast', function(){});
+        });
+    });
+</script>
+
+<div id="sidebar-left">
+    <div class="edition-top-container">&nbsp;</div>
+    <div class="grey-part-menu">
+        <ul class="menu">
+            <li class="create"><a href="#add-map">Nouveau</a></li>
+            <li class="import"><a href="#import-map">Importer</a></li>
+            <li class="customize"><a href="#">Personnaliser</a></li>
+            <li class="undo"><a href="#">Undo</a></li>
+            <li class="redo"><a href="#">Redo</a></li>
+        </ul>
+    </div>
+    <div class="edition-mid-container">&nbsp;</div>
+    <div class="green-part-menu">
+        <ul class="menu">
+            <li class="print"><a href="javascript:window.print()">Imprimer</a></li>
+            <li class="export"><a href="#export-map">Exporter</a></li>
+            <li class="pin-with"><a href="#">Attacher</a></li>
+            <li class="link"><a href="#link">Lier</a></li>
+            <li class="collaborate"><a href="#" class="delete">Collaborer</a></li>
+            <li class="discuss"><a href="#">Communiquer</a></li>
+            <li class="publish"><a href="#">Publier</a></li>
+        </ul>
+    </div>
+    <div class="edition-bot-container">&nbsp;</div>
+
+    <!--POPIN CREATE MAP-->
+    <div id="create-map-container" class="popin-bg" style="display:none;">
+
+    </div>
+    <!--POPIN IMPORT-->
+    <div id="import-container" class="popin-bg" style="display:none;">
+
+    </div>
+
+    <!--POPIN CUSTOMIZE-->
+    <div class="customize-options" style="display:none;">
+        <div id="text-options">
+            <strong>Texte</strong>
+            <ul class="style-options">
+                <li><a href="#">Petit</a></li>
+                <li><a href="#">Moyen</a></li>
+                <li><a href="#">Grand</a></li>
+                <li><a href="#" style="font-weight:bold;">B</a></li>
+                <li><a href="#" style="font-style:italic;">I</a></li>
+            </ul>
+            <ul class="text-color">
+                <li style="background-color: rgb(0,0,0);"><a href="#">&nbsp;</a></li>
+                <li style="background-color: rgb(43,19,118);"><a href="#">&nbsp;</a></li>
+                <li style="background-color: rgb(0,97,255);"><a href="#">&nbsp;</a></li>
+                <li style="background-color: rgb(246,63,20);"><a href="#">&nbsp;</a></li>
+                <li style="background-color: rgb(248,133,71);"><a href="#">&nbsp;</a></li>
+                <li style="background-color: rgb(119,187,65);"><a href="#">&nbsp;</a></li>
+                <li style="background-color: rgb(96,23,124);"><a href="#">&nbsp;</a></li>
+                <li style="background-color: rgb(255,252,64);"><a href="#">&nbsp;</a></li>
+                <li style="background-color: rgb(255,255,255);"><a href="#">&nbsp;</a></li>
+            </ul>
+            <strong>Topic</strong>
+            <ul class="style-options">
+                <li><a href="#">O</a></li>
+                <li><a href="#">[ ]</a></li>
+                <li><a href="#">- -</a></li>
+            </ul>
+            <ul class="text-color">
+                <li style="background-color: rgb(0,0,0);"><a href="#">&nbsp;</a></li>
+                <li style="background-color: rgb(43,19,118);"><a href="#">&nbsp;</a></li>
+                <li style="background-color: rgb(0,97,255);"><a href="#">&nbsp;</a></li>
+                <li style="background-color: rgb(246,63,20);"><a href="#">&nbsp;</a></li>
+                <li style="background-color: rgb(248,133,71);"><a href="#">&nbsp;</a></li>
+                <li style="background-color: rgb(119,187,65);"><a href="#">&nbsp;</a></li>
+                <li style="background-color: rgb(96,23,124);"><a href="#">&nbsp;</a></li>
+                <li style="background-color: rgb(255,252,64);"><a href="#">&nbsp;</a></li>
+                <li style="background-color: rgb(255,255,255);"><a href="#">&nbsp;</a></li>
+
+            </ul>
+        </div><!--END TEXT-OPTIONS-->
+    </div>
+
+    <!--POPIN EXPORT-->
+    <div id="export-container" class="popin-bg" style="display:none;">
+        <div id="export-map" class="popin">
+            <strong>Exporter une <span>Map</span></strong>
+            <form id="export-format" method="post" action="#">
+                <input type="radio" name="export-format" id="exp-svg">
+                <label for="exp-svg">Scalable Vector Graphics (SVG)</label>
+                <br>
+                <input type="radio" name="export-format" id="exp-pdf">
+                <label for="exp-pdf">Portable Document Format (PDF)</label>
+                <br>
+                <input type="radio" name="export-format" id="exp-freemind">
+                <label for="exp-freemind">Freemind (version 0.9.0)</label>
+                <br>
+                <input type="radio" name="export-format" id="exp-image">
+                <label for="exp-image">Image</label>
+
+                <input type="submit" value="Exporter">
+            </form>
+            <a class="cancel" href="#">Annuler</a>
+        </div>
+    </div>
+
+    <!--POPIN LINK URL-->
+    <div id="link-url-container" class="popin-bg" style="display:none;">
+        <div id="link" class="popin">
+            <strong>Insérer un<span> lien</span></strong>
+            <form method="post" action="#">
+                <label for="url-link">Lien (URL)</label>
+                <input type="text" placeholder="www.example.com" id="url-link">
+
+                <input type="submit" value="Insérer">
+            </form>
+            <a class="cancel" href="#">Annuler</a>
+        </div>
+    </div>
+    <span id="btn-sidebar"><a href="#" id="sidebar-on">+</a></span>
+</div>
+<strong id="title-toolbar" style="display: block; ">Toolbar</strong>
