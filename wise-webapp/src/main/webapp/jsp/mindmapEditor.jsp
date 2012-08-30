@@ -68,34 +68,12 @@
     <jsp:param name="removeSignin" value="false"/>
     <jsp:param name="showLogout" value="true"/>
     <jsp:param name="onlyActionHeader" value="true"/>
+    <jsp:param name="showMapTitle" value="true"/>
+    <jsp:param name="mapTitle" value="${mindmap.title}"/>
+    <jsp:param name="mapModificationDate" value="${mindmap.lastEditTime}"/>
 </jsp:include>
 
 <%@ include file="/jsp/mindmapEditorVerticalToolbar.jsf" %>
-
-<%--<div id="header">--%>
-<%--<div id="headerInfo">--%>
-<%--<div id="headerActions">--%>
-<%--<c:if test="${!memoryPersistence}">--%>
-
-<%--<spring:message code="WELCOME"/>, ${principal.firstname} |--%>
-<%--<span><a href="c/maps/"><spring:message code="MY_WISEMAPS"/></a></span> |--%>
-<%--<span><a href="c/keyboard" id="keyboardShortcuts"><spring:message code="SHORTCUTS"/></a></span> |--%>
-<%--<span><a href="c/logout" title="<spring:message code="LOGOUT"/>"><spring:message--%>
-<%--code="LOGOUT"/></a></span>--%>
-<%--</c:if>--%>
-<%--<c:if test="${memoryPersistence}">--%>
-<%--<span><a href="c/keyboard" id="keyboardShortcuts"><spring:message code="SHORTCUTS"/></a></span> |--%>
-<%--<span><a href="c/user/registration" title="<spring:message code="REGISTER"/>"><spring:message code="REGISTER"/></a></span>--%>
-<%--</c:if>--%>
-<%--</div>--%>
-<%--<a href="c/maps/">--%>
-<%--<div id="headerLogo"></div>--%>
-<%--</a>--%>
-
-<%--<div id="headerMapTitle"><spring:message code="NAME"/>: <span>${mindmap.title}</span></div>--%>
-<%--</div>--%>
-<%--<%@ include file="/jsp/mindmapEditorToolbar.jsf" %>--%>
-<%--</div>--%>
 
 <div id="mindplot" onselectstart="return false;"></div>
 <script type="text/javascript" src="js/editor.js"></script>

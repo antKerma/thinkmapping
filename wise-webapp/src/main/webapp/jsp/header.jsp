@@ -30,6 +30,11 @@
         <c:choose>
             <c:when test="${principal != null}">
                 <div class="wrapper">
+                    <c:if test="${param.showMapTitle == true}">
+                        <h2 id="map-title">
+                            ${param.mapTitle}<em>modifié le ${param.mapModificationDate}</em>
+                        </h2>
+                    </c:if>
                     <span><spring:message code="WELCOME"/>, <strong>${principal.firstname}</strong></span>
                     <nav class="main-menu">
                         <ul>
