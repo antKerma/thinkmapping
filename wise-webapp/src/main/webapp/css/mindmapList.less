@@ -180,13 +180,16 @@ input#selectAll {
 #tableActions {
     float: right;
     width: 320px;
+    height: 40px;
     white-space: nowrap;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 #tableActions > div {
-    float: right;
-    margin-left: 5px;
-}
+                    float: right;
+                    margin-left: 5px;
+                }
 
 #pageInfo {
     padding-top: 5px;
@@ -201,15 +204,23 @@ input#selectAll {
 }
 
 #foldersContainer {
-    width: 16%;
+    width: 650px;
+    height: 40px;
     float: left;
-    margin-right: 2%;
-    margin-top: 80px
+}
+
+#foldersContainer .nav-header {
+    padding: 9px 18px 9px 0px;
 }
 
 #foldersContainer .nav-list > .active > a,
 #foldersContainer .nav-list > .active > a:hover {
-  background-color: #9DB900;
+    background-color: #9DB900;
+}
+
+#foldersContainer .nav-pills > .active > a,
+#foldersContainer .nav-pills > .active > a:hover {
+    background-color: #97C333;
 }
 
 span.starredOff {

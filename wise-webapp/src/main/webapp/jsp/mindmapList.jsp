@@ -35,6 +35,7 @@
                 bProcessing:true,
                 sAjaxSource:"service/maps/",
                 sAjaxDataProp:'mindmapsInfo',
+
                 fnInitComplete:function () {
                     $('#mindmapListTable tbody').change(updateStatusToolbar);
                     callbackOnTableInit();
@@ -84,6 +85,7 @@
                     "sZeroRecords":"<spring:message code="NO_MATCHING_FOUND"/>",
                     "sLoadingRecords":"<spring:message code="LOADING"/>",
                     "sInfo":"<spring:message code="TABLE_ROWS"/>",
+                    "sInfoEmpty" : "<spring:message code="ZERO_RESULTS"/>",
                     "sEmptyTable":"<spring:message code="NO_SEARCH_RESULT"/>",
                     "sProcessing":"<spring:message code="LOADING"/>"
                 },
@@ -91,7 +93,7 @@
             });
 
             // Customize search action ...
-            $('#mindmapListTable_filter').appendTo("#tableActions");
+            $('#mindmapListTable_filter').appendTo("#buttonsToolbar");
             $('#mindmapListTable_filter input').addClass('input-medium search-query');
             $('#mindmapListTable_filter input').attr('placeholder', '<spring:message code="SEARCH"/>');
             $("#mindmapListTable_info").appendTo("#pageInfo");
@@ -132,9 +134,58 @@
             <div></div>
         </div>
 
+
+
+
+        <div id="buttonsToolbar" class="btn-toolbar">
+
+            <div class="btn-group">
+                <button id="newBtn" class="btn btn-primary"><i class="icon-file icon-white"></i> <spring:message
+                        code="NEW"/></button>
+                <button id="importBtn" class="btn btn-primary"><i class="icon-upload icon-white"></i>
+                    <spring:message code="IMPORT"/>
+                </button>
+            </div>
+
+            <div class="btn-group act-multiple" id="deleteBtn" style="display:none">
+                <button class="btn btn-primary"><i class="icon-trash icon-white"></i> <spring:message
+                        code="DELETE"/></button>
+            </div>
+
+            <div id="actionsBtn" class="btn-group act-single" style="display:none">
+                <button class="btn btn-primary"><i class="icon-exclamation-sign icon-white"></i> <spring:message
+                        code="INFO"/></button>
+                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    <i class="icon-asterisk icon-white"></i> <spring:message code="MORE"/>
+                    <span class="caret"></span>
+                </button>
+
+                <ul class="dropdown-menu">
+                    <li id="duplicateBtn"><a href="#" onclick="return false"><i class="icon-plus-sign"></i>
+                        <spring:message code="DUPLICATE"/></a></li>
+                    <li id="renameBtn"><a href="#" onclick="return false"><i class="icon-edit"></i> <spring:message
+                            code="RENAME"/></a></li>
+                    <li id="publishBtn"><a href="#" onclick="return false"><i class="icon-globe"></i>
+                        <spring:message code="PUBLISH"/></a>
+                    </li>
+                    <li id="shareBtn"><a href="#" onclick="return false"><i class="icon-share"></i> <spring:message
+                            code="SHARE"/></a></li>
+                    <li id="exportBtn"><a href="#" onclick="return false"><i class="icon-download"></i>
+                        <spring:message
+                                code="EXPORT"/></a>
+                    </li>
+                    <li id="printBtn"><a href="#" onclick="return false"><i class="icon-print"></i> <spring:message
+                            code="PRINT"/></a></li>
+                    <li id="historyBtn"><a href="#" onclick="return false"><i class="icon-time"></i> <spring:message
+                            code="HISTORY"/></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
         <div id="foldersContainer">
-            <ul class="nav nav-list">
-                <li class="nav-header"><spring:message code="FILTERS"/></li>
+            <ul class="nav nav-pills">
+                <li class="nav-header"><spring:message code="FILTER_MAPS"/></li>
                 <li data-filter="all" class="active"><a href="#"><i class="icon-inbox icon-white"></i> <spring:message
                         code="ALL_MAPS"/></a></li>
                 <li data-filter="my_maps"><a href="#"><i class="icon-user"></i> <spring:message code="MY_MAPS"/></a>
@@ -148,64 +199,17 @@
             </ul>
         </div>
 
-        <div style="width: 78%;float: left;">
-            <div id="buttonsToolbar" class="btn-toolbar">
-
-                <div class="btn-group">
-                    <button id="newBtn" class="btn btn-primary"><i class="icon-file icon-white"></i> <spring:message
-                            code="NEW"/></button>
-                    <button id="importBtn" class="btn btn-primary"><i class="icon-upload icon-white"></i>
-                        <spring:message code="IMPORT"/>
-                    </button>
-                </div>
-
-                <div class="btn-group act-multiple" id="deleteBtn" style="display:none">
-                    <button class="btn btn-primary"><i class="icon-trash icon-white"></i> <spring:message
-                            code="DELETE"/></button>
-                </div>
-
-                <div id="actionsBtn" class="btn-group act-single" style="display:none">
-                    <button class="btn btn-primary"><i class="icon-exclamation-sign icon-white"></i> <spring:message
-                            code="INFO"/></button>
-                    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                        <i class="icon-asterisk icon-white"></i> <spring:message code="MORE"/>
-                        <span class="caret"></span>
-                    </button>
-
-                    <ul class="dropdown-menu">
-                        <li id="duplicateBtn"><a href="#" onclick="return false"><i class="icon-plus-sign"></i>
-                            <spring:message code="DUPLICATE"/></a></li>
-                        <li id="renameBtn"><a href="#" onclick="return false"><i class="icon-edit"></i> <spring:message
-                                code="RENAME"/></a></li>
-                        <li id="publishBtn"><a href="#" onclick="return false"><i class="icon-globe"></i>
-                            <spring:message code="PUBLISH"/></a>
-                        </li>
-                        <li id="shareBtn"><a href="#" onclick="return false"><i class="icon-share"></i> <spring:message
-                                code="SHARE"/></a></li>
-                        <li id="exportBtn"><a href="#" onclick="return false"><i class="icon-download"></i>
-                            <spring:message
-                                    code="EXPORT"/></a>
-                        </li>
-                        <li id="printBtn"><a href="#" onclick="return false"><i class="icon-print"></i> <spring:message
-                                code="PRINT"/></a></li>
-                        <li id="historyBtn"><a href="#" onclick="return false"><i class="icon-time"></i> <spring:message
-                                code="HISTORY"/></a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div id="tableActions" class="btn-toolbar">
-                    <div class="btn-group" id="pageButtons">
-                        <button class="btn" id="pPageBtn"><strong>&lt;</strong></button>
-                        <button class="btn" id="nPageBtn"><strong>&gt;</strong></button>
-                    </div>
-                    <div id="pageInfo"></div>
-                </div>
+        <div id="tableActions" class="btn-toolbar">
+            <div class="btn-group" id="pageButtons">
+                <button class="btn" id="pPageBtn"><strong>&lt;</strong></button>
+                <button class="btn" id="nPageBtn"><strong>&gt;</strong></button>
             </div>
-            <div id="map-table">
-                <table class="table" id="mindmapListTable"></table>
-                <div id="tableFooter" class="form-inline"></div>
-            </div>
+            <div id="pageInfo"></div>
+        </div>
+
+        <div id="map-table">
+            <table class="table" id="mindmapListTable"></table>
+            <div id="tableFooter" class="form-inline"></div>
         </div>
     </div>
 </div>
