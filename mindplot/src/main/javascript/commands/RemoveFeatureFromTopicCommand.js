@@ -18,7 +18,7 @@
 
 mindplot.commands.RemoveFeatureFromTopicCommand = new Class({
     Extends:mindplot.Command,
-    initialize: function(topicId, featureId) {
+    initialize:function (topicId, featureId) {
         $assert($defined(topicId), 'topicId can not be null');
         $assert(featureId, 'iconModel can not be null');
 
@@ -28,7 +28,7 @@ mindplot.commands.RemoveFeatureFromTopicCommand = new Class({
         this._oldFeature = null;
     },
 
-    execute: function(commandContext) {
+    execute:function (commandContext) {
         var topic = commandContext.findTopics(this._topicId)[0];
 
         var feature = topic.findFeatureById(this._featureId);
@@ -36,11 +36,11 @@ mindplot.commands.RemoveFeatureFromTopicCommand = new Class({
         this._oldFeature = feature;
     },
 
-    undoExecute: function(commandContext) {
+    undoExecute:function (commandContext) {
         var topic = commandContext.findTopics(this._topicId)[0];
 
         var feature = this._oldFeature;
-        topic.addFeature(feature.getType(), feature.getAttributes());
+        topic.addFeature(feature.getType(), feature.getAttributes(), this._featureId);
         this._oldFeature = null;
     }
 });

@@ -6,7 +6,7 @@
 <html>
 <head>
     <base href="${baseURL}/">
-    <title><spring:message code="SITE.TITLE"/></title>
+    <title><spring:message code="SITE.TITLE"/> - <spring:message code="MY_WISEMAPS"/></title>
     <!--[if lt IE 9]>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <![endif]-->
@@ -58,7 +58,7 @@
                         bUseRendered:false,
                         mDataProp:"title",
                         fnRender:function (obj) {
-                            return '<a href="c/maps/' + obj.aData.id + '/edit">' + obj.aData.title + '</a>';
+                            return '<a href="c/maps/' + obj.aData.id + '/edit">' + $('<span></span>').text(obj.aData.title).html() + '</a>';
                         }
                     },
                     {
@@ -113,8 +113,8 @@
             $('#pPageBtn').click(function () {
                 $('#mindmapListTable_previous').click();
             });
-        });    </script>
-
+        });
+    </script>
 </head>
 <body>
 <jsp:include page="header.jsp">
@@ -123,7 +123,6 @@
 </jsp:include>
 
 <div style="min-height: 500px">
-
     <div id="mindmapListContainer">
         <div id="messagesPanel" class="alert alert-error alert-block fade in hide" style="margin-top: 10px">
             <strong><spring:message code="UNEXPECTED_ERROR"/></strong>
@@ -210,8 +209,9 @@
         </div>
     </div>
 </div>
-<jsp:include page="footer.jsp"/>
-
+<div style="border-top: 1px solid #000000">
+    <jsp:include page="footer.jsp"/>
+</div>
 
 <div id="dialogsContainer">
 <!-- New map dialog -->
@@ -418,5 +418,22 @@
     </div>
 </div>
 </div>
+<c:if test="${requestScope['google.ads.enabled']}">
+    <script type="text/javascript"><!--
+    google_ad_client = "ca-pub-7564778578019285";
+    /* WiseMapping Mindmap List */
+    google_ad_slot = "4071968444";
+    google_ad_width = 120;
+    google_ad_height = 460;
+    //-->
+    </script>
+
+    <div style="position:absolute;right: 9px;top: 90px">
+        <script type="text/javascript"
+                src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+        </script>
+    </div>
+</c:if>
+
 </body>
 </html>

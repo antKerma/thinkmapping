@@ -91,17 +91,24 @@ public class FreemindExporter
             List<RelationshipType> relationships = mindmapMap.getRelationship();
             for (RelationshipType relationship : relationships) {
                 Node srcNode = nodesMap.get(relationship.getSrcTopicId());
-                Arrowlink arrowlink = objectFactory.createArrowlink();
                 Node dstNode = nodesMap.get(relationship.getDestTopicId());
-                arrowlink.setDESTINATION(dstNode.getID());
-                if (relationship.isEndArrow() != null && relationship.isEndArrow())
-                    arrowlink.setENDARROW("Default");
 
-                if (relationship.isStartArrow() != null && relationship.isStartArrow())
-                    arrowlink.setSTARTARROW("Default");
 
-                List<Object> cloudOrEdge = srcNode.getArrowlinkOrCloudOrEdge();
-                cloudOrEdge.add(arrowlink);
+                // Workaround for nodes without relationship associated ...
+                if (srcNode != null && dstNode != null) {
+
+                    Arrowlink arrowlink = objectFactory.createArrowlink();
+
+                    arrowlink.setDESTINATION(dstNode.getID());
+                    if (relationship.isEndArrow() != null && relationship.isEndArrow())
+                        arrowlink.setENDARROW("Default");
+
+                    if (relationship.isStartArrow() != null && relationship.isStartArrow())
+                        arrowlink.setSTARTARROW("Default");
+
+                    List<Object> cloudOrEdge = srcNode.getArrowlinkOrCloudOrEdge();
+                    cloudOrEdge.add(arrowlink);
+                }
             }
 
             JAXBUtils.saveMap(freemindMap, outputStream);
@@ -167,6 +174,11 @@ public class FreemindExporter
             if (textNote == null || textNote.isEmpty()) {
                 textNote = mindmapTopic.getNote().getText();
             }
+
+            // @Todo: For some reason central topic nodes with CDATA seems not to be loaded in the JAXB model.
+            // Temporally excluding and continue ..
+            textNote = (textNote != null) ? textNote : "";
+
             textNote = textNote.replaceAll("%0A", "\n");
             note.setNAME("accessories/plugins/NodeNote.properties");
             note.setText(textNote);

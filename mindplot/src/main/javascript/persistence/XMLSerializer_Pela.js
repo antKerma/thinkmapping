@@ -47,9 +47,14 @@ mindplot.persistence.XMLSerializer_Pela = new Class({
         // Create Relationships
         var relationships = mindmap.getRelationships();
         if (relationships.length > 0) {
+
             for (var j = 0; j < relationships.length; j++) {
-                var relationDom = this._relationshipToXML(document, relationships[j]);
-                mapElem.appendChild(relationDom);
+                var relationship = relationships[j];
+                if (mindmap.findNodeById(relationship.getFromNode()) !== null && mindmap.findNodeById(relationship.getToNode()) !== null) {
+                    // Isolated relationships are not persisted ....
+                    var relationDom = this._relationshipToXML(document, relationship);
+                    mapElem.appendChild(relationDom);
+                }
             }
         }
 
@@ -180,6 +185,7 @@ mindplot.persistence.XMLSerializer_Pela = new Class({
         result.setAttribute("srcTopicId", relationship.getFromNode());
         result.setAttribute("destTopicId", relationship.getToNode());
 
+
         var lineType = relationship.getLineType();
         result.setAttribute("lineType", lineType);
         if (lineType == mindplot.ConnectionLine.CURVED || lineType == mindplot.ConnectionLine.SIMPLE_CURVED) {
@@ -250,8 +256,33 @@ mindplot.persistence.XMLSerializer_Pela = new Class({
 
         var topic = mindmap.createNode(type, id);
         var text = domElem.getAttribute('text');
-        if ($defined(text)) {
+        if ($defined(text) && text) {
             topic.setText(text);
+
+            var fontStyle = domElem.getAttribute('fontStyle');
+            if ($defined(fontStyle)) {
+                var font = fontStyle.split(';');
+
+                if (font[0]) {
+                    topic.setFontFamily(font[0]);
+                }
+
+                if (font[1]) {
+                    topic.setFontSize(font[1]);
+                }
+
+                if (font[2]) {
+                    topic.setFontColor(font[2]);
+                }
+
+                if (font[3]) {
+                    topic.setFontWeight(font[3]);
+                }
+
+                if (font[4]) {
+                    topic.setFontStyle(font[4]);
+                }
+            }
         }
 
         var shape = domElem.getAttribute('shape');
@@ -269,30 +300,6 @@ mindplot.persistence.XMLSerializer_Pela = new Class({
             }
         }
 
-        var fontStyle = domElem.getAttribute('fontStyle');
-        if ($defined(fontStyle)) {
-            var font = fontStyle.split(';');
-
-            if (font[0]) {
-                topic.setFontFamily(font[0]);
-            }
-
-            if (font[1]) {
-                topic.setFontSize(font[1]);
-            }
-
-            if (font[2]) {
-                topic.setFontColor(font[2]);
-            }
-
-            if (font[3]) {
-                topic.setFontWeight(font[3]);
-            }
-
-            if (font[4]) {
-                topic.setFontStyle(font[4]);
-            }
-        }
 
         var bgColor = domElem.getAttribute('bgColor');
         if ($defined(bgColor)) {
@@ -305,7 +312,7 @@ mindplot.persistence.XMLSerializer_Pela = new Class({
         }
 
         var order = domElem.getAttribute('order');
-        if ($defined(order) && order!="NaN") { // Hack for broken maps ...
+        if ($defined(order) && order != "NaN") { // Hack for broken maps ...
             topic.setOrder(parseInt(order));
         }
 

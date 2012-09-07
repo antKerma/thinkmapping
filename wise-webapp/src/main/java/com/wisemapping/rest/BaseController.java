@@ -18,6 +18,8 @@
 
 package com.wisemapping.rest;
 
+import com.wisemapping.exceptions.AccessDeniedSecurityException;
+import com.wisemapping.exceptions.ClientException;
 import com.wisemapping.filter.UserAgent;
 import com.wisemapping.mail.NotificationService;
 import com.wisemapping.model.User;
@@ -26,16 +28,17 @@ import com.wisemapping.security.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.support.RequestContextUtils;
-import org.springframework.web.util.WebUtils;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.UndeclaredThrowableException;
+import java.util.Locale;
 
 public class BaseController {
 
@@ -62,7 +65,7 @@ public class BaseController {
     @ResponseBody
     public String handleServerErrors(@NotNull Exception ex, @NotNull HttpServletRequest request) {
         final User user = Utils.getUser();
-        notificationService.reportUnexpectedError(ex, user, request.getHeader(UserAgent.USER_AGENT_HEADER));
+        notificationService.reportJavaException(ex, user, request);
         return ex.getMessage();
     }
 
@@ -74,14 +77,21 @@ public class BaseController {
 
     @ExceptionHandler(java.lang.reflect.UndeclaredThrowableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public RestErrors handleSecurityErrors(@NotNull ValidationException ex) {
-        return new RestErrors(ex.getErrors(), messageSource);
+    public RestErrors handleSecurityErrors(@NotNull UndeclaredThrowableException ex) {
+        final Throwable cause = ex.getCause();
+        RestErrors result;
+        if (cause instanceof ClientException) {
+            result = handleClientErrors((ClientException) cause);
+        } else {
+            result = new RestErrors(ex.getMessage());
+        }
+        return result;
     }
 
-    @ExceptionHandler(com.wisemapping.exceptions.AccessDeniedSecurityException.class)
+    @ExceptionHandler(ClientException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public RestErrors handleSecurity2Errors(@NotNull ValidationException ex) {
-        return new RestErrors(ex.getErrors(), messageSource);
+    public RestErrors handleClientErrors(@NotNull ClientException ex) {
+        final Locale locale = LocaleContextHolder.getLocale();
+        return new RestErrors(ex.getMessage(messageSource, locale));
     }
-
 }

@@ -267,14 +267,14 @@ mindplot.Topic = new Class({
         var featuresModel = model.getFeatures();
         for (var i = 0; i < featuresModel.length; i++) {
             var featureModel = featuresModel[i];
-            var icon = mindplot.TopicFeature.createIcon(this, featureModel);
-            result.addIcon(icon, featureModel.getType() == "icon"); // @Todo: Remove hack ...
+            var icon = mindplot.TopicFeature.createIcon(this, featureModel, this.isReadOnly());
+            result.addIcon(icon, featureModel.getType() == mindplot.TopicFeature.Icon.id && !this.isReadOnly());
         }
 
         return result;
     },
 
-    addFeature:function (type, attributes) {
+    addFeature:function (type, attributes, featureId) {
         var iconGroup = this.getOrBuildIconGroup();
         this.closeEditors();
 
@@ -282,10 +282,14 @@ mindplot.Topic = new Class({
 
         // Update model ...
         var feature = model.createFeature(type, attributes);
+        if ($defined(featureId)) {
+            feature.setId(featureId);
+        }
         model.addFeature(feature);
 
-        var result = mindplot.TopicFeature.createIcon(this, feature);
-        iconGroup.addIcon(result, type == "icon"); // @Todo: Remove hack ...
+
+        var result = mindplot.TopicFeature.createIcon(this, feature, this.isReadOnly());
+        iconGroup.addIcon(result, type == mindplot.TopicFeature.Icon.id && !this.isReadOnly());
 
         this._adjustShapes();
         return result;
@@ -1021,7 +1025,7 @@ mindplot.Topic = new Class({
 
     connectTo:function (targetTopic, workspace, isVisible) {
         $assert(!this._outgoingLine, 'Could not connect an already connected node');
-        $assert(targetTopic != this, 'Cilcular connection are not allowed');
+        $assert(targetTopic != this, 'Circular connection are not allowed');
         $assert(targetTopic, 'Parent Graph can not be null');
         $assert(workspace, 'Workspace can not be null');
 
@@ -1197,8 +1201,22 @@ mindplot.Topic = new Class({
             result = result.concat(innerChilds);
         }
         return result;
-    }
+    },
 
+    isChildTopic:function (childTopic) {
+        var result = (this.getId() == childTopic.getId());
+        if (!result) {
+            var children = this.getChildren();
+            for (var i = 0; i < children.length; i++) {
+                var parent = children[i];
+                result = parent.isChildTopic(childTopic);
+                if (result) {
+                    break;
+                }
+            }
+        }
+        return result;
+    }
 });
 
 
