@@ -147,20 +147,21 @@
                 </button>
             </div>
 
-            <div class="btn-group act-multiple" id="deleteBtn" style="display:none">
-                <button class="btn btn-primary"><i class="icon-trash icon-white"></i> <spring:message
-                        code="DELETE"/></button>
+            <div class="btn-group act-multiple" id="deleteBtn">
+                <a class="btn btn-primary"><i class="icon-trash icon-white"></i> <spring:message
+                        code="DELETE"/></a>
             </div>
 
-            <div id="actionsBtn" class="btn-group act-single" style="display:none">
-                <button class="btn btn-primary"><i class="icon-exclamation-sign icon-white"></i> <spring:message
-                        code="INFO"/></button>
-                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+            <div id="actionsBtn" class="btn-group act-single">
+
+                <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                     <i class="icon-asterisk icon-white"></i> <spring:message code="MORE"/>
                     <span class="caret"></span>
-                </button>
+                </a>
 
                 <ul class="dropdown-menu">
+                    <li><a href="#" onclick="return false"><i class="icon-exclamation-sign"></i>
+                            <spring:message code="INFO"/></a></li>
                     <li id="duplicateBtn"><a href="#" onclick="return false"><i class="icon-plus-sign"></i>
                         <spring:message code="DUPLICATE"/></a></li>
                     <li id="renameBtn"><a href="#" onclick="return false"><i class="icon-edit"></i> <spring:message
