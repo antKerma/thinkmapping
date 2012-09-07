@@ -140,28 +140,31 @@
         <div id="buttonsToolbar" class="btn-toolbar">
 
             <div class="btn-group">
-                <button id="newBtn" class="btn btn-primary"><i class="icon-file icon-white"></i> <spring:message
-                        code="NEW"/></button>
-                <button id="importBtn" class="btn btn-primary"><i class="icon-upload icon-white"></i>
-                    <spring:message code="IMPORT"/>
-                </button>
+                <a id="newBtn" class="btn btn-primary">
+                    <div class="btn-label new"><spring:message code="NEW"/></div>
+                </a>
+                <a id="importBtn" class="btn btn-primary">
+                    <div class="btn-label import"><spring:message code="IMPORT"/></div>
+                </a>
             </div>
 
             <div class="btn-group act-multiple" id="deleteBtn">
-                <a class="btn btn-primary"><i class="icon-trash icon-white"></i> <spring:message
-                        code="DELETE"/></a>
+                <a class="btn btn-primary">
+                    <div class="btn-label delete"><spring:message code="DELETE"/></div>
+                </a>
             </div>
 
             <div id="actionsBtn" class="btn-group act-single">
 
                 <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                    <i class="icon-asterisk icon-white"></i> <spring:message code="MORE"/>
-                    <span class="caret"></span>
+                    <div class="btn-label more">
+                        <spring:message code="MORE"/>
+                    </div>
                 </a>
 
                 <ul class="dropdown-menu">
                     <li><a href="#" onclick="return false"><i class="icon-exclamation-sign"></i>
-                            <spring:message code="INFO"/></a></li>
+                        <spring:message code="INFO"/></a></li>
                     <li id="duplicateBtn"><a href="#" onclick="return false"><i class="icon-plus-sign"></i>
                         <spring:message code="DUPLICATE"/></a></li>
                     <li id="renameBtn"><a href="#" onclick="return false"><i class="icon-edit"></i> <spring:message
