@@ -20,6 +20,7 @@ package com.wisemapping.mail;
 
 import com.wisemapping.filter.UserAgent;
 import com.wisemapping.model.Collaboration;
+import com.wisemapping.model.CollaborationRole;
 import com.wisemapping.model.Mindmap;
 import com.wisemapping.model.User;
 import org.apache.commons.io.IOUtils;
@@ -65,7 +66,7 @@ final public class NotificationService {
             model.put("message", "message");
             model.put("ownerName", user.getFirstname());
             model.put("mapEditUrl", baseUrl + "/c/maps/" + mindmap.getId() + "/edit");
-            model.put("baseUrl", formMail);
+            model.put("baseUrl", baseUrl);
             model.put("senderMail", user.getEmail());
             model.put("message", message);
             model.put("supportEmail", mailer.getSupportEmail());

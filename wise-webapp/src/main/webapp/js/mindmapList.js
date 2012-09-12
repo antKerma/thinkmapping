@@ -142,7 +142,8 @@ jQuery.fn.dialogForm = function (options) {
                     console.log(errorThrown);
                     console.log(jqXHR);
                     dialogElem.modal('hide');
-                    $('#messagesPanel div').text(errorThrown).parent().show();
+                    $('#messagesPanel div div').text(errorThrown);
+                    $('#messagesPanel').show()
                 }
                 var acceptBtn = $('#' + containerId + ' .btn-accept');
                 acceptBtn.button('reset');
@@ -180,10 +181,9 @@ function updateStatusToolbar() {
             // Can be executed by the owner ?
             var rowData = tableElem.dataTable().fnGetData(selectedRows[0]);
             if (rowData.role != 'owner') {
-                $("#buttonsToolbar").find('#publishBtn').hide().end().find('#shareBtn').hide().end().find('#renameBtn').hide();
+                $(".buttonsToolbar").find('#publishBtn').hide().end().find('#shareBtn').hide().end().find('#renameBtn').hide();
             }
         } else {
-            console.log("Asasa");        //TODO(gb): Remove trace!!!
             $("#buttonsToolbar .act-multiple").removeClass('disabled');
         }
     }

@@ -3,7 +3,7 @@
 
 <!DOCTYPE HTML>
 
-<html>
+<html lang="en">
 <head>
     <base href="${baseURL}/">
     <title><spring:message code="SITE.TITLE"/> - <spring:message code="MY_WISEMAPS"/></title>
@@ -35,7 +35,6 @@
                 bProcessing:true,
                 sAjaxSource:"service/maps/",
                 sAjaxDataProp:'mindmapsInfo',
-
                 fnInitComplete:function () {
                     $('#mindmapListTable tbody').change(updateStatusToolbar);
                     callbackOnTableInit();
@@ -140,7 +139,7 @@
 
             <div class="btn-group">
                 <a id="newBtn" class="btn btn-primary">
-                    <div class="btn-label new"><spring:message code="NEW"/></div>
+                    <div class="btn-label new"><spring:message code="NEW_MAP"/></div>
                 </a>
                 <a id="importBtn" class="btn btn-primary">
                     <div class="btn-label import"><spring:message code="IMPORT"/></div>
@@ -215,10 +214,25 @@
             <div id="tableFooter" class="form-inline"></div>
         </div>
     </div>
+    <div class="span1" style="padding-top:25px">
+        <c:if test="${requestScope['google.ads.enabled']}">
+            <script type="text/javascript"><!--
+            google_ad_client = "ca-pub-7564778578019285";
+            /* WiseMapping Mindmap List */
+            google_ad_slot = "4071968444";
+            google_ad_width = 120;
+            google_ad_height = 440;
+            //-->
+            </script>
+            <div style="margin-top:5px;">
+                <script type="text/javascript"
+                        src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+                </script>
+            </div>
+        </c:if>
+    </div>
 </div>
-<div style="border-top: 1px solid #000000">
-    <jsp:include page="footer.jsp"/>
-</div>
+<jsp:include page="footer.jsp"/>
 
 <div id="dialogsContainer">
 <!-- New map dialog -->
@@ -425,22 +439,5 @@
     </div>
 </div>
 </div>
-<c:if test="${requestScope['google.ads.enabled']}">
-    <script type="text/javascript"><!--
-    google_ad_client = "ca-pub-7564778578019285";
-    /* WiseMapping Mindmap List */
-    google_ad_slot = "4071968444";
-    google_ad_width = 120;
-    google_ad_height = 460;
-    //-->
-    </script>
-
-    <div style="position:absolute;right: 9px;top: 90px">
-        <script type="text/javascript"
-                src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-        </script>
-    </div>
-</c:if>
-
 </body>
 </html>

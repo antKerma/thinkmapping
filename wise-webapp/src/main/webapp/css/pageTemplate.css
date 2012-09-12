@@ -47,13 +47,13 @@ div.pageBodyContent ol li {
 
 
 div.pageBody {
-    margin: 10px auto;
-    width: 800px;
+    margin: 150px auto 10px auto;
+    width: 990px;
     min-height: 500px;
 }
 
 div.pageBodyContent {
-    padding-top: 200px;
+    padding-top: 30px;
 }
 
 div.pageBodyContent h1 {
