@@ -337,7 +337,6 @@ mindplot.layout.FreeTestSuite = new Class({
         manager.plot("testRootNodeChildrenPositioning4", {width:800, height:600});
         this._assertFreePosition(manager, 2, {x:-150, y:-50});
 
-        //TODO(gb): fix this. It's not working
 //        console.log("\tmove node 6");
 //        manager.moveNode(6, {x:-150, y:-50});
 //        manager.layout();

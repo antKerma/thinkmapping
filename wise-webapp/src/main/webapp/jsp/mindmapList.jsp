@@ -73,7 +73,7 @@
                         mDataProp:"lastModificationTime",
                         fnRender:function (obj) {
                             var time = obj.aData.lastModificationTime;
-                            return '<abbr class="timeago" title="' + time + '">' + jQuery.timeago(time) + '</abbr>' + ' ' + '<span style="color: #777;font-size: 75%;padding-left: 5px;">' + obj.aData.lastModifierUser + '</span>';
+                            return '<abbr class="timeago" title="' + time + '">' + $.timeago(time) + '</abbr>' + ' ' + '<span style="color: #777;font-size: 75%;padding-left: 5px;">' + obj.aData.lastModifierUser + '</span>';
                         }
                     }
                 ],

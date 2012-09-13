@@ -391,7 +391,7 @@ $(function () {
 
 // Register time update functions ....
 setTimeout(function () {
-    jQuery("abbr.timeago").timeago()
+    $("abbr.timeago").timeago()
 }, 50000);
 
 

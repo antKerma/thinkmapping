@@ -425,14 +425,12 @@ mindplot.layout.TestSuite = new Class({
         this._plotPrediction(graph2, manager.predict(9, null, {x:-330, y:70}));
         this._plotPrediction(graph2, manager.predict(9, null, {x:-330, y:120}));
         this._plotPrediction(graph2, manager.predict(0, null, {x:15, y:20}));
-        //TODO(gb): make asserts
 
         var graph3 = manager.plot("testSize4", {width: 1400, height: 400});
         this._plotPrediction(graph3, manager.predict(0, null, null));
         this._plotPrediction(graph3, manager.predict(9, null, null));
         this._plotPrediction(graph3, manager.predict(3, null, null));
         this._plotPrediction(graph3, manager.predict(1, null, null));
-        //TODO(gb): make asserts
 
         var yPosNode2 = manager.find(2).getPosition().y;
         manager.updateNodeSize(7, {width:80, height:120});

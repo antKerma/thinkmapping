@@ -74,19 +74,20 @@
 </div>
 
 
-
+<script type="text/javascript" language="javascript" src="js/jquery-1.7.2.min.js"></script>
 <script type="text/javascript">
-    $('#userSettingsBtn').click(
+    jQuery.noConflict();
+    jQuery('#userSettingsBtn').click(
             function (event) {
-                $('#settings-dialog-modal .modal-body').load("c/account/settings",
+                jQuery('#settings-dialog-modal .modal-body').load("c/account/settings",
                         function () {
-                            $('#settings-dialog-modal .btn-cancel').unbind('click').click(function () {
-                                $('#settings-dialog-modal').modal("hide");
+                            jQuery('#settings-dialog-modal .btn-cancel').unbind('click').click(function () {
+                                jQuery('#settings-dialog-modal').modal("hide");
                                 window.location.reload();
                             });
                         }
                 );
-                $('#settings-dialog-modal').modal();
+                jQuery('#settings-dialog-modal').modal();
                 event.preventDefault();
 
             });
