@@ -74,8 +74,8 @@ function buildDesigner(options) {
     mindplot.PersistenceManager.init(persistence);
 
     // Register toolbar event ...
-    if ($('toolbar')) {
-        var menu = new mindplot.widget.Menu(designer, 'toolbar', options.mapId, "");
+    if ($('sidebar-left')) {
+        var menu = new mindplot.widget.Menu(designer, 'sidebar-left', options.mapId, "");
 
         //  If a node has focus, focus can be move to another node using the keys.
         designer._cleanScreen = function () {

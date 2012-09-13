@@ -1,6 +1,5 @@
 <%--@elvariable id="mindmap" type="com.wisemapping.model.Mindmap"--%>
 <script type="text/javascript" language="javascript" src="js/jquery-1.7.2.min.js"></script>
-<script type="text/javascript" language="javascript" src="bootstrap/js/bootstrap.js"></script>
 <script type="text/javascript">
     jQuery.noConflict();
 
@@ -32,7 +31,11 @@
     <div class="edition-top-container">&nbsp;</div>
     <div class="grey-part-menu">
         <ul class="menu">
-            <li class="create"><a href="#add-map">Nouveau</a></li>
+            <li class="create">
+                <div id="addTopic">
+                    <a href="#add-map">Nouveau</a>
+                </div>
+            </li>
             <li class="import"><a href="#import-map">Importer</a></li>
             <li class="customize"><a href="#">Personnaliser</a></li>
             <li class="undo"><a href="#">Undo</a></li>
