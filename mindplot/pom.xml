@@ -204,6 +204,7 @@
                                         <include>widget/LinkIconTooltip.js</include>
                                         <include>widget/KeyboardShortcutTooltip.js</include>
                                         <include>widget/ColorPalettePanel.js</include>
+                                        <include>widget/SimplifiedColorPalette.js</include>
                                         <include>widget/ListToolbarPanel.js</include>
                                         <include>widget/FontFamilyPanel.js</include>
                                         <include>widget/FontSizePanel.js</include>

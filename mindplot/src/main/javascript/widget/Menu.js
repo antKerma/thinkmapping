@@ -150,8 +150,7 @@ mindplot.widget.Menu = new Class({
                     designer.changeBackgroundColor(hex);
                 }
             };
-            this._toolbarElems.push(new mindplot.widget.ColorPalettePanel('topicColor', topicColorModel, widgetsBaseUrl));
-            this._registerTooltip('topicColor', $msg('TOPIC_COLOR'));
+            this._toolbarElems.push(new mindplot.widget.SimplifiedColorPalette('topicColor', topicColorModel));
         }
 
         // Border color item ...
@@ -202,8 +201,7 @@ mindplot.widget.Menu = new Class({
                     designer.changeFontColor(hex);
                 }
             };
-            this._toolbarElems.push(new mindplot.widget.ColorPalettePanel('fontColor', fontColorModel, baseUrl));
-            this._registerTooltip('fontColor', $msg('FONT_COLOR'));
+            this._toolbarElems.push(new mindplot.widget.SimplifiedColorPalette('fontColor', fontColorModel));
         }
 
         this._addButton('export', false, false, function () {
@@ -276,7 +274,6 @@ mindplot.widget.Menu = new Class({
         this._addButton('addTopic', true, false, function () {
             designer.createChildForSelectedNode();
         });
-        this._registerTooltip('addTopic', $msg('ADD_TOPIC'), "Enter");
 
 
         this._addButton('deleteTopic', true, true, function () {
