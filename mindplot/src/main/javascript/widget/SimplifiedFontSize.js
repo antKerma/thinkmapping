@@ -16,7 +16,7 @@
  *   limitations under the License.
  */
 
-mindplot.widget.SimplifiedColorPalette = new Class({
+mindplot.widget.SimplifiedFontSize = new Class({
     Extends:mindplot.widget.ToolbarItem,
 
     initialize : function (buttonId, model) {
@@ -26,6 +26,7 @@ mindplot.widget.SimplifiedColorPalette = new Class({
         this._model = model;
         this._element = $(buttonId);
         var fn = function() { ; }.bind(this);
+
 
         this.parent(buttonId, fn, {topicAction:true,relAction:false});
         this._panelElem = this._init();
@@ -40,17 +41,17 @@ mindplot.widget.SimplifiedColorPalette = new Class({
         });
 
         // click
-        var colorItems = self._getElement().getElements("li");
-        self._currentItem = self._getElement().getElement("li[class='colorOn']");
+        var sizeItems = self._getElement().getElements("li.text-size");
+        self._currentItem = self._getElement().getElement("li[class='text-size sizeOn']");
         var model = self._getModel();
-        colorItems.each(function(elem) {
+        sizeItems.each(function(elem) {
             elem.addEvent('click', function() {
-                var color = elem.getStyle("background-color");
+                var size = elem.get("data-size");
                 if (!elem.hasClass('colorOn')) {
-                    self._currentItem.removeClass('colorOn');
+                    self._currentItem.removeClass('sizeOn');
                     self._currentItem = elem;
-                    elem.addClass('colorOn');
-                    model.setValue(color);
+                    elem.addClass('sizeOn');
+                    model.setValue(size);
                 }
             });
         });
@@ -58,10 +59,10 @@ mindplot.widget.SimplifiedColorPalette = new Class({
 
     updateValue : function() {
         var self = this;
-        var color = this._model.getValue();
-        self._getElement().getElement("li.colorOn").removeClass('colorOn');
-        var colorElement = self._getElement().getElement('li[data-color="'+color+'"]');
-        colorElement.addClass('colorOn');
+        var size = this._model.getValue();
+        self._getElement().getElement("li[class='text-size sizeOn']").removeClass('sizeOn');
+        var sizeElement = self._getElement().getElement("li[data-size='"+size+"']");
+        sizeElement.addClass('sizeOn');
     },
 
     isVisible : function() {
@@ -75,4 +76,4 @@ mindplot.widget.SimplifiedColorPalette = new Class({
     _getElement : function() {
         return this._element;
     }
-});
+})

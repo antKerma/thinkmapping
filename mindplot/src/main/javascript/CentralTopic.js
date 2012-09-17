@@ -75,7 +75,7 @@ mindplot.CentralTopic = new Class({
     },
 
     _defaultBackgroundColor:function () {
-        return "rgb(80,157,192)";
+        return "#509dc0";
     },
 
     _defaultBorderColor:function () {

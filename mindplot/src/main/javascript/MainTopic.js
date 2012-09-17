@@ -214,7 +214,7 @@ mindplot.MainTopic = new Class({
                     size:8,
                     style:"normal",
                     weight:"normal",
-                    color:"rgb(82,92,97)"
+                    color:"#525c61"
                 };
             } else {
                 result = {
@@ -222,7 +222,7 @@ mindplot.MainTopic = new Class({
                     size:6,
                     style:"normal",
                     weight:"normal",
-                    color:"rgb(82,92,97)"
+                    color:"#525c61"
                 };
             }
         } else {
@@ -231,14 +231,14 @@ mindplot.MainTopic = new Class({
                 size:8,
                 style:"normal",
                 weight:"normal",
-                color:"rgb(82,92,97)"
+                color:"#525c61  "
             };
         }
         return result;
     },
 
     _defaultBackgroundColor:function () {
-        return "rgb(224,229,239)";
+        return "#e0e5ef";
     },
 
     _defaultBorderColor:function () {

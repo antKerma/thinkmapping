@@ -208,6 +208,7 @@
                                         <include>widget/ListToolbarPanel.js</include>
                                         <include>widget/FontFamilyPanel.js</include>
                                         <include>widget/FontSizePanel.js</include>
+                                        <include>widget/SimplifiedFontSize.js</include>
                                         <include>widget/TopicShapePanel.js</include>
                                         <include>widget/IconPanel.js</include>
                                         <include>widget/IMenu.js</include>

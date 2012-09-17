@@ -541,6 +541,7 @@ abbr[title] {
 #sidebar-left .customize-options .style-options li {
     float: left;
     margin: 4px 4px 2px 0;
+    &.colorOn { border: solid 1px #333; }
 }
 /* line 1029, ../sass/styles.scss */
 #sidebar-left .customize-options .style-options li a {
@@ -555,6 +556,11 @@ abbr[title] {
     color: #383739;
     font-size: 0.75em;
 }
+
+#sidebar-left .customize-options .style-options li.sizeOn a {
+    background: #ECFEE6;
+}
+
 /* line 1037, ../sass/styles.scss */
 #sidebar-left .customize-options .style-options li a:hover {
     background: #383739;
@@ -580,9 +586,7 @@ abbr[title] {
     margin-right: 5px;
     text-indent: -9999px;
 
-    &.colorOn {
-        border: solid 1px #333;
-    }
+    &.colorOn { border: solid 1px #333; }
 }
 /* line 1058, ../sass/styles.scss */
 #sidebar-left .customize-options .text-color li a {

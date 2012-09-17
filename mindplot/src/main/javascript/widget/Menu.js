@@ -85,8 +85,7 @@ mindplot.widget.Menu = new Class({
                     designer.changeFontSize(value);
                 }
             };
-            this._toolbarElems.push(new mindplot.widget.FontSizePanel("fontSize", fontSizeModel));
-            this._registerTooltip('fontSize', $msg('FONT_SIZE'));
+            this._toolbarElems.push(new mindplot.widget.SimplifiedFontSize("fontSize", fontSizeModel));
         }
 
         var topicShapeBtn = $('topicShape');
@@ -303,14 +302,10 @@ mindplot.widget.Menu = new Class({
         this._addButton('fontBold', true, false, function () {
             designer.changeFontWeight();
         });
-        this._registerTooltip('fontBold', $msg('FONT_BOLD'), "meta+B");
-
 
         this._addButton('fontItalic', true, false, function () {
             designer.changeFontStyle();
         });
-        this._registerTooltip('fontItalic', $msg('FONT_ITALIC'), "meta+I");
-
 
         var saveElem = $('save');
         if (saveElem) {
