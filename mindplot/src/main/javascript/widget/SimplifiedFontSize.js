@@ -42,14 +42,12 @@ mindplot.widget.SimplifiedFontSize = new Class({
 
         // click
         var sizeItems = self._getElement().getElements("li.text-size");
-        self._currentItem = self._getElement().getElement("li[class='text-size sizeOn']");
         var model = self._getModel();
         sizeItems.each(function(elem) {
             elem.addEvent('click', function() {
                 var size = elem.get("data-size");
                 if (!elem.hasClass('colorOn')) {
-                    self._currentItem.removeClass('sizeOn');
-                    self._currentItem = elem;
+                    self._getElement().getElement("li[class='text-size sizeOn']").removeClass('sizeOn');
                     elem.addClass('sizeOn');
                     model.setValue(size);
                 }
