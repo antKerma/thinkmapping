@@ -44,9 +44,9 @@ mindplot.widget.SimplifiedColorPalette = new Class({
         var model = self._getModel();
         colorItems.each(function(elem) {
             elem.addEvent('click', function() {
-                var color = elem.getStyle("background-color");
+                var color = elem.get("data-color");
                 if (!elem.hasClass('colorOn')) {
-                    self._getElement().getElement("li[class='colorOn']").removeClass('colorOn');
+                    self.resetOn();
                     elem.addClass('colorOn');
                     model.setValue(color);
                 }
@@ -56,10 +56,24 @@ mindplot.widget.SimplifiedColorPalette = new Class({
 
     updateValue : function() {
         var self = this;
-        var color = this._model.getValue();
-        self._getElement().getElement("li[class='colorOn']").removeClass('colorOn');
-        var colorElement = self._getElement().getElement('li[data-color="'+color+'"]');
-        colorElement.addClass('colorOn');
+        self.resetOn();
+        self.setColor(this._model.getValue());
+    },
+
+    resetOn :  function() {
+        var self = this;
+        if (self._getElement().getElement("li.colorOn"))
+            self._getElement().getElement("li.colorOn").removeClass('colorOn');
+    },
+
+    setColor : function(color) {
+        if (color) {
+            var self = this;
+            var selector = 'li[data-color="'+color+'"]';
+            var colorElement = self._getElement().getElement(selector);
+            if (colorElement)
+                colorElement.addClass('colorOn');
+        }
     },
 
     isVisible : function() {

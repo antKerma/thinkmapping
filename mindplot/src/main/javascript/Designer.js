@@ -653,7 +653,7 @@ mindplot.Designer = new Class({
         _buildRelationshipShape:function (model) {
             var dmodel = this.getModel();
 
-            var sourceTopicId = model.getFromNode();
+            var sourceTopicId = modelgetFromNode();
             var sourceTopic = dmodel.findTopicById(sourceTopicId);
 
             var targetTopicId = model.getToNode();
@@ -815,6 +815,8 @@ mindplot.Designer = new Class({
                 this._actionDispatcher.changeFontWeightToTopic(topicsIds);
             }
         },
+
+
 
         addIconType:function (iconType) {
             var topicsIds = this.getModel().filterTopicsIds();

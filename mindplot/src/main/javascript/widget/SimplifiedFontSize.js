@@ -34,6 +34,7 @@ mindplot.widget.SimplifiedFontSize = new Class({
 
     _init : function() {
         var self = this;
+        var model = self._getModel();
 
         // show
         self._getElement().addEvent('openPanel', function() {
@@ -42,25 +43,78 @@ mindplot.widget.SimplifiedFontSize = new Class({
 
         // click
         var sizeItems = self._getElement().getElements("li.text-size");
-        var model = self._getModel();
+
         sizeItems.each(function(elem) {
             elem.addEvent('click', function() {
+                self.resetSize();
                 var size = elem.get("data-size");
-                if (!elem.hasClass('colorOn')) {
-                    self._getElement().getElement("li[class='text-size sizeOn']").removeClass('sizeOn');
+                if (!elem.hasClass('sizeOn')) {
                     elem.addClass('sizeOn');
-                    model.setValue(size);
+                    model.setValue('size', size);
                 }
             });
+        });
+
+        // bold
+        var boldItem = self._getElement().getElement("li.text-bold");
+        boldItem.addEvent('click', function() {
+            $(this).toggleClass('boldOn');
+            model.setValue('bold', null);
+        });
+
+        // italics
+        var boldItem = self._getElement().getElement("li.text-italic");
+        boldItem.addEvent('click', function() {
+            $(this).toggleClass('italicOn');
+            model.setValue('italic', null);
         });
     },
 
     updateValue : function() {
         var self = this;
-        var size = this._model.getValue();
-        self._getElement().getElement("li[class='text-size sizeOn']").removeClass('sizeOn');
-        var sizeElement = self._getElement().getElement("li[data-size='"+size+"']");
-        sizeElement.addClass('sizeOn');
+        self.resetSize();
+        self.resetStyle();
+        self.setSize(this._model.getValue().size);
+        self.setBold(this._model.getValue().bold);
+        self.setItalic(this._model.getValue().italic);
+    },
+
+    resetSize :  function() {
+        var self = this;
+        if (self._getElement().getElement("li.sizeOn"))
+            self._getElement().getElement("li.sizeOn").removeClass('sizeOn');
+    },
+
+    resetStyle : function() {
+        var self = this;
+        if (self._getElement().getElement("li.boldOn"))
+            self._getElement().getElement("li.boldOn").removeClass('boldOn');
+        if (self._getElement().getElement("li.italicOn"))
+            self._getElement().getElement("li.italicOn").removeClass('italicOn');
+    },
+
+    setSize : function(size) {
+        var self = this;
+        if (size) {
+            var selector = 'li[data-size="'+size+'"]';
+            var sizeElement = self._getElement().getElement(selector);
+            if (sizeElement)
+                sizeElement.addClass('sizeOn');
+        }
+    },
+
+    setBold : function(bold) {
+        var self = this;
+        if (bold && bold == 'bold') {
+            self._getElement().getElement("li.text-bold").addClass('boldOn');
+        }
+    },
+
+    setItalic : function(italic) {
+        var self = this;
+        if (italic && italic == 'italic') {
+            self._getElement().getElement("li.text-italic").addClass('italicOn');
+        }
     },
 
     isVisible : function() {
