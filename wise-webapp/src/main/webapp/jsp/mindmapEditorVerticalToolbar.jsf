@@ -96,11 +96,14 @@
                 </ul>
             </div>
             <strong>Topic</strong>
-            <ul class="style-options">
-                <li><a href="#">O</a></li>
-                <li><a href="#">[ ]</a></li>
-                <li><a href="#">- -</a></li>
-            </ul>
+            <div id="topicShape" class="widget">
+                <ul class="style-options">
+                    <li data-shape="elipse"><a href="#">O</a></li>
+                    <li data-shape="rectagle"><a href="#">[ ]</a></li>
+                    <li data-shape="rounded rectagle"><a href="#">( )</a></li>
+                    <li data-shape="line"><a href="#">- -</a></li>
+                </ul>
+            </div>
             <div id="topicColor" class="widget">
                 <ul class="text-color">
                     <li style="background-color: rgb(0,0,0);" data-color="#000000"><a href="#">&nbsp;</a></li>

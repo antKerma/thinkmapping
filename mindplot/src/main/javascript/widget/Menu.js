@@ -132,8 +132,7 @@ mindplot.widget.Menu = new Class({
                     designer.changeTopicShape(value);
                 }
             };
-            this._toolbarElems.push(new mindplot.widget.TopicShapePanel("topicShape", topicShapeModel));
-            this._registerTooltip('topicShape', $msg('TOPIC_SHAPE'));
+            this._toolbarElems.push(new mindplot.widget.SimplifiedTopicShape("topicShape", topicShapeModel));
         }
 
         var topicIconBtn = $('topicIcon');
