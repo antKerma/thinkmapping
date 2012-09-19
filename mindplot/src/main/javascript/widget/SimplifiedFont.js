@@ -16,7 +16,7 @@
  *   limitations under the License.
  */
 
-mindplot.widget.SimplifiedFontSize = new Class({
+mindplot.widget.SimplifiedFont = new Class({
     Extends:mindplot.widget.ToolbarItem,
 
     initialize : function (buttonId, model) {

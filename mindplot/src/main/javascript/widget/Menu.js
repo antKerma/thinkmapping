@@ -109,7 +109,7 @@ mindplot.widget.Menu = new Class({
                     }
                 }
             };
-            this._toolbarElems.push(new mindplot.widget.SimplifiedFontSize("font", fontSizeModel));
+            this._toolbarElems.push(new mindplot.widget.SimplifiedFont("font", fontSizeModel));
         }
 
         var topicShapeBtn = $('topicShape');
