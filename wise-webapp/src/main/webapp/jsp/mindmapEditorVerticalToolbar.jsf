@@ -61,8 +61,8 @@
             <li class="export"><a href="#export-map">Exporter</a></li>
             <li class="pin-with"><a href="#">Attacher</a></li>
             <li class="link"><a href="#link">Lier</a></li>
-            <li class="collaborate"><a href="#" class="delete">Collaborer</a></li>
-            <li class="discuss"><a href="#">Communiquer</a></li>
+            <%--<li class="collaborate"><a href="#" class="delete">Collaborer</a></li>--%>
+            <%--<li class="discuss"><a href="#">Communiquer</a></li>--%>
             <li class="publish"><a href="#">Publier</a></li>
         </ul>
     </div>
