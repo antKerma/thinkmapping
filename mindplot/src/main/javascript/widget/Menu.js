@@ -266,7 +266,6 @@ mindplot.widget.Menu = new Class({
         if (undoButton) {
             undoButton.disable();
         }
-        this._registerTooltip('undoEdition', $msg('UNDO'), "meta+Z");
 
 
         var redoButton = this._addButton('redoEdition', false, false, function () {
@@ -275,7 +274,6 @@ mindplot.widget.Menu = new Class({
         if (redoButton) {
             redoButton.disable();
         }
-        this._registerTooltip('redoEdition', $msg('REDO'), "meta+shift+Z");
 
         if (redoButton && undoButton) {
             designer.addEvent('modelUpdate', function (event) {
