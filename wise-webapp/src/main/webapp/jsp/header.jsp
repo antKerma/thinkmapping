@@ -32,7 +32,7 @@
                 <div class="wrapper">
                     <c:if test="${param.showMapTitle == true}">
                         <h2 id="map-title">
-                            ${param.mapTitle}<em>modifié le ${param.mapModificationDate}</em>
+                            ${param.mapTitle}<em> <spring:message code="MODIFIED_ON"></spring:message> ${param.mapModificationDate}</em>
                         </h2>
                     </c:if>
                     <span><spring:message code="WELCOME"/>, <strong>${principal.firstname}</strong></span>

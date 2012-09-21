@@ -36,34 +36,33 @@
     <div class="grey-part-menu">
         <ul class="menu">
             <li class="create">
-                <div id="addTopic"><a href="#add-map">Nouveau</a></div>
+                <div id="addTopic"><a href="#add-map"><spring:message code="TOOLBAR_NEW"></spring:message></a></div>
             </li>
-            <%--<li class="import"><a href="#import-map">Importer</a></li>--%>
-            <li class="customize"><a href="#">Personnaliser</a></li>
+            <li class="customize"><a href="#"><spring:message code="TOOLBAR_CUSTOMIZE"></spring:message></a></li>
             <li class="copy">
-                <div id="copySelection"><a href="#">Copy</a></div>
+                <div id="copySelection"><a href="#"><spring:message code="TOOLBAR_COPY"></spring:message></a></div>
             </li>
             <li class="paste">
-                <div id="pasteSelection"><a href="#">Paste</a></div>
+                <div id="pasteSelection"><a href="#"><spring:message code="TOOLBAR_PASTE"></spring:message></a></div>
             </li>
             <li class="undo">
-                <div id="undoEdition"><a href="#">Undo</a></div>
+                <div id="undoEdition"><a href="#"><spring:message code="TOOLBAR_UNDO"></spring:message></a></div>
             </li>
             <li class="redo">
-                <div id="redoEdition"><a href="#">Redo</a></div>
+                <div id="redoEdition"><a href="#"><spring:message code="TOOLABR_REDO"></spring:message></a></div>
             </li>
         </ul>
     </div>
     <div class="edition-mid-container">&nbsp;</div>
     <div class="green-part-menu">
         <ul class="menu">
-            <li class="print"><a href="javascript:window.print()">Imprimer</a></li>
-            <li class="export"><a href="#export-map">Exporter</a></li>
-            <li class="pin-with"><a href="#">Attacher</a></li>
-            <li class="link"><a href="#link">Lier</a></li>
+            <li class="print"><a href="javascript:window.print()"><spring:message code="TOOLBAR_PRINT"></spring:message></a></li>
+            <li class="export"><a href="#export-map"><spring:message code="TOOLBAR_EXPORT"></spring:message></a></li>
+            <li class="pin-with"><a href="#"><spring:message code="TOOLBAR_ATTACH"></spring:message></a></li>
+            <li class="link"><a href="#link"><spring:message code="TOOLBAR_LINK"></spring:message></a></li>
             <%--<li class="collaborate"><a href="#" class="delete">Collaborer</a></li>--%>
             <%--<li class="discuss"><a href="#">Communiquer</a></li>--%>
-            <li class="publish"><a href="#">Publier</a></li>
+            <li class="publish"><a href="#"><spring:message code="TOOLBAR_PUBLISH"></spring:message></a></li>
         </ul>
     </div>
     <div class="edition-bot-container">&nbsp;</div>
@@ -80,14 +79,14 @@
     <!--POPIN CUSTOMIZE-->
     <div id="personalizePanel" class="customize-options" style="display:none;">
         <div id="text-options">
-            <strong>Texte</strong>
+            <strong><spring:message code="TOOLBAR_FONT"></spring:message></strong>
             <div id="font" class="widget">
                 <ul class="style-options">
-                    <li class="text-size" data-size="6"><a href="#">Petit</a></li>
-                    <li class="text-size" data-size="8"><a href="#">Moyen</a></li>
-                    <li class="text-size" data-size="10"><a href="#">Grand</a></li>
-                    <li class="text-bold"><a href="#" style="font-weight:bold;">B</a></li>
-                    <li class="text-italic"><a href="#" style="font-style:italic;">I</a></li>
+                    <li class="text-size" data-size="6"><a href="#"><spring:message code="TOOLBAR_FONT_SIZE_SMALL"></spring:message></a></li>
+                    <li class="text-size" data-size="8"><a href="#"><spring:message code="TOOLBAR_FONT_SIZE_MEDIUM"></spring:message></a></li>
+                    <li class="text-size" data-size="10"><a href="#"><spring:message code="TOOLBAR_FONT_SIZE_BIG"></spring:message></a></li>
+                    <li class="text-bold"><a href="#" style="font-weight:bold;"><spring:message code="TOOLBAR_FONT_BOLD"></spring:message></a></li>
+                    <li class="text-italic"><a href="#" style="font-style:italic;"><spring:message code="TOOLBAR_FONT_ITALIC"></spring:message></a></li>
                 </ul>
             </div>
             <div id="fontColor" class="widget">
@@ -103,7 +102,7 @@
                     <li style="background-color: rgb(255,255,255);" data-color="#ffffff"><a href="#">&nbsp;</a></li>
                 </ul>
             </div>
-            <strong>Topic</strong>
+            <strong><spring:message code="TOOLBAR_TOPIC"></spring:message></strong>
             <div id="topicShape" class="widget">
                 <ul class="style-options">
                     <li data-shape="elipse"><a href="#">O</a></li>
@@ -166,4 +165,4 @@
     </div>
     <span id="btn-sidebar"><a href="#" id="sidebar-on">+</a></span>
 </div>
-<strong id="title-toolbar" style="display: block; ">Toolbar</strong>
+<strong id="title-toolbar" style="display: block; "><spring:message code="TOOLBAR"></spring:message></strong>
