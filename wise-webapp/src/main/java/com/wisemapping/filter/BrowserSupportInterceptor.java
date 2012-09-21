@@ -32,7 +32,7 @@ import java.util.Set;
 
 public class BrowserSupportInterceptor extends HandlerInterceptorAdapter {
     private Set<String> exclude;
-    public static final String USER_AGENT = "wisemapping.userAgent";
+    public static final String USER_AGENT = "wisemapping.user_agent";
 
     public boolean preHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, Object object) throws Exception {
 
@@ -41,14 +41,14 @@ public class BrowserSupportInterceptor extends HandlerInterceptorAdapter {
             final HttpSession session = request.getSession(false);
 
             // Try to loaded from the request ...
-            UserAgent userAgent = null;
+            SupportedUserAgent userAgent = null;
             if (session != null) {
-                userAgent = (UserAgent) session.getAttribute(USER_AGENT);
+                userAgent = (SupportedUserAgent) session.getAttribute(USER_AGENT);
             }
 
             // I could not loaded. I will create a new one...
             if (userAgent == null) {
-                userAgent = UserAgent.create(request);
+                userAgent = SupportedUserAgent.create(request);
                 if (session != null) {
                     session.setAttribute(USER_AGENT, userAgent);
                 }

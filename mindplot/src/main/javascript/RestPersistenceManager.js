@@ -46,7 +46,17 @@ mindplot.RESTPersistenceManager = new Class({
                 },
                 onFailure:function (xhr) {
                     var responseText = xhr.responseText;
-                    events.onError(JSON.decode(responseText));
+                    var error = null;
+
+                    var contentType = this.getHeader("Content-Type");
+                    if (contentType != null && contentType.indexOf("application/json") != -1) {
+                        try {
+                            error = JSON.decode(responseText);
+                        } catch (e) {
+                            throw "Unexpected error saving. Error response is not json object:" + responseText;
+                        }
+                    }
+                    events.onError(error);
                 },
                 headers:{"Content-Type":"application/json", "Accept":"application/json"},
                 emulation:false,

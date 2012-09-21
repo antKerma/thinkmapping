@@ -18,9 +18,8 @@
 
 package com.wisemapping.mail;
 
-import com.wisemapping.filter.UserAgent;
+import com.wisemapping.filter.SupportedUserAgent;
 import com.wisemapping.model.Collaboration;
-import com.wisemapping.model.CollaborationRole;
 import com.wisemapping.model.Mindmap;
 import com.wisemapping.model.User;
 import org.apache.commons.io.IOUtils;
@@ -83,7 +82,7 @@ final public class NotificationService {
         final String messageTitle = "Your new password has been generated";
         final String messageBody =
                 "<p>Someone, most likely you, requested a new password for your WiseMapping account. </p>\n" +
-                        "<p><strong>Here is your new password: : " + temporalPassword + "</strong></p>\n" +
+                        "<p><strong>Here is your new password: " + temporalPassword + "</strong></p>\n" +
                         "<p>You can login clicking <a href=\"" + this.baseUrl + "/c/login\">here</a>. We strongly encourage you to change the password as soon as possible.</p>";
 
         sendTemplateMail(user, mailSubject, messageTitle, messageBody);
@@ -176,7 +175,7 @@ final public class NotificationService {
         final String userEmail = user != null ? user.getEmail() : "'anonymous'";
 
         model.put("email", userEmail);
-        model.put("userAgent", request.getHeader(UserAgent.USER_AGENT_HEADER));
+        model.put("userAgent", request.getHeader(SupportedUserAgent.USER_AGENT_HEADER));
         model.put("server", request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort());
         model.put("requestURI", request.getRequestURI());
         model.put("method", request.getMethod());

@@ -54,7 +54,7 @@
                     </nav>
                 </div>
             </c:when>
-            <c:when test="${param.removeSignin!=true}">
+            <c:when test="${!param.removeSignin && !requestScope.removeSignin}">
                 <div id="headerActions">
                     <spring:message code="ALREADY_A_MEMBER"/>
                     <span><a href="c/login" title="<spring:message code="SIGN_IN"/>">
@@ -93,5 +93,4 @@
             });
 
 </script>
-
 

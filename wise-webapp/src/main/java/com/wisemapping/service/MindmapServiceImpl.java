@@ -70,7 +70,7 @@ public class MindmapServiceImpl
     }
 
     private boolean isAdmin(User user) {
-        return (user != null && user.getEmail().equals(adminUser));
+        return user != null && user.getEmail() != null && user.getEmail().equals(adminUser);
     }
 
     @Override
@@ -79,8 +79,9 @@ public class MindmapServiceImpl
     }
 
     @Override
-    public Mindmap findMindmapById(int mindmapId) {
-        return mindmapManager.getMindmapById(mindmapId);
+    @NotNull
+    public Mindmap findMindmapById(int id) {
+        return mindmapManager.getMindmapById(id);
     }
 
     @Override
@@ -108,7 +109,7 @@ public class MindmapServiceImpl
         final Set<Collaboration> collaborations = mindMap.getCollaborations();
 
         if (mindMap.getCreator().getEmail().equals(collaboration.getCollaborator().getEmail())) {
-            throw new CollaborationException("User is the creator and must have ownership permissions");
+            throw new CollaborationException("User is the creator and must have ownership permissions.Creator Email:" + mindMap.getCreator().getEmail() + ",Collaborator:" + collaboration.getCollaborator().getEmail());
         }
 
         // When you delete an object from hibernate you have to delete it from *all* collections it exists in...
@@ -288,10 +289,11 @@ public class MindmapServiceImpl
         this.notificationService = notificationService;
     }
 
-    public void setAdminUser(String adminUser) {
+    public void setAdminUser(@NotNull String adminUser) {
         this.adminUser = adminUser;
     }
 
+    @NotNull
     public String getAdminUser() {
         return adminUser;
     }

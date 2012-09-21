@@ -1,6 +1,13 @@
 /* HEADER STYLES */
+
+html,body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
 #header {
-    margin-top: 0px;
+    margin-top: 0;
     height: 78px;
     width: 100%;
     position: absolute;
@@ -227,15 +234,6 @@ div#headerButtons activelink a, div#headerButtons activelink a:hover {
     border-bottom: 0;
 }
 
-#footer {
-    border-top: 1px black solid;
-    padding-top: 15px;
-}
-
-div#paypal {
-    float: left;
-    margin: -29px;
-}
 
 #headerLogo {
     cursor: pointer;

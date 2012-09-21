@@ -18,6 +18,7 @@
 
 package com.wisemapping.view;
 
+import com.wisemapping.exceptions.AccessDeniedSecurityException;
 import com.wisemapping.exceptions.WiseMappingException;
 import com.wisemapping.model.*;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class MindMapBean {
     private Mindmap mindmap;
@@ -122,18 +124,29 @@ public class MindMapBean {
     }
 
     public String getXmlAsJsLiteral() throws IOException {
-        return this.mindmap.getXmlAsJsLiteral();
+        final String xmlAsJsLiteral = this.mindmap.getXmlAsJsLiteral();
+
+        // Firefox is failing for this. Need to be reviewed ...
+        return xmlAsJsLiteral.replace("\\u0000","");
     }
 
     public String getProperties() throws WiseMappingException {
-        String result;
+        String result = null;
+
         if (collaborator != null) {
-            final CollaborationProperties properties = this.mindmap.findCollaborationProperties(collaborator);
-            result = properties.getMindmapProperties();
-        } else {
+            try {
+                final CollaborationProperties properties = this.mindmap.findCollaborationProperties(collaborator);
+                result = properties.getMindmapProperties();
+            } catch (AccessDeniedSecurityException e) {
+                // Ignore exception. This is required for the admin could view maps ...
+            }
+        }
+
+        if (result == null) {
             // It must be public view ...
             result = CollaborationProperties.DEFAULT_JSON_PROPERTIES;
         }
+
         return result;
     }
 
