@@ -38,8 +38,14 @@
             <li class="create">
                 <div id="addTopic"><a href="#add-map">Nouveau</a></div>
             </li>
-            <li class="import"><a href="#import-map">Importer</a></li>
+            <%--<li class="import"><a href="#import-map">Importer</a></li>--%>
             <li class="customize"><a href="#">Personnaliser</a></li>
+            <li class="copy">
+                <div id="copySelection"><a href="#">Copy</a></div>
+            </li>
+            <li class="paste">
+                <div id="pasteSelection"><a href="#">Paste</a></div>
+            </li>
             <li class="undo">
                 <div id="undoEdition"><a href="#">Undo</a></div>
             </li>

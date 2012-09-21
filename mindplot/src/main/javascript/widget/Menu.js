@@ -267,7 +267,6 @@ mindplot.widget.Menu = new Class({
             undoButton.disable();
         }
 
-
         var redoButton = this._addButton('redoEdition', false, false, function () {
             designer.redo();
         });
@@ -290,6 +289,14 @@ mindplot.widget.Menu = new Class({
 
             }.bind(this));
         }
+
+        this._addButton('copySelection', true, false, function () {
+            designer.copyToClipboard();
+        });
+
+        this._addButton('pasteSelection', true, false, function () {
+            designer.pasteClipboard();
+        });
 
         this._addButton('addTopic', true, false, function () {
             designer.createChildForSelectedNode();
