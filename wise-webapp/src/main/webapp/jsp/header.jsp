@@ -73,21 +73,20 @@
     </c:if>
 </div>
 
-
 <script type="text/javascript" language="javascript" src="js/jquery-1.7.2.min.js"></script>
 <script type="text/javascript">
     jQuery.noConflict();
     jQuery('#userSettingsBtn').click(
             function (event) {
-                jQuery('#settings-dialog-modal .modal-body').load("c/account/settings",
+                $('#settings-dialog-modal .modal-body').load("c/account/settings",
                         function () {
-                            jQuery('#settings-dialog-modal .btn-cancel').unbind('click').click(function () {
-                                jQuery('#settings-dialog-modal').modal("hide");
+                            $('#settings-dialog-modal .btn-cancel').unbind('click').click(function () {
+                                $('#settings-dialog-modal').modal("hide");
                                 window.location.reload();
                             });
                         }
                 );
-                jQuery('#settings-dialog-modal').modal();
+                $('#settings-dialog-modal').modal();
                 event.preventDefault();
 
             });
