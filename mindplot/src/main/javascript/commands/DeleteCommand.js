@@ -34,7 +34,6 @@ mindplot.commands.DeleteCommand = new Class({
         // If a parent has been selected for deletion, the children must be excluded from the delete ...
         var topics = this._filterChildren(this._topicIds, commandContext);
 
-
         if (topics.length > 0) {
             topics.each(function (topic) {
                 var model = topic.getModel();
@@ -76,23 +75,35 @@ mindplot.commands.DeleteCommand = new Class({
 
     undoExecute:function (commandContext) {
 
-        var parent = commandContext.findTopics(this._parentTopicIds);
-        this._deletedTopicModels.each(function (model, index) {
-            var topic = commandContext.createTopic(model);
-
-            // Was the topic connected?
-            var parentTopic = parent[index];
-            if (parentTopic != null) {
-                commandContext.connect(topic, parentTopic);
-                topic.setOnFocus(true);
-            }
-
+        // Add all the topics ...
+        this._deletedTopicModels.each(function (model) {
+            commandContext.createTopic(model);
         }, this);
 
+        // Do they need to be connected ?
+        this._deletedTopicModels.each(function (model, index) {
+            var topicModel = this._deletedTopicModels[index];
+            var topics = commandContext.findTopics(topicModel.getId());
 
+            var parentId = this._parentTopicIds[index];
+            if (parentId) {
+                var parentTopics = commandContext.findTopics(parentId);
+                commandContext.connect(topics[0], parentTopics[0]);
+            }
+        }, this);
+
+        // Add rebuild relationships ...
         this._deletedRelModel.each(function (model) {
             commandContext.addRelationship(model);
         }.bind(this));
+
+
+        // Focus on last recovered topic ..
+        if (this._deletedTopicModels.length > 0) {
+            var firstTopic = this._deletedTopicModels[0];
+            var topic = commandContext.findTopics(firstTopic.getId())[0];
+            topic.setOnFocus(true);
+        }
 
         this._deletedTopicModels = [];
         this._parentTopicIds = [];
@@ -124,15 +135,13 @@ mindplot.commands.DeleteCommand = new Class({
 
     _collectInDepthRelationships:function (topic) {
         var result = [];
+        result.append(topic.getRelationships());
+
         var children = topic.getChildren();
-        if (children.length > 0) {
-            var rels = children.map(function (topic) {
-                return this._collectInDepthRelationships(topic);
-            }, this);
-            result.append(rels.flatten());
-        } else {
-            result.append(topic.getRelationships());
-        }
+        var rels = children.map(function (topic) {
+            return this._collectInDepthRelationships(topic);
+        }, this);
+        result.append(rels.flatten());
         return result;
     }
 

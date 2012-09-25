@@ -32,24 +32,42 @@ function buildDesigner(options) {
     });
 
     window.onerror = function (message, url, lineNo) {
-        // Log error message ...
 
-        if (window.waitDialog) {
-            window.waitDialog.close.delay(1000, window.waitDialog);
-            window.waitDialog = null;
+        // Ignore errors ...
+        if (message === "Script error." && lineNo == 0) {
+            // http://stackoverflow.com/questions/5913978/cryptic-script-error-reported-in-javascript-in-chrome-and-firefox
+            return;
         }
 
-        var req = new Request({
+        // Trasform error ...
+        var errorMsg = message;
+        if (typeof(message) === 'object' && message.srcElement && message.target) {
+            if (message.srcElement == '[object HTMLScriptElement]' && message.target == '[object HTMLScriptElement]') {
+                errorMsg = 'Error loading script';
+            } else {
+                errorMsg = 'Event Error - target:' + message.target + ' srcElement:' + message.srcElement;
+            }
+        }
+        errorMsg = errorMsg.toString();
+
+        new Request({
             method:'post',
             url:"/service/logger/editor",
             headers:{"Content-Type":"application/json", "Accept":"application/json"},
             emulation:false,
             urlEncoded:false
         }).post(JSON.encode({
-            jsErrorMsg:"message: '" + message + "', line:'" + lineNo + "', :" + url,
+            jsErrorMsg:"Message: '" + errorMsg + "', line:'" + lineNo + "', :" + url,
             jsStack:window.errorStack,
             userAgent:navigator.userAgent,
             mapId:options.mapId}));
+
+
+        // Close loading dialog ...
+        if (window.waitDialog) {
+            window.waitDialog.close.delay(1000, window.waitDialog);
+            window.waitDialog = null;
+        }
 
         // Open error dialog only in case of mindmap loading errors. The rest of the error are reported but not display the dialog.
         // Remove this in the near future.
@@ -269,74 +287,6 @@ editor.FatalErrorDialog = new Class({
     }
 
 });
-
-
-editor.Help = {
-    buildHelp:function (panel) {
-        var container = new Element('div');
-        container.setStyles({width:'100%', textAlign:'center'});
-        var content1 = Help.buildContentIcon('images/black-keyboard.png', 'Keyboard Shortcuts', function () {
-            MOOdalBox.open('keyboard.htm', 'KeyBoard Shortcuts', '500px 400px', false);
-            panel.hidePanel();
-        });
-        var content2 = Help.buildContentIcon('images/firstSteps.png', 'Editor First Steps', function () {
-            var wOpen;
-            var sOptions;
-
-            sOptions = 'status=yes,menubar=yes,scrollbars=yes,resizable=yes,toolbar=yes';
-            sOptions = sOptions + ',width=' + (screen.availWidth - 10).toString();
-            sOptions = sOptions + ',height=' + (screen.availHeight - 122).toString();
-            sOptions = sOptions + ',screenX=0,screenY=0,left=0,top=0';
-
-            wOpen = window.open("firststeps.htm", "WiseMapping", "width=100px, height=100px");
-            wOpen.focus();
-            wOpen.moveTo(0, 0);
-            wOpen.resizeTo(screen.availWidth, screen.availHeight);
-            panel.hidePanel();
-        });
-
-        container.addEvent('show', function () {
-            content1.effect('opacity', {duration:800}).start(0, 100);
-            var eff = function () {
-                content2.effect('opacity', {duration:800}).start(0, 100);
-            };
-            eff.delay(150);
-        });
-        container.addEvent('hide', function () {
-            content1.effect('opacity').set(0);
-            content2.effect('opacity').set(0)
-        });
-        content1.inject(container);
-        content2.inject(container);
-        return container;
-    },
-    buildContentIcon:function (image, text, onClickFn) {
-        var container = new Element('div').setStyles({margin:'15px 0px 0px 0px', opacity:0, padding:'5px 0px', border:'1px solid transparent', cursor:'pointer'});
-
-        var icon = new Element('div');
-        icon.addEvent('click', onClickFn);
-        var img = new Element('img');
-        img.setProperty('src', image);
-        img.inject(icon);
-        icon.inject(container);
-
-        var textContainer = new Element('div').setStyles({width:'100%', color:'white'});
-        textContainer.innerHTML = text;
-        textContainer.inject(container);
-
-        container.addEvent('mouseover', function () {
-            $(this).setStyle('border-top', '1px solid #BBB4D6');
-            $(this).setStyle('border-bottom', '1px solid #BBB4D6');
-        }.bind(this));
-        container.addEvent('mouseout', function () {
-            $(this).setStyle('border-top', '1px solid transparent');
-            $(this).setStyle('border-bottom', '1px solid transparent');
-
-        }.bind(this));
-        return container;
-    }
-};
-
 
 // Show loading dialog ...
 waitDialog = new editor.WaitDialog();

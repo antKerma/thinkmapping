@@ -29,32 +29,36 @@
     <script type="text/javascript">
 
         $(document).addEvent('loadcomplete', function (resource) {
-            var mapId = '${mindmap.id}';
-            var mapXml = '${mindmap.xmlAsJsLiteral}';
+            try {
+                var mapId = '${mindmap.id}';
+                var mapXml = '${mindmap.xmlAsJsLiteral}';
 
-            // Configure designer options ...
-            var options = loadDesignerOptions();
+                // Configure designer options ...
+                var options = loadDesignerOptions();
             <c:if test="${!memoryPersistence}">
-            options.persistenceManager = new mindplot.RESTPersistenceManager("service/maps/{id}/document", "service/maps/{id}/history/latest");
+                options.persistenceManager = new mindplot.RESTPersistenceManager("service/maps/{id}/document", "service/maps/{id}/history/latest");
             </c:if>
-            var userOptions = ${mindmap.properties};
-            options.zoom = userOptions.zoom;
-            options.readOnly = ${!!readOnlyMode};
-            options.locale = '${locale}';
+                var userOptions = ${mindmap.properties};
+                options.zoom = userOptions.zoom;
+                options.readOnly = ${!!readOnlyMode};
+                options.locale = '${locale}';
 
-            // Set map id ...
-            options.mapId = mapId;
+                // Set map id ...
+                options.mapId = mapId;
 
-            // Build designer ...
-            var designer = buildDesigner(options);
+                // Build designer ...
+                var designer = buildDesigner(options);
 
-            // Load map from XML ...
-            var parser = new DOMParser();
-            var domDocument = parser.parseFromString(mapXml, "text/xml");
+                // Load map from XML ...
+                var parser = new DOMParser();
+                var domDocument = parser.parseFromString(mapXml, "text/xml");
 
-            var mindmap = mindplot.PersistenceManager.loadFromDom(mapId, domDocument);
-            designer.loadMap(mindmap);
-
+                var mindmap = mindplot.PersistenceManager.loadFromDom(mapId, domDocument);
+                designer.loadMap(mindmap);
+            } catch (e) {
+                logStackTrace(e);
+                throw e;
+            }
         });
     </script>
 </head>
@@ -72,6 +76,11 @@
 </jsp:include>
 
 <%@ include file="/jsp/mindmapEditorVerticalToolbar.jsf" %>
+
+        <div id="headerMapTitle"><spring:message code="NAME"/>: <span><c:out value="${mindmap.title}"/></span></div>
+    </div>
+    <%@ include file="/jsp/mindmapEditorToolbar.jsf" %>
+</div>
 
 <div id="mindplot" onselectstart="return false;"></div>
 <script type="text/javascript" src="js/editor.js"></script>
