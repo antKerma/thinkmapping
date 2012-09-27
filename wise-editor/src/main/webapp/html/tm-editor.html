@@ -1,0 +1,271 @@
+<!DOCTYPE HTML>
+
+<html>
+<head>
+    <base href="../">
+    <title>Thinkmapping - Editor</title>
+
+    <!--[if lt IE 9]>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <![endif]-->
+    <link rel="stylesheet/less" type="text/css" href="css/editor.less"/>
+    <link rel="stylesheet/less" type="text/css" href="css/mindmapList.less"/>
+
+    <script type='text/javascript' src='js/mootools-core.js'></script>
+    <script type='text/javascript' src='js/mootools-more.js'></script>
+    <script type='text/javascript' src='js/core.js'></script>
+    <script type='text/javascript' src='js/less.js'></script>
+
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+
+    <script type="text/javascript">
+
+        $(document).addEvent('loadcomplete', function (resource) {
+            try {
+                var mapId = 'welcome';
+
+                // Configure designer options ...
+                var options = loadDesignerOptions();
+                var designer = buildDesigner(options);
+
+                // Load map from XML file persisted on disk...
+                var persistence = mindplot.PersistenceManager.getInstance();
+                var mindmap = mindmap = persistence.load(mapId);
+                designer.loadMap(mindmap);
+            } catch (e) {
+                logStackTrace(e);
+                throw e;
+            }
+        });
+    </script>
+</head>
+<body>
+
+<div id="actionsContainer"></div>
+
+<div id="settings-dialog-modal" class="modal fade">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3>Account</h3>
+    </div>
+    <div class="modal-body">
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-cancel">Close</button>
+    </div>
+</div>
+<div id="header">
+    <div id="headerToolbar">
+        <div class="wrapper">
+            <h2 id="map-title">
+                Welcome<em> modifié le 8/30/12 7:25 PM</em>
+            </h2>
+            <span>Bienvenue, Gonzalo</strong></span>
+            <nav class="main-menu">
+                <ul>
+                    <li id="call-home">
+                        <a href="c/home">Accueil</a>
+                    </li>
+                    <li id="call-maps" class="maps">
+                        <a href="c/maps/">Mes Wisemaps</a>
+                    </li>
+                    <li id="call-settings">
+                        <a id="userSettingsBtn" href="#" title="">Settings</a>
+                    </li>
+                    <li id="call-logout">
+                        <a href="c/logout" title="">Déconnexion</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript"src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+    jQuery.noConflict();
+    jQuery('#userSettingsBtn').click(
+            function (event) {
+                $('#settings-dialog-modal .modal-body').load("c/account/settings",
+                        function () {
+                            $('#settings-dialog-modal .btn-cancel').unbind('click').click(function () {
+                                $('#settings-dialog-modal').modal("hide");
+                                window.location.reload();
+                            });
+                        }
+                );
+                $('#settings-dialog-modal').modal();
+                event.preventDefault();
+
+            });
+
+    jQuery(document).ready(function(){
+        //Sidebar show/hide page edition
+        jQuery('#sidebar-left').hover(function(){
+            jQuery(this).stop(true).animate({left:0});
+            //jQuery('#sidebar-left').stop(true, true).animate({left:-20});
+            jQuery("#title-toolbar").fadeToggle('fast', function(){});
+        },function(){
+            jQuery(this).stop(true).animate({left:-80});
+            //jQuery('#sidebar-left').stop(true, true).animate({left:-100});
+            jQuery("#title-toolbar").fadeToggle('slow', function(){});
+        });
+
+        // Sidebar masquer le module customize lorsque l'on ne survole plus la sidebar ou le module
+        jQuery('#sidebar-left').mouseleave(function(){
+            jQuery(".customize-options").fadeOut('fast', function() {});
+        });
+
+        // Sidebar btn personnaliser
+        jQuery(".customize a").click(function () {
+            jQuery(".customize-options").fadeToggle('fast', function(){});
+
+            $("personalizePanel").getElements(".widget").each(function(elem) {
+                elem.fireEvent('openPanel');
+            });
+        });
+    });
+</script>
+
+<div id="sidebar-left">
+    <div class="edition-top-container">&nbsp;</div>
+    <div class="grey-part-menu">
+        <ul class="menu">
+            <li class="create">
+                <div id="addTopic"><a href="#add-map">Nouveau</a></div>
+            </li>
+            <li class="customize"><a href="#">Personnaliser</a></li>
+            <li class="copy">
+                <div id="copySelection"><a href="#">Copy</a></div>
+            </li>
+            <li class="paste">
+                <div id="pasteSelection"><a href="#">Paste</a></div>
+            </li>
+            <li class="undo">
+                <div id="undoEdition"><a href="#">Undo</a></div>
+            </li>
+            <li class="redo">
+                <div id="redoEdition"><a href="#">Redo</a></div>
+            </li>
+        </ul>
+    </div>
+    <div class="edition-mid-container">&nbsp;</div>
+    <div class="green-part-menu">
+        <ul class="menu">
+            <li class="print"><a href="javascript:window.print()">Imprimmer</a></li>
+            <li class="export"><a href="#export-map">Exporter</a></li>
+            <li class="pin-with"><a href="#">Attacher</a></li>
+            <li class="link"><a href="#link">Lier</a></li>
+            <%--<li class="collaborate"><a href="#" class="delete">Collaborer</a></li>--%>
+            <%--<li class="discuss"><a href="#">Communiquer</a></li>--%>
+            <li class="publish"><a href="#">Publish</a></li>
+        </ul>
+    </div>
+    <div class="edition-bot-container">&nbsp;</div>
+
+    <!--POPIN CREATE MAP-->
+    <div id="create-map-container" class="popin-bg" style="display:none;">
+
+    </div>
+    <!--POPIN IMPORT-->
+    <div id="import-container" class="popin-bg" style="display:none;">
+
+    </div>
+
+    <!--POPIN CUSTOMIZE-->
+    <div id="personalizePanel" class="customize-options" style="display:none;">
+        <div id="text-options">
+            <strong>Texte</strong>
+            <div id="font" class="widget">
+                <ul class="style-options">
+                    <li class="text-size" data-size="6"><a href="#">Petit</a></li>
+                    <li class="text-size" data-size="8"><a href="#">Moyen</a></li>
+                    <li class="text-size" data-size="10"><a href="#">Grand</a></li>
+                    <li class="text-bold"><a href="#" style="font-weight:bold;">B</a></li>
+                    <li class="text-italic"><a href="#" style="font-style:italic;">I</a></li>
+                </ul>
+            </div>
+            <div id="fontColor" class="widget">
+                <ul class="text-color">
+                    <li style="background-color: rgb(0,0,0);" data-color="#000000"><a href="#">&nbsp;</a></li>
+                    <li style="background-color: rgb(82,92,97);" data-color="#525c61"><a href="#">&nbsp;</a></li>
+                    <li style="background-color: rgb(112,155,192);" data-color="#509dc0"><a href="#">&nbsp;</a></li>
+                    <li style="background-color: rgb(246,63,20);" data-color="#f63f14"><a href="#">&nbsp;</a></li>
+                    <li style="background-color: rgb(248,133,71);" data-color="#f88547"><a href="#">&nbsp;</a></li>
+                    <li style="background-color: rgb(119,187,65);" data-color="#77bb41"><a href="#">&nbsp;</a></li>
+                    <li style="background-color: rgb(255,252,64);" data-color="#fffc40"><a href="#">&nbsp;</a></li>
+                    <li style="background-color: rgb(224,229,239);" data-color="#e0e5ef"><a href="#">&nbsp;</a></li>
+                    <li style="background-color: rgb(255,255,255);" data-color="#ffffff"><a href="#">&nbsp;</a></li>
+                </ul>
+            </div>
+            <strong>Topic</strong>
+            <div id="topicShape" class="widget">
+                <ul class="style-options">
+                    <li data-shape="elipse"><a href="#">O</a></li>
+                    <li data-shape="rectagle"><a href="#">[ ]</a></li>
+                    <li data-shape="rounded rectagle"><a href="#">( )</a></li>
+                    <li data-shape="line"><a href="#">- -</a></li>
+                </ul>
+            </div>
+            <div id="topicColor" class="widget">
+                <ul class="text-color">
+                    <li style="background-color: rgb(0,0,0);" data-color="#000000"><a href="#">&nbsp;</a></li>
+                    <li style="background-color: rgb(82,92,97);" data-color="#525c61"><a href="#">&nbsp;</a></li>
+                    <li style="background-color: rgb(112,155,192);" data-color="#509dc0"><a href="#">&nbsp;</a></li>
+                    <li style="background-color: rgb(246,63,20);" data-color="#f63f14"><a href="#">&nbsp;</a></li>
+                    <li style="background-color: rgb(248,133,71);" data-color="#f88547"><a href="#">&nbsp;</a></li>
+                    <li style="background-color: rgb(119,187,65);" data-color="#77bb41"><a href="#">&nbsp;</a></li>
+                    <li style="background-color: rgb(255,252,64);" data-color="#fffc40"><a href="#">&nbsp;</a></li>
+                    <li style="background-color: rgb(224,229,239);" data-color="#e0e5ef"><a href="#">&nbsp;</a></li>
+                    <li style="background-color: rgb(255,255,255);" data-color="#ffffff"><a href="#">&nbsp;</a></li>
+                </ul>
+            </div>
+        </div><!--END TEXT-OPTIONS-->
+    </div>
+
+    <!--POPIN EXPORT-->
+    <div id="export-container" class="popin-bg" style="display:none;">
+        <div id="export-map" class="popin">
+            <strong>Exporter une <span>Map</span></strong>
+            <form id="export-format" method="post" action="#">
+                <input type="radio" name="export-format" id="exp-svg">
+                <label for="exp-svg">Scalable Vector Graphics (SVG)</label>
+                <br>
+                <input type="radio" name="export-format" id="exp-pdf">
+                <label for="exp-pdf">Portable Document Format (PDF)</label>
+                <br>
+                <input type="radio" name="export-format" id="exp-freemind">
+                <label for="exp-freemind">Freemind (version 0.9.0)</label>
+                <br>
+                <input type="radio" name="export-format" id="exp-image">
+                <label for="exp-image">Image</label>
+
+                <input type="submit" value="Exporter">
+            </form>
+            <a class="cancel" href="#">Annuler</a>
+        </div>
+    </div>
+
+    <!--POPIN LINK URL-->
+    <div id="link-url-container" class="popin-bg" style="display:none;">
+        <div id="link" class="popin">
+            <strong>Insérer un<span> lien</span></strong>
+            <form method="post" action="#">
+                <label for="url-link">Lien (URL)</label>
+                <input type="text" placeholder="www.example.com" id="url-link">
+
+                <input type="submit" value="Insérer">
+            </form>
+            <a class="cancel" href="#">Annuler</a>
+        </div>
+    </div>
+    <span id="btn-sidebar"><a href="#" id="sidebar-on">+</a></span>
+</div>
+<strong id="title-toolbar" style="display: block; ">Toolbar</strong>
+
+<div id="mindplot" onselectstart="return false;"></div>
+<script type="text/javascript" src="js/editor.js"></script>
+</body>
+</html>
