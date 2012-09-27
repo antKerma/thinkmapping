@@ -657,7 +657,7 @@ mindplot.Designer = new Class({
         _buildRelationshipShape:function (model) {
             var dmodel = this.getModel();
 
-            var sourceTopicId = modelgetFromNode();
+            var sourceTopicId = model.getFromNode();
             var sourceTopic = dmodel.findTopicById(sourceTopicId);
 
             var targetTopicId = model.getToNode();
