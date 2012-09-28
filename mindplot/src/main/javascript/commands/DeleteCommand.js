@@ -36,6 +36,9 @@ mindplot.commands.DeleteCommand = new Class({
 
         if (topics.length > 0) {
             topics.each(function (topic) {
+                // In case that it's editing text node, force close without update ...
+                topic.closeEditors();
+
                 var model = topic.getModel();
 
                 // Delete relationships
@@ -81,8 +84,7 @@ mindplot.commands.DeleteCommand = new Class({
         }, this);
 
         // Do they need to be connected ?
-        this._deletedTopicModels.each(function (model, index) {
-            var topicModel = this._deletedTopicModels[index];
+        this._deletedTopicModels.each(function (topicModel, index) {
             var topics = commandContext.findTopics(topicModel.getId());
 
             var parentId = this._parentTopicIds[index];
@@ -97,6 +99,11 @@ mindplot.commands.DeleteCommand = new Class({
             commandContext.addRelationship(model);
         }.bind(this));
 
+        // Finally display the topics ...
+        this._deletedTopicModels.each(function (topicModel) {
+            var topics = commandContext.findTopics(topicModel.getId());
+            topics[0].setBranchVisibility(true);
+        }, this);
 
         // Focus on last recovered topic ..
         if (this._deletedTopicModels.length > 0) {

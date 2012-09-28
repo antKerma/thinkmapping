@@ -281,10 +281,7 @@ mindplot.Topic = new Class({
         var model = this.getModel();
 
         // Update model ...
-        var feature = model.createFeature(type, attributes);
-        if ($defined(featureId)) {
-            feature.setId(featureId);
-        }
+        var feature = model.createFeature(type, attributes, featureId);
         model.addFeature(feature);
 
 
@@ -637,7 +634,6 @@ mindplot.Topic = new Class({
         var elements = this._flatten2DElements(this);
         var fade = new mindplot.util.FadeEffect(elements, !value);
         fade.addEvent('complete', function () {
-
         });
         fade.start();
         mindplot.EventBus.instance.fireEvent(mindplot.EventBus.events.NodeShrinkEvent, model);
@@ -843,7 +839,14 @@ mindplot.Topic = new Class({
         // Hide all children...
         this._setChildrenVisibility(value);
 
+        // If there there are connection to the node, topic must be hidden.
         this._setRelationshipLinesVisibility(value);
+
+        // If it's connected, the connection must be rendered.
+        var outgoingLine = this.getOutgoingLine();
+        if (outgoingLine) {
+            outgoingLine.setVisibility(value);
+        }
     },
 
     moveToBack:function () {
@@ -1023,7 +1026,7 @@ mindplot.Topic = new Class({
         model.setOrder(value);
     },
 
-    connectTo:function (targetTopic, workspace, isVisible) {
+    connectTo:function (targetTopic, workspace) {
         $assert(!this._outgoingLine, 'Could not connect an already connected node');
         $assert(targetTopic != this, 'Circular connection are not allowed');
         $assert(targetTopic, 'Parent Graph can not be null');
@@ -1040,9 +1043,8 @@ mindplot.Topic = new Class({
 
         // Create a connection line ...
         var outgoingLine = new mindplot.ConnectionLine(this, targetTopic);
-        if ($defined(isVisible)) {
-            outgoingLine.setVisibility(isVisible);
-        }
+        outgoingLine.setVisibility(false);
+
         this._outgoingLine = outgoingLine;
         workspace.appendChild(outgoingLine);
 
@@ -1074,7 +1076,6 @@ mindplot.Topic = new Class({
         if (this.isInWorkspace()) {
             mindplot.EventBus.instance.fireEvent(mindplot.EventBus.events.NodeConnectEvent, {parentNode:targetTopic.getModel(), childNode:this.getModel()});
         }
-
     },
 
     appendChild:function (child) {

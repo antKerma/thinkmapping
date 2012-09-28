@@ -32,7 +32,7 @@ mindplot.commands.AddTopicCommand = new Class({
         this._models.each(function (model, index) {
 
             // Add a new topic ...
-            var topic = commandContext.createTopic(model, false);
+            var topic = commandContext.createTopic(model);
 
             // Connect to topic ...
             if (this._parentsIds) {
@@ -43,14 +43,14 @@ mindplot.commands.AddTopicCommand = new Class({
                 }
             }
 
-            // Finally, focus ...
+            // Select just created node ...
             var designer = commandContext._designer;
-            var fade = new mindplot.util.FadeEffect([topic, topic.getOutgoingLine()], true);
-            fade.addEvent('complete', function () {
-                designer.onObjectFocusEvent(topic);
-                topic.setOnFocus(true);
-            });
-            fade.start();
+            designer.onObjectFocusEvent(topic);
+            topic.setOnFocus(true);
+
+            // Render node ...
+            topic.setVisibility(true);
+
         }.bind(this));
     },
 

@@ -32,7 +32,7 @@
                 <div class="wrapper">
                     <c:if test="${param.showMapTitle == true}">
                         <h2 id="map-title">
-                            ${param.mapTitle}<em> <spring:message code="MODIFIED_ON"></spring:message> ${param.mapModificationDate}</em>
+                                ${param.mapTitle}<em> <spring:message code="MODIFIED_ON"></spring:message> ${param.mapModificationDate}</em>
                         </h2>
                     </c:if>
                     <span><spring:message code="WELCOME"/>, <strong>${principal.firstname}</strong></span>
@@ -80,8 +80,8 @@
             function (event) {
                 $('#settings-dialog-modal .modal-body').load("c/account/settings",
                         function () {
-                            $('#settings-dialog-modal .btn-cancel').unbind('click').click(function () {
-                                $('#settings-dialog-modal').modal("hide");
+                            jQuery('#settings-dialog-modal .btn-cancel').unbind('click').click(function () {
+                                jQuery('#settings-dialog-modal').modal("hide");
                                 window.location.reload();
                             });
                         }

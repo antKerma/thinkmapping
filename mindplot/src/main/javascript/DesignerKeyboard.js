@@ -60,19 +60,32 @@ mindplot.DesignerKeyboard = new Class({
                 }
             }.bind(this),
 
-            'delete':function () {
+            'delete':function (event) {
                 designer.deleteSelectedEntities();
+
+                event.preventDefault();
+                event.stopPropagation();
             }.bind(this),
 
             'enter':function () {
                 designer.createSiblingForSelectedNode();
             }.bind(this),
 
-            'insert':function () {
+            'insert':function (event) {
                 designer.createChildForSelectedNode();
+
+                event.preventDefault();
+                event.stopPropagation();
             }.bind(this),
 
-            '-':function () {
+            'tab':function (event) {
+                designer.createChildForSelectedNode();
+
+                event.preventDefault();
+                event.stopPropagation();
+            }.bind(this),
+
+            '-':function () { // "-" is a insert on several Browsers. Don't ask why ...
                 designer.createChildForSelectedNode();
             }.bind(this),
 
@@ -225,7 +238,7 @@ mindplot.DesignerKeyboard = new Class({
                 designer.selectAll();
             },
 
-            'right':function () {
+            'right':function (event) {
                 var node = model.selectedTopic();
                 if (node) {
                     if (node.getTopicType() == mindplot.model.INodeModel.CENTRAL_TOPIC_TYPE) {
@@ -243,9 +256,11 @@ mindplot.DesignerKeyboard = new Class({
                     var centralTopic = model.getCentralTopic();
                     this._goToNode(designer, centralTopic);
                 }
+                event.preventDefault();
+                event.stopPropagation();
             }.bind(this),
 
-            'left':function () {
+            'left':function (event) {
                 var node = model.selectedTopic();
                 if (node) {
                     if (node.getTopicType() == mindplot.model.INodeModel.CENTRAL_TOPIC_TYPE) {
@@ -263,9 +278,11 @@ mindplot.DesignerKeyboard = new Class({
                     var centralTopic = model.getCentralTopic();
                     this._goToNode(designer, centralTopic);
                 }
+                event.preventDefault();
+                event.stopPropagation();
             }.bind(this),
 
-            'up':function () {
+            'up':function (event) {
                 var node = model.selectedTopic();
                 if (node) {
                     if (node.getTopicType() != mindplot.model.INodeModel.CENTRAL_TOPIC_TYPE) {
@@ -275,9 +292,11 @@ mindplot.DesignerKeyboard = new Class({
                     var centralTopic = model.getCentralTopic();
                     this._goToNode(designer, centralTopic);
                 }
+                event.preventDefault();
+                event.stopPropagation();
             }.bind(this),
 
-            'down':function () {
+            'down':function (event) {
                 var node = model.selectedTopic();
                 if (node) {
                     if (node.getTopicType() != mindplot.model.INodeModel.CENTRAL_TOPIC_TYPE) {
@@ -287,6 +306,8 @@ mindplot.DesignerKeyboard = new Class({
                     var centralTopic = model.getCentralTopic();
                     this._goToNode(designer, centralTopic);
                 }
+                event.preventDefault();
+                event.stopPropagation();
             }.bind(this)
         };
         this.addEvents(keyboardEvents);

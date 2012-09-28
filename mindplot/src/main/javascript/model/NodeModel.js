@@ -32,8 +32,8 @@ mindplot.model.NodeModel = new Class({
         this._feature = [];
     },
 
-    createFeature:function (type, attributes) {
-        return mindplot.TopicFeature.createModel(type, attributes);
+    createFeature:function (type, attributes, featureId) {
+        return mindplot.TopicFeature.createModel(type, attributes, featureId);
     },
 
     addFeature:function (feature) {
@@ -47,7 +47,9 @@ mindplot.model.NodeModel = new Class({
 
     removeFeature:function (feature) {
         $assert(feature, 'feature can not be null');
-        this._feature.erase(feature);
+        this._feature = this._feature.filter(function (f) {
+            return feature.getId() != f.getId();
+        });
     },
 
     findFeatureByType:function (type) {
@@ -140,33 +142,6 @@ mindplot.model.NodeModel = new Class({
     setParent:function (parent) {
         $assert(parent != this, 'The same node can not be parent and child if itself.');
         this._parent = parent;
-    },
-
-    canBeConnected:function (sourceModel, sourcePosition, targetTopicSize) {
-
-        $assert(sourceModel != this, 'The same node can not be parent and child if itself.');
-        $assert(sourcePosition, 'childPosition can not be null.');
-        $assert(targetTopicSize, 'targetTopicSize can not be null.');
-        var result = false;
-
-        // Only can be connected if the node is in the left or right.
-        var targetModel = this;
-        var targetPosition = targetModel.getPosition();
-
-        // Finally, check current node position ...
-        var yDistance = Math.abs(sourcePosition.y - targetPosition.y);
-        var gap = 35 + targetTopicSize.height / 2;
-        if (targetModel.getChildren().length > 0) {
-            gap += Math.abs(targetPosition.y - targetModel.getChildren()[0].getPosition().y);
-        }
-
-        if (yDistance <= gap) {
-            // Circular connection ?
-            var xDistance = (sourcePosition.x - targetPosition.x) * Math.sign(targetPosition.x);
-            result = xDistance > targetTopicSize.width;
-        }
-
-        return result;
     },
 
     _isChildNode:function (node) {
