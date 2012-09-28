@@ -23,10 +23,7 @@ mindplot.widget.SimplifiedColorPalette = new Class({
         $assert(buttonId, "buttonId can not be null");
         $assert(model, "model can not be null");
 
-        this.parent(buttonId, model, {
-            onClass: 'colorOn',
-            dataKey: 'data-color'
-        });
+        this.parent(buttonId, model, { onClass:'colorOn', dataKey:'data-color' });
     }
 
 });
