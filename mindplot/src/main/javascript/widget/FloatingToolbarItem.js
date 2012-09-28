@@ -39,18 +39,22 @@ mindplot.widget.FloatingToolbarItem = new Class({
         });
 
         // click
-        var items = self._getElement().getElements("li");
-        var model = self._getModel();
+        var items = self._getElement().getElements(self.getSelector());
         items.each(function(elem) {
             elem.addEvent('click', function() {
-                var value = elem.get(self.getDataKey());
-                if (!elem.hasClass(self.getOnClass())) {
-                    self.resetOn();
-                    elem.addClass(self.getOnClass());
-                    model.setValue(value);
-                }
+                self.onClick(elem);
             });
         });
+    },
+
+    onClick : function(elem) {
+        var self = this;
+        var value = elem.get(self.getDataKey());
+        if (!elem.hasClass(self.getOnClass())) {
+            self.resetOn();
+            elem.addClass(self.getOnClass());
+            self._getModel().setValue(value);
+        }
     },
 
     onPanelOpen : function() {
@@ -61,14 +65,14 @@ mindplot.widget.FloatingToolbarItem = new Class({
 
     resetOn :  function() {
         var self = this;
-        if (self._getElement().getElement("li." + self.getOnClass()))
-            self._getElement().getElement("li." + self.getOnClass()).removeClass(self.getOnClass());
+        if (self._getElement().getElement(self.getSelector() + "." + self.getOnClass()))
+            self._getElement().getElement(self.getSelector() + "." + self.getOnClass()).removeClass(self.getOnClass());
     },
 
     setValue : function(value) {
         if (value) {
             var self = this;
-            var selector = 'li[' + this.getDataKey() + '="'+value+'"]';
+            var selector = self.getSelector() + '[' + this.getDataKey() + '="'+value+'"]';
             var element = self._getElement().getElement(selector);
             if (element)
                 element.addClass(self.getOnClass());
@@ -93,5 +97,9 @@ mindplot.widget.FloatingToolbarItem = new Class({
 
     getDataKey : function() {
         return this._options.dataKey;
+    },
+
+    getSelector : function() {
+        return this._options.elemSelector;
     }
 });

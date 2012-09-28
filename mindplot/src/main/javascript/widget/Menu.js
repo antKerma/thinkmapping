@@ -97,19 +97,82 @@ mindplot.widget.Menu = new Class({
                         italic = fontItalic
                     }
 
-                    return {size: size, bold: bold, italic: italic};
+//                    return {size: size, bold: bold, italic: italic};
+                    return size;
                 },
-                setValue:function (key, value) {
-                    if (key == 'size') {
-                        designer.changeFontSize(value);
-                    } else if (key == 'bold') {
-                        designer.changeFontWeight();
-                    } else if (key == 'italic') {
-                        designer.changeFontStyle();
-                    }
+                setValue:function (value) {
+//                    if (key == 'size') {
+//                        designer.changeFontSize(value);
+//                    } else if (key == 'bold') {
+//                        designer.changeFontWeight();
+//                    } else if (key == 'italic') {
+//                        designer.changeFontStyle();
+//                    }
+                    designer.changeFontSize(value);
                 }
             };
+
+            var fontBoldModel = {
+                getValue:function () {
+                    var nodes = designerModel.filterSelectedTopics();
+                    var bold = null, boldBreak = false;
+
+                    for (var i = 0; i < nodes.length; i++) {
+                        var fontBold = boldBreak ? null : nodes[i].getFontWeight();    // bold
+                        if (bold != null && bold != fontBold) {
+                            bold = null;
+                            boldBreak = true;
+                        }
+                        bold = fontBold
+                    }
+
+//                    return {size: size, bold: bold, italic: italic};
+                    return bold;
+                },
+                setValue:function (value) {
+//                    if (key == 'size') {
+//                        designer.changeFontSize(value);
+//                    } else if (key == 'bold') {
+//                        designer.changeFontWeight();
+//                    } else if (key == 'italic') {
+//                        designer.changeFontStyle();
+//                    }
+                    designer.changeFontWeight();
+                }
+            };
+
+            var fontItalicModel = {
+                getValue:function () {
+                    var nodes = designerModel.filterSelectedTopics();
+                    var italic = null, italicBreak = false;
+
+                    for (var i = 0; i < nodes.length; i++) {
+                        var fontItalic = italicBreak ? null : nodes[i].getFontStyle();    // italic
+                        if (italic != null && italic != fontItalic) {
+                            italic = null;
+                            italicBreak = true;
+                        }
+                        italic = fontItalic
+                    }
+
+//                    return {size: size, bold: bold, italic: italic};
+                    return italic;
+                },
+                setValue:function (value) {
+//                    if (key == 'size') {
+//                        designer.changeFontSize(value);
+//                    } else if (key == 'bold') {
+//                        designer.changeFontWeight();
+//                    } else if (key == 'italic') {
+//                        designer.changeFontStyle();
+//                    }
+                    designer.changeFontStyle();
+                }
+            };
+
             this._toolbarElems.push(new mindplot.widget.SimplifiedFont("font", fontSizeModel));
+            this._toolbarElems.push(new mindplot.widget.SimplifiedFontWeight("font", fontBoldModel));
+            this._toolbarElems.push(new mindplot.widget.SimplifiedFontItalic("font", fontItalicModel));
         }
 
         var topicShapeBtn = $('topicShape');

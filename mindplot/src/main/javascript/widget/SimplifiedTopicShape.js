@@ -23,6 +23,10 @@ mindplot.widget.SimplifiedTopicShape = new Class({
         $assert(buttonId, "buttonId can not be null");
         $assert(model, "model can not be null");
 
-        this.parent(buttonId, model, { onClass:'sizeOn', dataKey:'data-shape' });
+        this.parent(buttonId, model, {
+            onClass : 'shapeOn',
+            dataKey : 'data-shape',
+            elemSelector: 'li'
+        });
     }
 });

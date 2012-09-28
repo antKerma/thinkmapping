@@ -16,7 +16,7 @@
  *   limitations under the License.
  */
 
-mindplot.widget.SimplifiedColorPalette = new Class({
+mindplot.widget.SimplifiedFontItalic = new Class({
     Extends:mindplot.widget.FloatingToolbarItem,
 
     initialize : function(buttonId, model) {
@@ -24,10 +24,25 @@ mindplot.widget.SimplifiedColorPalette = new Class({
         $assert(model, "model can not be null");
 
         this.parent(buttonId, model, {
-            onClass : 'colorOn',
-            dataKey : 'data-color',
-            elemSelector : 'li'
+            onClass : 'italicOn',
+            elemSelector: 'li.text-italic'
         });
-    }
+    },
 
-});
+    onClick : function(elem) {
+        elem.toggleClass(this.getOnClass());
+        this._getModel().setValue(null);
+    },
+
+    setValue : function(value) {
+        if (value) {
+            var self = this;
+            var selector = self.getSelector();
+            var element = self._getElement().getElement(selector);
+            if (element && value == 'italic')
+                element.addClass(self.getOnClass());
+            else if (element && value == 'normal')
+                element.removeClass(self.getOnClass());
+        }
+    }
+})

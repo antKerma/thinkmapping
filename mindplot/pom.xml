@@ -210,6 +210,8 @@
                                         <include>widget/FontFamilyPanel.js</include>
                                         <include>widget/FontSizePanel.js</include>
                                         <include>widget/SimplifiedFont.js</include>
+                                        <include>widget/SimplifiedFontWeight.js</include>
+                                        <include>widget/SimplifiedFontItalic.js</include>
                                         <include>widget/TopicShapePanel.js</include>
                                         <include>widget/SimplifiedTopicShape.js</include>
                                         <include>widget/IconPanel.js</include>
