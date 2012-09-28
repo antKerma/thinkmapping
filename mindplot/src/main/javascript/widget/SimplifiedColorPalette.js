@@ -17,5 +17,16 @@
  */
 
 mindplot.widget.SimplifiedColorPalette = new Class({
-    Extends:mindplot.widget.FloatingToolbarItem
+    Extends:mindplot.widget.FloatingToolbarItem,
+
+    initialize : function(buttonId, model) {
+        $assert(buttonId, "buttonId can not be null");
+        $assert(model, "model can not be null");
+
+        this.parent(buttonId, model, {
+            onClass: 'colorOn',
+            dataKey: 'data-color'
+        });
+    }
+
 });

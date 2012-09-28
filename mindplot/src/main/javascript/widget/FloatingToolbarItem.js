@@ -18,7 +18,7 @@
 
 mindplot.widget.FloatingToolbarItem = new Class({
     Extends:mindplot.widget.ToolbarItem,
-    initialize : function (buttonId, model) {
+    initialize : function (buttonId, model, options) {
         $assert(buttonId, "buttonId can not be null");
         $assert(model, "model can not be null");
 
@@ -26,7 +26,7 @@ mindplot.widget.FloatingToolbarItem = new Class({
         this._element = $(buttonId);
         var fn = function() { ; }.bind(this);
 
-        this.parent(buttonId, fn, {topicAction:true,relAction:false});
+        this.parent(buttonId, fn, Object.merge({topicAction:true,relAction:false}, options));
         this._panelElem = this._init();
     },
 
@@ -35,43 +35,43 @@ mindplot.widget.FloatingToolbarItem = new Class({
 
         // show
         self._getElement().addEvent('openPanel', function() {
-            self.updateValue();
+            self.onPanelOpen();
         });
 
         // click
-        var colorItems = self._getElement().getElements("li");
+        var items = self._getElement().getElements("li");
         var model = self._getModel();
-        colorItems.each(function(elem) {
+        items.each(function(elem) {
             elem.addEvent('click', function() {
-                var color = elem.get("data-color");
-                if (!elem.hasClass('colorOn')) {
+                var value = elem.get(self.getDataKey());
+                if (!elem.hasClass(self.getOnClass())) {
                     self.resetOn();
-                    elem.addClass('colorOn');
-                    model.setValue(color);
+                    elem.addClass(self.getOnClass());
+                    model.setValue(value);
                 }
             });
         });
     },
 
-    updateValue : function() {
+    onPanelOpen : function() {
         var self = this;
         self.resetOn();
-        self.setColor(this._model.getValue());
+        self.setValue(this._model.getValue());
     },
 
     resetOn :  function() {
         var self = this;
-        if (self._getElement().getElement("li.colorOn"))
-            self._getElement().getElement("li.colorOn").removeClass('colorOn');
+        if (self._getElement().getElement("li." + self.getOnClass()))
+            self._getElement().getElement("li." + self.getOnClass()).removeClass(self.getOnClass());
     },
 
-    setColor : function(color) {
-        if (color) {
+    setValue : function(value) {
+        if (value) {
             var self = this;
-            var selector = 'li[data-color="'+color+'"]';
-            var colorElement = self._getElement().getElement(selector);
-            if (colorElement)
-                colorElement.addClass('colorOn');
+            var selector = 'li[' + this.getDataKey() + '="'+value+'"]';
+            var element = self._getElement().getElement(selector);
+            if (element)
+                element.addClass(self.getOnClass());
         }
     },
 
@@ -85,5 +85,13 @@ mindplot.widget.FloatingToolbarItem = new Class({
 
     _getElement : function() {
         return this._element;
+    },
+
+    getOnClass : function() {
+        return this._options.onClass;
+    },
+
+    getDataKey : function() {
+        return this._options.dataKey;
     }
 });
