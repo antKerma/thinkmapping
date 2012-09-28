@@ -58,8 +58,8 @@
         <ul class="menu">
             <li class="print"><a href="javascript:window.print()"><spring:message code="TOOLBAR_PRINT"></spring:message></a></li>
             <li class="export"><a href="#export-map"><spring:message code="TOOLBAR_EXPORT"></spring:message></a></li>
-            <li class="pin-with"><a href="#"><spring:message code="TOOLBAR_ATTACH"></spring:message></a></li>
-            <li class="link"><a href="#link"><spring:message code="TOOLBAR_LINK"></spring:message></a></li>
+            <%--<li class="pin-with"><a href="#"><spring:message code="TOOLBAR_ATTACH"></spring:message></a></li>--%>
+            <%--<li class="link"><a href="#link"><spring:message code="TOOLBAR_LINK"></spring:message></a></li>--%>
             <%--<li class="collaborate"><a href="#" class="delete">Collaborer</a></li>--%>
             <%--<li class="discuss"><a href="#">Communiquer</a></li>--%>
             <li class="publish"><a href="#"><spring:message code="TOOLBAR_PUBLISH"></spring:message></a></li>
