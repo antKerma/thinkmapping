@@ -20,6 +20,7 @@ mindplot.widget.Menu = new Class({
     Extends:mindplot.widget.IMenu,
 
     initialize:function (designer, containerId, mapId, readOnly, baseUrl) {
+        var self = this;
         this.parent(designer, containerId, mapId);
 
         baseUrl = !$defined(baseUrl) ? "" : baseUrl;
@@ -71,8 +72,6 @@ mindplot.widget.Menu = new Class({
                 getValue:function () {
                     var nodes = designerModel.filterSelectedTopics();
                     var size = null, sizeBreak = false;
-                    var bold = null, boldBreak = false;
-                    var italic = null, italicBreak = false;
 
                     for (var i = 0; i < nodes.length; i++) {
                         var fontSize = sizeBreak ? null : nodes[i].getFontSize();      // size
@@ -81,33 +80,11 @@ mindplot.widget.Menu = new Class({
                             sizeBreak = true;
                         }
                         size = fontSize;
-
-                        var fontBold = boldBreak ? null : nodes[i].getFontWeight();    // bold
-                        if (bold != null && bold != fontBold) {
-                            bold = null;
-                            boldBreak = true;
-                        }
-                        bold = fontBold
-
-                        var fontItalic = italicBreak ? null : nodes[i].getFontStyle();    // italic
-                        if (italic != null && italic != fontItalic) {
-                            italic = null;
-                            italicBreak = true;
-                        }
-                        italic = fontItalic
                     }
 
-//                    return {size: size, bold: bold, italic: italic};
                     return size;
                 },
                 setValue:function (value) {
-//                    if (key == 'size') {
-//                        designer.changeFontSize(value);
-//                    } else if (key == 'bold') {
-//                        designer.changeFontWeight();
-//                    } else if (key == 'italic') {
-//                        designer.changeFontStyle();
-//                    }
                     designer.changeFontSize(value);
                 }
             };
@@ -126,17 +103,9 @@ mindplot.widget.Menu = new Class({
                         bold = fontBold
                     }
 
-//                    return {size: size, bold: bold, italic: italic};
                     return bold;
                 },
                 setValue:function (value) {
-//                    if (key == 'size') {
-//                        designer.changeFontSize(value);
-//                    } else if (key == 'bold') {
-//                        designer.changeFontWeight();
-//                    } else if (key == 'italic') {
-//                        designer.changeFontStyle();
-//                    }
                     designer.changeFontWeight();
                 }
             };
@@ -155,17 +124,9 @@ mindplot.widget.Menu = new Class({
                         italic = fontItalic
                     }
 
-//                    return {size: size, bold: bold, italic: italic};
                     return italic;
                 },
                 setValue:function (value) {
-//                    if (key == 'size') {
-//                        designer.changeFontSize(value);
-//                    } else if (key == 'bold') {
-//                        designer.changeFontWeight();
-//                    } else if (key == 'italic') {
-//                        designer.changeFontStyle();
-//                    }
                     designer.changeFontStyle();
                 }
             };
@@ -233,6 +194,7 @@ mindplot.widget.Menu = new Class({
                 },
                 setValue:function (hex) {
                     designer.changeBackgroundColor(hex);
+                    designer.changeBorderColor(self._changeColor(hex, 0.2, true));
                 }
             };
             this._toolbarElems.push(new mindplot.widget.SimplifiedColorPalette('topicColor', topicColorModel));
@@ -598,5 +560,80 @@ mindplot.widget.Menu = new Class({
             }
             new mindplot.widget.KeyboardShortcutTooltip($(buttonId), tooltip);
         }
+    },
+
+    _pad : function(num, totalChars) {
+        var pad = '0';
+        num = num + '';
+        while (num.length < totalChars) {
+            num = pad + num;
+        }
+        return num;
+    },
+
+    _changeColor : function(color, ratio, darker) {
+        // Trim trailing/leading whitespace
+        color = color.replace(/^\s*|\s*$/, '');
+
+        // Expand three-digit hex
+        color = color.replace(
+            /^#?([a-f0-9])([a-f0-9])([a-f0-9])$/i,
+            '#$1$1$2$2$3$3'
+        );
+
+        // Calculate ratio
+        var difference = Math.round(ratio * 256) * (darker ? -1 : 1),
+        // Determine if input is RGB(A)
+            rgb = color.match(new RegExp('^rgba?\\(\\s*' +
+                '(\\d|[1-9]\\d|1\\d{2}|2[0-4][0-9]|25[0-5])' +
+                '\\s*,\\s*' +
+                '(\\d|[1-9]\\d|1\\d{2}|2[0-4][0-9]|25[0-5])' +
+                '\\s*,\\s*' +
+                '(\\d|[1-9]\\d|1\\d{2}|2[0-4][0-9]|25[0-5])' +
+                '(?:\\s*,\\s*' +
+                '(0|1|0?\\.\\d+))?' +
+                '\\s*\\)$'
+                , 'i')),
+            alpha = !!rgb && rgb[4] != null ? rgb[4] : null,
+
+        // Convert hex to decimal
+            decimal = !!rgb? [rgb[1], rgb[2], rgb[3]] : color.replace(
+                /^#?([a-f0-9][a-f0-9])([a-f0-9][a-f0-9])([a-f0-9][a-f0-9])/i,
+                function() {
+                    return parseInt(arguments[1], 16) + ',' +
+                        parseInt(arguments[2], 16) + ',' +
+                        parseInt(arguments[3], 16);
+                }
+            ).split(/,/),
+            returnValue;
+
+        // Return RGB(A)
+        return !!rgb ?
+            'rgb' + (alpha !== null ? 'a' : '') + '(' +
+                Math[darker ? 'max' : 'min'](
+                    parseInt(decimal[0], 10) + difference, darker ? 0 : 255
+                ) + ', ' +
+                Math[darker ? 'max' : 'min'](
+                    parseInt(decimal[1], 10) + difference, darker ? 0 : 255
+                ) + ', ' +
+                Math[darker ? 'max' : 'min'](
+                    parseInt(decimal[2], 10) + difference, darker ? 0 : 255
+                ) +
+                (alpha !== null ? ', ' + alpha : '') +
+                ')' :
+            // Return hex
+            [
+                '#',
+                this._pad(Math[darker ? 'max' : 'min'](
+                    parseInt(decimal[0], 10) + difference, darker ? 0 : 255
+                ).toString(16), 2),
+                this._pad(Math[darker ? 'max' : 'min'](
+                    parseInt(decimal[1], 10) + difference, darker ? 0 : 255
+                ).toString(16), 2),
+                this._pad(Math[darker ? 'max' : 'min'](
+                    parseInt(decimal[2], 10) + difference, darker ? 0 : 255
+                ).toString(16), 2)
+            ].join('');
     }
+
 });
