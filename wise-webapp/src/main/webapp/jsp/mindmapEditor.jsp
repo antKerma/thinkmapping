@@ -77,11 +77,6 @@
 
 <%@ include file="/jsp/mindmapEditorVerticalToolbar.jsf" %>
 
-        <div id="headerMapTitle"><spring:message code="NAME"/>: <span><c:out value="${mindmap.title}"/></span></div>
-    </div>
-    <%@ include file="/jsp/mindmapEditorToolbar.jsf" %>
-</div>
-
 <div id="mindplot" onselectstart="return false;"></div>
 <script type="text/javascript" src="js/editor.js"></script>
 </body>
