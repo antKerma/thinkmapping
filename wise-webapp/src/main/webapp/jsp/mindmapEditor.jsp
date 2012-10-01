@@ -77,6 +77,8 @@
 
 <%@ include file="/jsp/mindmapEditorVerticalToolbar.jsf" %>
 
+<jsp:include page="footer.jsp"/>
+
 <div id="mindplot" onselectstart="return false;"></div>
 <script type="text/javascript" src="js/editor.js"></script>
 </body>
