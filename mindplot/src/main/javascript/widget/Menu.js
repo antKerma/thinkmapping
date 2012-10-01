@@ -331,8 +331,6 @@ mindplot.widget.Menu = new Class({
         this._addButton('deleteTopic', true, true, function () {
             designer.deleteSelectedEntities();
         });
-        this._registerTooltip('deleteTopic', $msg('TOPIC_DELETE'), "Delete");
-
 
         this._addButton('topicLink', true, false, function () {
             designer.addLink();

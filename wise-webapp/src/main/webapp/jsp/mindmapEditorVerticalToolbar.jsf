@@ -36,9 +36,17 @@
     <div class="grey-part-menu">
         <ul class="menu">
             <li class="create">
-                <div id="addTopic"><a href="#add-map"><spring:message code="TOOLBAR_NEW"></spring:message></a></div>
+                <div id="addTopic"><a href="#"><spring:message code="TOOLBAR_NEW"></spring:message></a></div>
             </li>
-            <li class="customize"><a href="#"><spring:message code="TOOLBAR_CUSTOMIZE"></spring:message></a></li>
+            <li class="delete">
+                <div id="deleteTopic"><a href="#"><spring:message code="TOOLBAR_DELETE"></spring:message></a></div>
+            </li>
+            <li class="edit">
+                <div id="editTopic"><a href="#"><spring:message code="TOOLBAR_EDIT"></spring:message></a></div>
+            </li>
+            <li class="customize">
+                <a href="#"><spring:message code="TOOLBAR_CUSTOMIZE"></spring:message></a>
+            </li>
             <li class="copy">
                 <div id="copySelection"><a href="#"><spring:message code="TOOLBAR_COPY"></spring:message></a></div>
             </li>
