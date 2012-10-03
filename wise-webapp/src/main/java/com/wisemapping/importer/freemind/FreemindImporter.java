@@ -18,7 +18,6 @@
 
 package com.wisemapping.importer.freemind;
 
-import com.sun.org.apache.xerces.internal.dom.TextImpl;
 import com.wisemapping.importer.Importer;
 import com.wisemapping.importer.ImporterException;
 import com.wisemapping.importer.VersionNumber;
@@ -33,12 +32,20 @@ import com.wisemapping.jaxb.wisemap.TopicType;
 import com.wisemapping.jaxb.wisemap.Link;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.*;
+import org.jsoup.nodes.Document;
 import org.w3c.dom.*;
+import org.w3c.dom.Element;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.math.BigInteger;
@@ -51,6 +58,7 @@ public class FreemindImporter
     public static final int ROOT_LEVEL_TOPIC_HEIGHT = SECOND_LEVEL_TOPIC_HEIGHT;
     public static final int CENTRAL_TO_TOPIC_DISTANCE = 200;
     public static final int TOPIC_TO_TOPIC_DISTANCE = 90;
+    public static final String NODE_TYPE = "NODE";
     private com.wisemapping.jaxb.wisemap.ObjectFactory mindmapObjectFactory;
     private static final String POSITION_LEFT = "left";
     private static final String BOLD = "bold";
@@ -65,6 +73,10 @@ public class FreemindImporter
 
 
     private int currentId;
+    private static final int FONT_SIZE_HUGE = 15;
+    private static final int FONT_SIZE_LARGE = 10;
+    public static final int FONT_SIZE_NORMAL = 8;
+    private static final int FONT_SIZE_SMALL = 6;
 
     public static void main(String argv[]) {
 
@@ -138,10 +150,7 @@ public class FreemindImporter
             addRelationships(mindmapMap);
 
             JAXBUtils.saveMap(mindmapMap, baos);
-
             wiseXml = new String(baos.toByteArray(), UTF_8_CHARSET);
-
-
             result.setXmlStr(wiseXml);
             result.setTitle(mapName);
             result.setDescription(description);
@@ -150,8 +159,9 @@ public class FreemindImporter
             throw new ImporterException(e);
         } catch (IOException e) {
             throw new ImporterException(e);
+        } catch (TransformerException e) {
+            throw new ImporterException(e);
         }
-
         return result;
     }
 
@@ -214,7 +224,7 @@ public class FreemindImporter
         }
     }
 
-    private void convertChildNodes(@NotNull Node freeParent, @NotNull TopicType wiseParent, final int depth) {
+    private void convertChildNodes(@NotNull Node freeParent, @NotNull TopicType wiseParent, final int depth) throws TransformerException {
         final List<Object> freeChilden = freeParent.getArrowlinkOrCloudOrEdge();
         TopicType currentWiseTopic = wiseParent;
 
@@ -289,11 +299,11 @@ public class FreemindImporter
                 final Richcontent content = (Richcontent) element;
                 final String type = content.getTYPE();
 
-                if (type.equals("NODE")) {
-                    String text = getText(content);
+                if (type.equals(NODE_TYPE)) {
+                    String text = html2text(content);
                     currentWiseTopic.setText(text);
                 } else {
-                    String text = getRichContent(content);
+                    String text = html2text(content);
                     final com.wisemapping.jaxb.wisemap.Note mindmapNote = new com.wisemapping.jaxb.wisemap.Note();
                     text = text != null ? text : EMPTY_NOTE;
                     mindmapNote.setText(text);
@@ -480,72 +490,40 @@ public class FreemindImporter
 //        }
 //        return result;
 //    }
-    private String getRichContent(Richcontent content) {
-        String result = null;
-        List<Element> elementList = content.getHtml().getAny();
-
-        Element body = null;
-        for (Element elem : elementList) {
-            if (elem.getNodeName().equals("body")) {
-                body = elem;
-                break;
-            }
-        }
-        if (body != null) {
-            result = body.getTextContent();
-        }
-        return result;
-    }
-
     @NotNull
-    private String getText(Richcontent content) {
-        String result = "";
-        List<Element> elementList = content.getHtml().getAny();
+    private String html2text(@NotNull Richcontent content) throws TransformerException {
+        final Element html = (Element) content.getHtml();
 
-        Element body = null;
-        for (Element elem : elementList) {
-            if (elem.getNodeName().equals("body")) {
-                body = elem;
-                break;
-            }
-        }
-        if (body != null) {
-            String textNode = buildTextFromChildren(body);
-            if (textNode != null)
-                result = textNode.trim();
+        // Convert any to HTML piece ...
+        TransformerFactory transFactory = TransformerFactory.newInstance();
+        Transformer transformer = transFactory.newTransformer();
+        StringWriter buffer = new StringWriter();
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+        transformer.transform(new DOMSource(html), new StreamResult(buffer));
 
-        }
-        return result;
+        // Keep return lines in place ...
+        final Document document = Jsoup.parse(buffer.toString());
+        document.select("br").append("\\n");
+        document.select("p").prepend("\\n");
+        document.select("div").prepend("\\n");
+        return document.text().replaceAll("\\\\n", "\n").trim();
+
     }
 
-    private String buildTextFromChildren(org.w3c.dom.Node body) {
-        StringBuilder text = new StringBuilder();
-        NodeList childNodes = body.getChildNodes();
-        for (int i = 0; i < childNodes.getLength(); i++) {
-            org.w3c.dom.Node child = childNodes.item(i);
-            if (child instanceof TextImpl) {
-                text.append(" ");
-                text.append(child.getTextContent());
-            } else {
-                String textElem = buildTextFromChildren(child);
-                if (textElem != null && !textElem.equals("")) {
-                    text.append(textElem);
-                }
-            }
-        }
-        return text.toString();
-    }
 
     private void convertNodeProperties(@NotNull com.wisemapping.jaxb.freemind.Node freeNode, @NotNull com.wisemapping.jaxb.wisemap.TopicType wiseTopic) {
         final String text = freeNode.getTEXT();
         wiseTopic.setText(text);
 
+        // Background color ...
         final String bgcolor = freeNode.getBACKGROUNDCOLOR();
         wiseTopic.setBgColor(bgcolor);
+
 
         final String shape = getShapeFormFromNode(freeNode);
         wiseTopic.setShape(shape);
 
+        // Check for styles ...
         final String fontStyle = generateFontStyle(freeNode, null);
         if (fontStyle != null) {
             wiseTopic.setFontStyle(fontStyle);
@@ -567,9 +545,9 @@ public class FreemindImporter
 
     }
 
-    private
+
     @Nullable
-    String generateFontStyle(@NotNull Node node, @Nullable Font font) {
+    private String generateFontStyle(@NotNull Node node, @Nullable Font font) {
         /*
         * MindmapFont format : fontName ; size ; color ; bold; italic;
         * eg: Verdana;10;#ffffff;bold;italic;
@@ -583,10 +561,24 @@ public class FreemindImporter
         }
         fontStyle.append(";");
 
-        // Size ...
+        // Freemind size goes from 10 to 28
+        // WiseMapping:
+        //  6 Small
+        //  8 Normal
+        // 10 Large
+        // 15 Huge
         if (font != null) {
-            final BigInteger bigInteger = (font.getSIZE() == null || font.getSIZE().intValue() < 8) ? BigInteger.valueOf(8) : font.getSIZE();
-            fontStyle.append(bigInteger);
+            final int fontSize = ((font.getSIZE() == null || font.getSIZE().intValue() < 8) ? BigInteger.valueOf(FONT_SIZE_NORMAL) : font.getSIZE()).intValue();
+            int wiseFontSize = FONT_SIZE_SMALL;
+            if (fontSize >= 24) {
+                wiseFontSize = FONT_SIZE_HUGE;
+            } else if (fontSize >= 16) {
+                wiseFontSize = FONT_SIZE_LARGE;
+            }else  if (fontSize >= 12) {
+                wiseFontSize = FONT_SIZE_NORMAL;
+            }
+            fontStyle.append(wiseFontSize);
+
         }
         fontStyle.append(";");
 
@@ -630,10 +622,16 @@ public class FreemindImporter
     String getShapeFormFromNode(@NotNull Node node) {
         String result = node.getSTYLE();
         // In freemind a node without style is a line
-        if ("bubble".equals(result)) {
+        if ("bubble".equals(result))
+        {
             result = ShapeStyle.ROUNDED_RECTANGLE.getStyle();
         } else {
-            result = ShapeStyle.LINE.getStyle();
+             if(node.getBACKGROUNDCOLOR()!=null){
+                 // This the node has background color defined. It's better to change the default shape.
+                 result = ShapeStyle.RECTANGLE.getStyle();
+             } else {
+                result = ShapeStyle.LINE.getStyle();
+             }
         }
         return result;
     }

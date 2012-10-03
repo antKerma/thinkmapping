@@ -249,12 +249,12 @@
                 <div class="control-group">
                     <label class="control-label" for="newTitle"><spring:message code="NAME"/>:</label>
                     <input class="control" name="title" id="newTitle" type="text" required="required"
-                           placeholder="<spring:message code="MAP_NAME_HINT"/>" autofocus="autofocus"/>
+                           placeholder="<spring:message code="MAP_NAME_HINT"/>" autofocus="autofocus" maxlength="255"/>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="newDec"><spring:message code="DESCRIPTION"/>:</label>
                     <input class="control" name="description" id="newDec" type="text"
-                           placeholder="<spring:message code="MAP_DESCRIPTION_HINT"/>"/>
+                           placeholder="<spring:message code="MAP_DESCRIPTION_HINT"/>" maxlength="255"/>
                 </div>
             </fieldset>
         </form>
@@ -280,14 +280,14 @@
                 <div class="control-group">
                     <label for="title" class="control-label"><spring:message code="NAME"/>: </label>
                     <input name="title" id="title" type="text" required="required"
-                           placeholder="Name of the new map to create" autofocus="autofocus"
-                           class="control"/>
+                           placeholder="<spring:message code="MAP_DESCRIPTION_HINT"/>" autofocus="autofocus"
+                           class="control" maxlength="255"/>
                 </div>
                 <div class="control-group">
                     <label for="description" class="control-label"><spring:message
                             code="DESCRIPTION"/>: </label>
                     <input name="description" id="description" type="text"
-                           placeholder="Some description for your map" class="control"/>
+                           placeholder="<spring:message code="MAP_DESCRIPTION_HINT"/>" class="control" maxlength="255"/>
                 </div>
             </fieldset>
         </form>
@@ -312,12 +312,12 @@
                 <div class="control-group">
                     <label for="renTitle" class="control-label"><spring:message code="NAME"/>: </label>
                     <input name="title" id="renTitle" required="required" autofocus="autofocus"
-                           class="control"/>
+                           class="control" maxlength="255"/>
                 </div>
                 <div class="control-group">
                     <label for="renDescription" class="control-label"><spring:message
                             code="DESCRIPTION"/>:</label>
-                    <input name="description" class="control" id="renDescription"/>
+                    <input name="description" class="control" id="renDescription" maxlength="255"/>
                 </div>
             </fieldset>
         </form>
@@ -341,7 +341,8 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary btn-accept" data-loading-text="Saving ..."><spring:message
+        <button class="btn btn-primary btn-accept" data-loading-text="<spring:message
+                code="SAVING"/> ..."><spring:message
                 code="DELETE"/></button>
         <button class="btn btn-cancel" data-dismiss="modal"><spring:message code="CANCEL"/></button>
     </div>
