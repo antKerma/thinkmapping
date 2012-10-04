@@ -269,7 +269,7 @@ mindplot.widget.Menu = new Class({
 
         this._addButton('print', false, false, function () {
             var baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf("c/maps/"));
-            window.open(baseUrl + 'c/maps/' + mapId + '/print');
+            var win = window.open(baseUrl + 'c/maps/' + mapId + '/print');
         });
 
         this._registerTooltip('print', $msg('PRINT'));
@@ -359,7 +359,6 @@ mindplot.widget.Menu = new Class({
             this._addButton('save', false, false, function () {
                 this.save(saveElem, designer, true);
             }.bind(this));
-            this._registerTooltip('save', $msg('SAVE'), "meta+S");
 
 
             if (!readOnly) {
@@ -442,7 +441,6 @@ mindplot.widget.Menu = new Class({
                 MooDialog.Request.active = reqDialog;
 
             });
-            this._registerTooltip('publishIt', $msg('PUBLISH'));
         }
 
         var historyElem = $('history');
