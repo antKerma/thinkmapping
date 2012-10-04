@@ -390,9 +390,11 @@ abbr[title] {
     background-color: #a1cf38;
 }
 /* line 908, ../sass/styles.scss */
-#sidebar-left .green-part-menu li:hover {
-    width: 80px;
-    background-color: #c8e38a;
+#sidebar-left .green-part-menu, #sidebar-left .extra-actions {
+    li:hover {
+        width: 80px;
+        background-color: #c8e38a;
+    }
 }
 /* line 912, ../sass/styles.scss */
 #sidebar-left .green-part-menu a {
@@ -430,6 +432,12 @@ abbr[title] {
     margin-bottom: 10px;
 }
 
+#sidebar-left .horizontal-menu li {
+    width: 80px;
+    float: left;
+    padding: 10px 0px;
+}
+
 #sidebar-left ol, #sidebar-left ul {
     list-style: none;
     margin: 0px;
@@ -439,74 +447,75 @@ abbr[title] {
     text-decoration: none;
 }
 
-/* line 944, ../sass/styles.scss */
-#sidebar-left .menu li.create a {
-    background: url(../images/sprite.png) no-repeat 34px -194px;
-}
-/* line 948, ../sass/styles.scss */
-#sidebar-left .menu li.import a {
-    background: url(../images/sprite.png) no-repeat 30px -354px;
-}
-/* line 952, ../sass/styles.scss */
-#sidebar-left .menu li.customize a {
-    background: url(../images/sprite.png) no-repeat 30px -876px;
+#sidebar-left .menu, #sidebar-left .horizontal-menu {
+    li.create a {
+        background: url(../images/sprite.png) no-repeat 34px -194px;
+    }
+
+    li.import a {
+        background: url(../images/sprite.png) no-repeat 30px -354px;
+    }
+
+    li.customize a {
+        background: url(../images/sprite.png) no-repeat 30px -876px;
+    }
+
+    li.copy a {
+    //    background: url(../images/sprite.png) no-repeat 34px -954px;
+    }
+
+    li.paste a {
+    //    background: url(../images/sprite.png) no-repeat 34px -954px;
+    }
+
+    li.pin-with a {
+        background: url(../images/sprite.png) no-repeat 34px -954px;
+    }
+
+    li.link a {
+        background: url(../images/sprite.png) no-repeat 34px -794px;
+    }
+
+    li.collaborate a {
+        background: url(../images/sprite.png) no-repeat 34px -710px;
+    }
+
+    li.discuss a {
+        background: url(../images/sprite.png) no-repeat 34px -1034px;
+    }
+
+    li.undo a {
+        background: url(../images/sprite.png) no-repeat -90px -230px;
+    }
+
+    li.redo a {
+        background: url(../images/sprite.png) no-repeat -90px -270px;
+    }
+
+    li.print a {
+        background: url(../images/sprite.png) no-repeat -88px -313px;
+    }
+
+    li.export a {
+        background: url(../images/sprite.png) no-repeat -90px -360px;
+    }
+
+    li.publish a {
+        background: url(../images/sprite.png) no-repeat -86px -515px;
+    }
+
+    li a {
+        display: block;
+        padding: 26px 0px 4px 0px;
+        margin-right: 1px;
+        text-align: center;
+        font-family: Arial, Helvetica, "Sans Serif";
+        font-size: 9px;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
 }
 
-#sidebar-left .menu li.copy a {
-//    background: url(../images/sprite.png) no-repeat 34px -954px;
-}
-
-#sidebar-left .menu li.paste a {
-//    background: url(../images/sprite.png) no-repeat 34px -954px;
-}
-
-/* line 956, ../sass/styles.scss */
-#sidebar-left .menu li.pin-with a {
-    background: url(../images/sprite.png) no-repeat 34px -954px;
-}
-/* line 960, ../sass/styles.scss */
-#sidebar-left .menu li.link a {
-    background: url(../images/sprite.png) no-repeat 34px -794px;
-}
-/* line 963, ../sass/styles.scss */
-#sidebar-left .menu li.collaborate a {
-    background: url(../images/sprite.png) no-repeat 34px -710px;
-}
-/* line 967, ../sass/styles.scss */
-#sidebar-left .menu li.discuss a {
-    background: url(../images/sprite.png) no-repeat 34px -1034px;
-}
-/* line 970, ../sass/styles.scss */
-#sidebar-left .menu li.undo a {
-    background: url(../images/sprite.png) no-repeat -90px -230px;
-}
-/* line 973, ../sass/styles.scss */
-#sidebar-left .menu li.redo a {
-    background: url(../images/sprite.png) no-repeat -90px -270px;
-}
-/* line 976, ../sass/styles.scss */
-#sidebar-left .menu li.print a {
-    background: url(../images/sprite.png) no-repeat -88px -313px;
-}
-/* line 979, ../sass/styles.scss */
-#sidebar-left .menu li.export a {
-    background: url(../images/sprite.png) no-repeat -90px -360px;
-}
-/* line 982, ../sass/styles.scss */
-#sidebar-left .menu li.publish a {
-    background: url(../images/sprite.png) no-repeat -86px -515px;
-}
-/* line 986, ../sass/styles.scss */
-#sidebar-left .menu li a {
-    display: block;
-    padding: 26px 0px 4px 0px;
-    margin-right: 1px;
-    text-align: center;
-    font-family: Arial, Helvetica, "Sans Serif";
-    font-size: 9px;
-    text-transform: uppercase;
-    font-weight: bold;
-}
 /* line 998, ../sass/styles.scss */
 #sidebar-left .customize-options {
     display: block;
@@ -523,6 +532,23 @@ abbr[title] {
     border-radius: 6px;
     padding: 10px 20px 20px;
 }
+
+#sidebar-left .extra-actions {
+    display: block;
+    position: absolute;
+    top: 550px;
+    left: 120px;
+    width: 400px;
+    background-color: #a1cf38;
+    border: solid 1px #eaeaea;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -ms-border-radius: 6px;
+    -o-border-radius: 6px;
+    border-radius: 6px;
+    padding: 0px 20px 0px;
+}
+
 /* line 1010, ../sass/styles.scss */
 #sidebar-left .customize-options strong {
     clear: left;

@@ -7,17 +7,15 @@
         //Sidebar show/hide page edition
         jQuery('#sidebar-left').hover(function(){
             jQuery(this).stop(true).animate({left:0});
-            //jQuery('#sidebar-left').stop(true, true).animate({left:-20});
             jQuery("#title-toolbar").fadeToggle('fast', function(){});
         },function(){
             jQuery(this).stop(true).animate({left:-80});
-            //jQuery('#sidebar-left').stop(true, true).animate({left:-100});
             jQuery("#title-toolbar").fadeToggle('slow', function(){});
         });
 
         // Sidebar masquer le module customize lorsque l'on ne survole plus la sidebar ou le module
         jQuery('#sidebar-left').mouseleave(function(){
-            jQuery(".customize-options").fadeOut('fast', function() {});
+            jQuery(".popin").fadeOut('fast', function() {});
         });
 
         // Sidebar btn personnaliser
@@ -27,6 +25,10 @@
             $("personalizePanel").getElements(".widget").each(function(elem) {
                 elem.fireEvent('openPanel');
             });
+        });
+
+        jQuery(".extraActions a").click(function () {
+            jQuery(".extra-actions").fadeToggle('fast', function(){});
         });
     });
 </script>
@@ -44,7 +46,7 @@
             <li class="edit">
                 <div id="editTopic"><a href="#"><spring:message code="TOOLBAR_EDIT"></spring:message></a></div>
             </li>
-            <li class="customize">
+            <li class="customize popinBtn">
                 <a href="#"><spring:message code="TOOLBAR_CUSTOMIZE"></spring:message></a>
             </li>
             <li class="copy">
@@ -64,14 +66,7 @@
     <div class="edition-mid-container">&nbsp;</div>
     <div class="green-part-menu">
         <ul class="menu">
-            <li class="save"><div id="save"><a href="#"><spring:message code="SAVE_CHANGES"></spring:message></a></div></li>
-            <li class="print"><div id="print"><a href="javascript:window.print()"><spring:message code="TOOLBAR_PRINT"></spring:message></a></div></li>
-            <li class="export"><div id="export"><a href="#export-map"><spring:message code="TOOLBAR_EXPORT"></spring:message></a></div></li>
-            <%--<li class="pin-with"><a href="#"><spring:message code="TOOLBAR_ATTACH"></spring:message></a></li>--%>
-            <%--<li class="link"><a href="#link"><spring:message code="TOOLBAR_LINK"></spring:message></a></li>--%>
-            <%--<li class="collaborate"><a href="#" class="delete">Collaborer</a></li>--%>
-            <%--<li class="discuss"><a href="#">Communiquer</a></li>--%>
-            <li class="publish"><div id="publishIt"><a href="#"><spring:message code="TOOLBAR_PUBLISH"></spring:message></a></div></li>
+            <li class="extraActions popinBtn"><a href="#">+</a></li>
         </ul>
     </div>
     <div class="edition-bot-container">&nbsp;</div>
@@ -86,7 +81,7 @@
     </div>
 
     <!--POPIN CUSTOMIZE-->
-    <div id="personalizePanel" class="customize-options" style="display:none;">
+    <div id="personalizePanel" class="customize-options popin" style="display:none;">
         <div id="text-options">
             <strong><spring:message code="TOOLBAR_FONT"></spring:message></strong>
             <div id="font" class="widget">
@@ -173,5 +168,16 @@
         </div>
     </div>
     <span id="btn-sidebar"><a href="#" id="sidebar-on">+</a></span>
+
+    <!-- POPIN EXTRA ACTIONS -->
+    <div id="extraActionsPanel" class="extra-actions popin" style="display: none;">
+        <ul class="horizontal-menu">
+            <li class="save"><div id="save"><a href="#"><spring:message code="SAVE_CHANGES"></spring:message></a></div></li>
+            <li class="saveAs"><a href="#"><spring:message code="TOOLBAR_SAVE_AS"></spring:message></a></li>
+            <li class="print"><div id="print"><a href="javascript:window.print()"><spring:message code="TOOLBAR_PRINT"></spring:message></a></div></li>
+            <li class="export"><div id="export"><a href="#export-map"><spring:message code="TOOLBAR_EXPORT"></spring:message></a></div></li>
+            <li class="publish"><div id="publishIt"><a href="#"><spring:message code="TOOLBAR_PUBLISH"></spring:message></a></div></li>
+        </ul>
+    </div>
 </div>
 <strong id="title-toolbar" style="display: block; "><spring:message code="TOOLBAR"></spring:message></strong>

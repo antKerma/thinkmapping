@@ -265,14 +265,11 @@ mindplot.widget.Menu = new Class({
             });
             MooDialog.Request.active = reqDialog;
         });
-        this._registerTooltip('export', $msg('EXPORT'));
 
         this._addButton('print', false, false, function () {
             var baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf("c/maps/"));
             var win = window.open(baseUrl + 'c/maps/' + mapId + '/print');
         });
-
-        this._registerTooltip('print', $msg('PRINT'));
 
         this._addButton('zoomIn', false, false, function () {
             designer.zoomIn();
