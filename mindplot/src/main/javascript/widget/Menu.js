@@ -327,6 +327,11 @@ mindplot.widget.Menu = new Class({
             designer.createChildForSelectedNode();
         });
 
+        this._addButton('editTopic', true, false, function() {
+            var nodes = designerModel.filterSelectedTopics();
+            var topic = nodes[nodes.length-1];
+            topic.showTextEditor(topic.getText());
+        })
 
         this._addButton('deleteTopic', true, true, function () {
             designer.deleteSelectedEntities();
