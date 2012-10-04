@@ -66,7 +66,7 @@
     <div class="edition-mid-container">&nbsp;</div>
     <div class="green-part-menu">
         <ul class="menu">
-            <li class="extraActions popinBtn"><a href="#">+</a></li>
+            <li class="extraActions popinBtn collaborate"><a href="#"><spring:message code="TOOLBAR_SAVE_SHARE"></spring:message></a></li>
         </ul>
     </div>
     <div class="edition-bot-container">&nbsp;</div>
