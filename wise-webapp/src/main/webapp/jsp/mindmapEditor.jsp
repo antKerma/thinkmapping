@@ -77,7 +77,9 @@
 
 <%@ include file="/jsp/mindmapEditorVerticalToolbar.jsf" %>
 
-<jsp:include page="footer.jsp"/>
+<div id="footerContainer" class="row">
+    <a href="http://www.wisemapping.org/"><spring:message code="COPYRIGHT"/></a>
+</div>
 
 <div id="mindplot" onselectstart="return false;"></div>
 <script type="text/javascript" src="js/editor.js"></script>
