@@ -173,7 +173,7 @@
     <div id="extraActionsPanel" class="extra-actions popin" style="display: none;">
         <ul class="horizontal-menu">
             <li class="save"><div id="save"><a href="#"><spring:message code="SAVE_CHANGES"></spring:message></a></div></li>
-            <li class="saveAs"><a href="#"><spring:message code="TOOLBAR_SAVE_AS"></spring:message></a></li>
+            <%--<li class="saveAs"><a href="#"><spring:message code="TOOLBAR_SAVE_AS"></spring:message></a></li>--%>
             <li class="print"><div id="print"><a href="javascript:window.print()"><spring:message code="TOOLBAR_PRINT"></spring:message></a></div></li>
             <li class="export"><div id="export"><a href="#export-map"><spring:message code="TOOLBAR_EXPORT"></spring:message></a></div></li>
             <li class="publish"><div id="publishIt"><a href="#"><spring:message code="TOOLBAR_PUBLISH"></spring:message></a></div></li>
