@@ -49,6 +49,9 @@
             <li class="customize popinBtn">
                 <a href="#"><spring:message code="TOOLBAR_CUSTOMIZE"></spring:message></a>
             </li>
+            <li class="relationship">
+                <div id="addRelationship"><a href="#">relation</a></div>
+            </li>
             <li class="copy">
                 <div id="copySelection"><a href="#"><spring:message code="TOOLBAR_COPY"></spring:message></a></div>
             </li>

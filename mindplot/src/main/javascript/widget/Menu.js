@@ -328,7 +328,11 @@ mindplot.widget.Menu = new Class({
             var nodes = designerModel.filterSelectedTopics();
             var topic = nodes[nodes.length-1];
             topic.showTextEditor(topic.getText());
-        })
+        });
+
+        this._addButton('addRelationship', true, false, function (event) {
+            designer.showRelPivot(event);
+        });
 
         this._addButton('deleteTopic', true, true, function () {
             designer.deleteSelectedEntities();
