@@ -122,3 +122,7 @@ The  node.setShapeType(mindplot.model.TopicShape.IMAGE) defines a image node. Th
 The source code is Licensed under the WiseMapping Open License, Version 1.0 (the “License”);
 
 You may obtain a copy of the License at: http://www.wisemapping.org/license
+
+
+
+
