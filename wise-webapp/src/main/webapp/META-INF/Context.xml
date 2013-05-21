@@ -6,8 +6,8 @@
             name="jdbc/wisemapping"
             auth="Container"
             type="javax.sql.DataSource"
-            maxActive="100"
-            maxIdle="30" maxWait="10000"
+            maxActive="10"
+            maxIdle="3" maxWait="10000"
             driverClassName="com.mysql.jdbc.Driver"
             url="jdbc:mysql://localhost/wisemapping?autoReconnect=true"/>
 
