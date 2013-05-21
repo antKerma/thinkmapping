@@ -11,8 +11,6 @@
         <property name="url" value="${database.url}"/>
         <property name="username" value="${database.username}"/>
         <property name="password" value="${database.password}"/>
-        <property name="testOnBorrow" value="${database.validation.enabled}"/>
-        <property name="validationQuery" value="${database.validation.query}"/>
     </bean>
 
      <!--Descoment this lines for production environments -->
@@ -37,7 +35,6 @@
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">${database.hibernate.dialect}</prop>
-                <prop key="hibernate.default_schema">public</prop>
             </props>
         </property>
     </bean>
