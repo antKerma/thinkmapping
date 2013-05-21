@@ -4,7 +4,7 @@
  *   Licensed under WiseMapping Public License, Version 1.0 (the "License").
  *   It is basically the Apache License, Version 2.0 (the "License") plus the
  *   "powered by wisemapping" text requirement on every single page;
- *   you may not use this file except in compliance with the License.
+ *   you may not use this   file except in compliance with the License.
  *   You may obtain a copy of the license at
  *
  *       http://www.wisemapping.org/license
@@ -22,11 +22,13 @@ mindplot.DragManager = new Class({
         this._designerModel = workspace;
         this._listeners = {};
         this._isDragInProcess = false;
+        this._selectedNodes = [];
         this._eventDispatcher = eventDispatcher;
         mindplot.DragTopic.init(this._workspace);
     },
 
     add : function(node) {
+        console.log('add drag manager');
         // Add behaviour ...
         var workspace = this._workspace;
         var screen = workspace.getScreenManager();
@@ -54,6 +56,7 @@ mindplot.DragManager = new Class({
             }
         }.bind(this);
         node.addEvent('mousedown', mouseDownListener);
+
     },
 
     remove : function(node) {
@@ -76,6 +79,8 @@ mindplot.DragManager = new Class({
             if (!this._isDragInProcess) {
                 // Execute Listeners ..
                 var startDragListener = dragManager._listeners['startdragging'];
+                console.log('start draggin..');
+                //for each selected node ...
                 startDragListener(event, dragNode);
 
                 // Add shadow node to the workspace.

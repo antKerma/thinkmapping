@@ -92,7 +92,8 @@ mindplot.Workspace = new Class({
         return this._workspace.getCoordSize();
     },
 
-    setZoom: function(zoom, center) {
+    setZoom: function(zoom, center,event) {
+        zoom=1.0;
         this._zoom = zoom;
         var workspace = this._workspace;
 
@@ -100,6 +101,11 @@ mindplot.Workspace = new Class({
         var coordWidth = zoom * this._screenWidth;
         var coordHeight = zoom * this._screenHeight;
         workspace.setCoordSize(coordWidth, coordHeight);
+
+        if(event){
+            var screen = this._screenManager;
+            var pos = screen.getWorkspaceMousePosition(event);
+        }
 
         // View port coords ...
         if (this._viewPort) {
@@ -121,8 +127,8 @@ mindplot.Workspace = new Class({
             }
         } else {
             var coordOrigin = workspace.getCoordOrigin();
-            coordOriginX = coordOrigin.x;
-            coordOriginY = coordOrigin.y;
+            coordOriginX = -(coordWidth / 2) + pos.x;
+            coordOriginY = -(coordHeight / 2) + pos.y;
         }
 
         workspace.setCoordOrigin(coordOriginX, coordOriginY);

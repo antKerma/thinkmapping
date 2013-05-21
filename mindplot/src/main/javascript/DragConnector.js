@@ -26,7 +26,7 @@ mindplot.DragConnector = new Class({
         this._workspace = workspace;
     },
 
-    checkConnection:function (dragTopic) {
+    checkConnection:function (dragTopic,selectedNodes) {
         var topics = this._designerModel.getTopics();
 
         // Must be disconnected from their current connection ?.
@@ -40,7 +40,11 @@ mindplot.DragConnector = new Class({
 
         // Finally, connect nodes ...
         if (!dragTopic.isConnected() && candidates.length > 0) {
-            dragTopic.connectTo(candidates[0]);
+            console.log(selectedNodes.length);
+            selectedNodes.map(function(node){
+                node.connectTo(candidates[0]);
+            });
+//           dragTopic.connectTo(candidates[0]);
         }
     },
 

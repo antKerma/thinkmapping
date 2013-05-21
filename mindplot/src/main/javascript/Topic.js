@@ -25,6 +25,7 @@ mindplot.Topic = new Class({
         this._parent = null;
         this._relationships = [];
         this._isInWorkspace = false;
+        this._dragNode= null;
         this._buildTopicShape();
 
         // Position a topic ....
@@ -582,6 +583,7 @@ mindplot.Topic = new Class({
 
         // Focus events ...
         elem.addEvent('mousedown', function (event) {
+
             if (!this.isReadOnly()) {
                 // Disable topic selection of readOnly mode ...
                 var value = true;
@@ -591,6 +593,9 @@ mindplot.Topic = new Class({
                     event.preventDefault();
                 }
                 topic.setOnFocus(value);
+
+                console.log('focus');
+                console.log(topic)
             }
 
             var eventDispatcher = this._getTopicEventDispatcher();
@@ -1138,7 +1143,12 @@ mindplot.Topic = new Class({
         // If a drag node is create for it, let's hide the editor.
         this._getTopicEventDispatcher().close();
 
+        this._dragNode = result;
         return result;
+    },
+
+    getDragNode: function(){
+        return this._dragNode;
     },
 
     _adjustShapes:function () {

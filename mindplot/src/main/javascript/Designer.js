@@ -98,10 +98,10 @@ mindplot.Designer = new Class({
 
                 if (!isOutsideContainer) {
                     if (event.wheel > 0) {
-                        this.zoomIn(1.05);
+                        this.zoomIn(1.00,event);
                     }
                     else {
-                        this.zoomOut(1.05);
+                        this.zoomOut(1.00,event);
                     }
                     event.preventDefault();
                 }
@@ -177,21 +177,47 @@ mindplot.Designer = new Class({
             });
 
             dragManager.addEvent('dragging', function (event, dragTopic) {
-                dragTopic.updateFreeLayout(event);
-                if (!dragTopic.isFreeLayoutOn(event)) {
-                    // The node is being drag. Is the connection still valid ?
-                    dragConnector.checkConnection(dragTopic);
+                var selectedNodes = designerModel.filterSelectedTopics();
+                var dragNodes = selectedNodes.map(function(f){
+                    return f.getDragNode();
+                });
+                console.log(dragNodes.length);
 
-                    if (!dragTopic.isVisible() && dragTopic.isConnected()) {
-                        dragTopic.setVisibility(true);
+                dragNodes.map(function(dragNode){
+                    dragNode.updateFreeLayout(event);
+                    if (!dragNode.isFreeLayoutOn(event)) {
+                        // The node is being drag. Is the connection still valid ?
+                        dragConnector.checkConnection(dragNode,dragNodes);
+
+                        if (!dragNode.isVisible() && dragNode.isConnected()) {
+                            dragNode.setVisibility(true);
+                        }
                     }
-                }
+
+                });
+//                dragTopic.updateFreeLayout(event);
+//                if (!dragTopic.isFreeLayoutOn(event)) {
+//                    // The node is being drag. Is the connection still valid ?
+//                    dragConnector.checkConnection(dragTopic,dragNodes);
+//
+//                    if (!dragTopic.isVisible() && dragTopic.isConnected()) {
+//                        dragTopic.setVisibility(true);
+//                    }
+//                }
+
             });
 
             dragManager.addEvent('enddragging', function (event, dragTopic) {
                 for (var i = 0; i < topics.length; i++) {
                     topics[i].setMouseEventsEnabled(true);
                 }
+                var selectedNodes = designerModel.filterSelectedTopics();
+                var dragNodes = selectedNodes.map(function(f){
+                    return f.getDragNode();
+                });
+                dragNodes.map(function(f){
+                    f.applyChanges(workspace);
+                });
                 dragTopic.applyChanges(workspace);
             });
 
@@ -278,8 +304,10 @@ mindplot.Designer = new Class({
             var objects = model.getEntities();
             objects.each(function (object) {
                 // Disable all nodes on focus but not the current if Ctrl key isn't being pressed
+
                 if (!$defined(event) || (!event.control && !event.meta)) {
                     if (object.isOnFocus() && object != currentObject) {
+                        console.log('disabling focus');
                         object.setOnFocus(false);
                     }
                 }
@@ -315,7 +343,7 @@ mindplot.Designer = new Class({
             this._workspace.setZoom(zoom);
         },
 
-        zoomOut:function (factor) {
+        zoomOut:function (factor,event) {
             if (!factor)
                 factor = 1.2;
 
@@ -323,7 +351,7 @@ mindplot.Designer = new Class({
             var scale = model.getZoom() * factor;
             if (scale <= 1.9) {
                 model.setZoom(scale);
-                this._workspace.setZoom(scale);
+                this._workspace.setZoom(scale,false,event);
             }
             else {
                 $notify($msg('ZOOM_ERROR'));
@@ -331,7 +359,7 @@ mindplot.Designer = new Class({
 
         },
 
-        zoomIn:function (factor) {
+        zoomIn:function (factor,event) {
             if (!factor)
                 factor = 1.2;
 
@@ -340,7 +368,7 @@ mindplot.Designer = new Class({
 
             if (scale >= 0.3) {
                 model.setZoom(scale);
-                this._workspace.setZoom(scale);
+                this._workspace.setZoom(1.0,false,event);
             }
             else {
                 $notify($msg('ZOOM_ERROR'));
