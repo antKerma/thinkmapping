@@ -226,6 +226,7 @@
                                         <include>layout/ChildrenSorterStrategy.js</include>
                                         <include>layout/AbstractBasicSorter.js</include>
                                         <include>layout/BalancedSorter.js</include>
+                                        <include>layout/CyclicSorter.js</include>
                                         <include>layout/SymmetricSorter.js</include>
                                         <include>layout/GridSorter.js</include>
                                         <include>layout/OriginalLayout.js</include>
