@@ -122,6 +122,7 @@ mindplot.layout.CyclicSorter = new Class({
 
         var newOrder = order > (max + 1) ? (max + 2) : order;
         child.setOrder(newOrder);
+        console.log("\tchild order= " + child.getOrder());        //TODO(gb): Remove trace!!!
     },
 
     detach:function (treeSet, node) {
@@ -137,56 +138,46 @@ mindplot.layout.CyclicSorter = new Class({
         node.setOrder(node.getOrder() % 2 == 0 ? 0 : 1);
     },
 
-    computeOffsets:function (treeSet, node) {
+    computeOffsets:function (treeSet, rootNode) {
         $assert(treeSet, "treeSet can no be null.");
-        $assert(node, "node can no be null.");
+        $assert(rootNode, "rootNode can no be null.");
+        var self = this;
 
-        var children = this._getSortedChildren(treeSet, node);
+        var offsets = {};
+
+        var children = this._getSortedChildren(treeSet, rootNode);
 
         // Compute heights ...
-        var heights = children.map(
+        var nodes = children.map(
             function (child) {
-                return {id:child.getId(), order:child.getOrder(), width:child.getSize().width, height:this._computeChildrenHeight(treeSet, child)};
-            }, this).reverse();
+                return {
+                    id: child.getId(),
+                    order: child.getOrder(),
+                    width: child.getSize().width,
+                    height: this._computeChildrenHeight(treeSet, child)
+                };
+            }, this);
 
+        for (var i=0; i<nodes.length; i++) {
+            var node = nodes[i];
+            var xOffset = 0, yOffset = 0;
+            var vector = self._getDirectionVector(self._getAngle(node.order, children.length));
 
-        // Compute the center of the branch ...
-        var totalPHeight = 0;
-        var totalNHeight = 0;
+            // xOffset
+            xOffset = mindplot.layout.CyclicSorter.BASE_RADIUS * vector.x;
 
-        heights.each(function (elem) {
-            if (elem.order % 2 == 0) {
-                totalPHeight += elem.height;
-            } else {
-                totalNHeight += elem.height;
-            }
-        });
-        var psum = totalPHeight / 2;
-        var nsum = totalNHeight / 2;
-        var ysum = 0;
+            // yOffset
+            yOffset = mindplot.layout.CyclicSorter.BASE_RADIUS * vector.y;
 
-        // Calculate the offsets ...
-        var result = {};
-        for (var i = 0; i < heights.length; i++) {
-            var direction = heights[i].order % 2 ? -1 : 1;
-
-            if (direction > 0) {
-                psum = psum - heights[i].height;
-                ysum = psum;
-            } else {
-                nsum = nsum - heights[i].height;
-                ysum = nsum;
-            }
-
-            var yOffset = ysum + heights[i].height / 2;
-            var xOffset = direction * (node.getSize().width / 2 + heights[i].width / 2 + +mindplot.layout.BalancedSorter.INTERNODE_HORIZONTAL_PADDING);
-
+            // Add to offsets object
             $assert(!isNaN(xOffset), "xOffset can not be null");
             $assert(!isNaN(yOffset), "yOffset can not be null");
-
-            result[heights[i].id] = {x:xOffset, y:yOffset};
+            offsets[node.id] = { x: xOffset, y: yOffset };
         }
-        return result;
+
+        offsets[node.id] = { x: xOffset, y: yOffset };
+
+        return offsets;
     },
 
     verify:function (treeSet, node) {
@@ -210,6 +201,30 @@ mindplot.layout.CyclicSorter = new Class({
         return "Cyclic Sorter";
     },
 
+    _getDirection : function(order) {
+        return order < 1 ? -1 : 1;
+    },
+
+    _getAngle : function(order, totalNodes) {
+        return (order * 360 / totalNodes) % 360;
+    },
+
+    _getDirectionVector : function(alpha) {
+        function inRads(angle) { return angle * (Math.PI / 180); }
+
+        if (alpha == 0) {
+            return { x: -1, y: 0 }
+        } else if (alpha <= 90 ) {
+            return { x: -Math.cos(inRads(alpha)), y: -Math.sin(inRads(alpha))}
+        } else if (alpha <= 180) {
+            return { x: Math.cos(inRads(180 - alpha)), y: -Math.sin(inRads(180 - alpha))}
+        } else if (alpha <= 270) {
+            return { x: Math.cos(inRads(alpha - 180)), y: Math.sin(inRads(alpha - 180))}
+        } else {
+            return { x: -Math.sin(inRads(alpha - 270)), y: Math.cos(inRads(alpha - 270))}
+        }
+    },
+
     _getChildrenForOrder:function (parent, graph, order) {
         return this._getSortedChildren(graph, parent).filter(function (child) {
             return child.getOrder() % 2 == order % 2;
@@ -221,5 +236,6 @@ mindplot.layout.CyclicSorter = new Class({
     }
 });
 
-mindplot.layout.CyclicSorter.INTERNODE_VERTICAL_PADDING = 5;
-mindplot.layout.CyclicSorter.INTERNODE_HORIZONTAL_PADDING = 30;
+mindplot.layout.CyclicSorter.INTERNODE_VERTICAL_PADDING = 0;
+mindplot.layout.CyclicSorter.INTERNODE_HORIZONTAL_PADDING = 20;
+mindplot.layout.CyclicSorter.BASE_RADIUS = 120;
