@@ -48,15 +48,15 @@ mindplot.layout.CyclicTestSuite = new Class({
         manager.connectNode(0, 2, 1);
         manager.layout();
         manager.plot("testCyclic2", plotsize);
-        this.assertAligned(manager, "left", 1);
-        this.assertAligned(manager, "right", 2);
+        this.assertAlignedToRoot(manager, "left", 1);
+        this.assertAlignedToRoot(manager, "right", 2);
 
         console.log("\tAdd 3rd node...");
         manager.addNode(3, nodeSize, position);
         manager.connectNode(0, 3, 2);
         manager.layout();
         manager.plot("testCyclic3", plotsize);
-        this.assertAligned(manager, "left", 1);
+        this.assertAlignedToRoot(manager, "left", 1);
         this.assertQuadrant(manager, "top-right", 2);
         this.assertQuadrant(manager, "bottom-right", 3);
 
@@ -65,17 +65,17 @@ mindplot.layout.CyclicTestSuite = new Class({
         manager.connectNode(0, 4, 3);
         manager.layout();
         manager.plot("testCyclic4", plotsize);
-        this.assertAligned(manager, "left", 1);
-        this.assertAligned(manager, "top", 2);
-        this.assertAligned(manager, "right", 3);
-        this.assertAligned(manager, "bottom", 4);
+        this.assertAlignedToRoot(manager, "left", 1);
+        this.assertAlignedToRoot(manager, "top", 2);
+        this.assertAlignedToRoot(manager, "right", 3);
+        this.assertAlignedToRoot(manager, "bottom", 4);
 
         console.log("\tAdd 5th node...");
         manager.addNode(5, nodeSize, position);
         manager.connectNode(0, 5, 4);
         manager.layout();
         manager.plot("testCyclic5", plotsize);
-        this.assertAligned(manager, "left", 1);
+        this.assertAlignedToRoot(manager, "left", 1);
         this.assertQuadrant(manager, "top-left",2);
         this.assertQuadrant(manager, "top-right", 3);
         this.assertQuadrant(manager, "bottom-right", 4);
@@ -86,21 +86,39 @@ mindplot.layout.CyclicTestSuite = new Class({
         manager.connectNode(0, 6, 5);
         manager.layout();
         manager.plot("testCyclic6", plotsize);
-        this.assertAligned(manager, "left", 1);
+        this.assertAlignedToRoot(manager, "left", 1);
         this.assertQuadrant(manager, "top-left",2);
         this.assertQuadrant(manager, "top-right", 3);
-        this.assertAligned(manager, "right", 4);
+        this.assertAlignedToRoot(manager, "right", 4);
         this.assertQuadrant(manager, "bottom-right", 5);
         this.assertQuadrant(manager, "bottom-left", 6);
 
-//        manager.addNode(7, nodeSize, position);
-//        manager.addNode(8, nodeSize, position);
-//        manager.addNode(9, nodeSize, position);
-//        manager.connectNode(3, 7, 0)
-//        manager.connectNode(7, 8, 0)
-//        manager.connectNode(7, 9, 1);
-//        manager.layout();
-//        manager.plot("testCyclic7", plotsize);
+        manager.addNode(7, nodeSize, position);
+        manager.addNode(8, nodeSize, position);
+        manager.addNode(9, nodeSize, position);
+        manager.connectNode(3, 7, 0)
+        manager.connectNode(7, 8, 0)
+        manager.connectNode(7, 9, 1);
+        manager.addNode(10, nodeSize, position);
+        manager.addNode(11, nodeSize, position);
+        manager.addNode(12, nodeSize, position);
+        manager.connectNode(4, 10, 0)
+        manager.connectNode(4, 11, 1)
+        manager.connectNode(4, 12, 2);
+        manager.addNode(13, nodeSize, position);
+        manager.addNode(14, nodeSize, position);
+        manager.connectNode(1, 13, 0)
+        manager.connectNode(1, 14, 1)
+        manager.layout();
+        manager.plot("testCyclic7", plotsize);
+        this.assertAligned(manager, "horizontally", 3, 7);
+        this.assertToThe(manager, "right", 3, 7);
+        this.assertAligned(manager, "horizontally", 4, 11);
+        this.assertToThe(manager, "right", 4, 10);
+        this.assertToThe(manager, "right", 4, 11);
+        this.assertToThe(manager, "right", 4, 12);
+        this.assertToThe(manager, "left", 1, 13);
+        this.assertToThe(manager, "left", 1, 14);
 
 //        manager.addNode(10, nodeSize, position);
 //        manager.addNode(11, nodeSize, position);
@@ -419,6 +437,10 @@ mindplot.layout.CyclicTestSuite = new Class({
         console.log("OK!\n\n");
     },
 
+    /*
+     * Asserts that a given node is in a certain quadrant.
+     * Possible quadrants: "top-right", "bottom-right", "bottom-left", "top-left"
+     */
     assertQuadrant: function(manager, quadrant, nodeId) {
         var test = false;
         if (quadrant == "top-right") {
@@ -433,7 +455,11 @@ mindplot.layout.CyclicTestSuite = new Class({
         $assert(test, "Node " + nodeId + " must be in the " + quadrant + " quadrant");
     },
 
-    assertAligned: function(manager, direction, nodeId) {
+    /*
+     * Asserts that a given node is aligned to the root node in a certain direction.
+     * Possible directions: "top", "right", "bottom", "left".
+     */
+    assertAlignedToRoot: function(manager, direction, nodeId) {
         var test = false;
         if (direction == "top") {
             test = manager.find(nodeId).getPosition().x == manager.find(0).getPosition().x && manager.find(nodeId).getPosition().y < manager.find(0).getPosition().y;
@@ -445,5 +471,37 @@ mindplot.layout.CyclicTestSuite = new Class({
             test = manager.find(nodeId).getPosition().x < manager.find(0).getPosition().x && manager.find(nodeId).getPosition().y == manager.find(0).getPosition().y;
         }
         $assert(test, "Node " + nodeId + " must be aligned to the " +  direction + " of the root node");
+    },
+
+    /*
+     * Asserts that two given nodes are aligned in a certain direction.
+     * Possible directions: "horizontally", "vertically".
+     */
+    assertAligned: function(manager, direction, nodeA, nodeB) {
+        var test = false;
+        if (direction == "horizontally") {
+            test = manager.find(nodeA).getPosition().y == manager.find(nodeB).getPosition().y;
+        } else if (direction == "vertically") {
+            test = manager.find(nodeA).getPosition().x == manager.find(nodeB).getPosition().x;
+        }
+        $assert(test, "Nodes " + nodeA + " and " + nodeB + "must be " + direction + " algined");
+    },
+
+    /*
+     * Asserts that nodeB is to a certain direction of nodeA.
+     * Possible directions: "top", "right", "bottom", "left".
+     */
+    assertToThe: function(manager, direction, nodeA, nodeB) {
+        var test = false;
+        if (direction == "top") {
+            test = manager.find(nodeB).getPosition().y < manager.find(nodeA).getPosition().y;
+        } else if (direction == "right") {
+            test = manager.find(nodeB).getPosition().x > manager.find(nodeA).getPosition().x;
+        } else if (direction == "bottom") {
+            test = manager.find(nodeB).getPosition().y > manager.find(nodeA).getPosition().y;
+        } else if (direction == "left") {
+            test = manager.find(nodeB).getPosition().x < manager.find(nodeA).getPosition().x;
+        }
+        $assert(test, "Node " + nodeB + " must be to the " + direction + " of node " + nodeA);
     }
 });

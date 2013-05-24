@@ -15,6 +15,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
+
 mindplot.layout.CyclicSorter = new Class({
     Extends:mindplot.layout.AbstractBasicSorter,
 
@@ -193,7 +194,16 @@ mindplot.layout.CyclicSorter = new Class({
     },
 
     getChildDirection:function (treeSet, child) {
-        return child.getOrder() % 2 == 0 ? 1 : -1;
+        var direction = 1;
+        var rootNode = treeSet.getRootNode(child);
+
+        if (child.getPosition().x == rootNode.getPosition().x) {
+            direction = child.getPosition().y < 0 ? 1 : -1;
+        } else {
+            direction = child.getPosition().x < rootNode.getPosition().x ? -1 : 1;
+        }
+
+        return direction;
     },
 
     toString:function () {
