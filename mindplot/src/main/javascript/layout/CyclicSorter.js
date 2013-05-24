@@ -122,7 +122,6 @@ mindplot.layout.CyclicSorter = new Class({
 
         var newOrder = order > (max + 1) ? (max + 2) : order;
         child.setOrder(newOrder);
-        console.log("\tchild order= " + child.getOrder());        //TODO(gb): Remove trace!!!
     },
 
     detach:function (treeSet, node) {
@@ -164,10 +163,10 @@ mindplot.layout.CyclicSorter = new Class({
             var vector = self._getDirectionVector(self._getAngle(node.order, children.length));
 
             // xOffset
-            xOffset = mindplot.layout.CyclicSorter.BASE_RADIUS * vector.x;
+            xOffset = Math.round(mindplot.layout.CyclicSorter.BASE_RADIUS * vector.x);
 
             // yOffset
-            yOffset = mindplot.layout.CyclicSorter.BASE_RADIUS * vector.y;
+            yOffset = Math.round(mindplot.layout.CyclicSorter.BASE_RADIUS * vector.y);
 
             // Add to offsets object
             $assert(!isNaN(xOffset), "xOffset can not be null");
@@ -238,4 +237,4 @@ mindplot.layout.CyclicSorter = new Class({
 
 mindplot.layout.CyclicSorter.INTERNODE_VERTICAL_PADDING = 0;
 mindplot.layout.CyclicSorter.INTERNODE_HORIZONTAL_PADDING = 20;
-mindplot.layout.CyclicSorter.BASE_RADIUS = 120;
+mindplot.layout.CyclicSorter.BASE_RADIUS = 130;

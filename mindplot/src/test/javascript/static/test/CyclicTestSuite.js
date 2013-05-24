@@ -33,57 +33,85 @@ mindplot.layout.CyclicTestSuite = new Class({
         var rootNodeSize = {width:120, height:40}, nodeSize = {width:80, height:30};
         var manager = new mindplot.layout.LayoutManager(0, rootNodeSize);
 
-        console.log("Add 1st node...");
+        console.log("\tAdd 1st node...");
         manager.addNode(1, nodeSize, position);
         manager.connectNode(0, 1, 0);
         manager.layout();
         manager.plot("testCyclic1", plotsize);
+        $assert(
+            manager.find(1).getPosition().x < manager.find(0).getPosition().x,
+            "Node 1 must be to the left of the root node"
+        );
 
-        console.log("Add 2nd node...");
-        manager.addNode(2, mindplot.layout.TestSuite.NODE_SIZE, position);
+        console.log("\tAdd 2nd node...");
+        manager.addNode(2, nodeSize, position);
         manager.connectNode(0, 2, 1);
         manager.layout();
         manager.plot("testCyclic2", plotsize);
+        this.assertAligned(manager, "left", 1);
+        this.assertAligned(manager, "right", 2);
 
-        manager.addNode(3, mindplot.layout.TestSuite.NODE_SIZE, position);
+        console.log("\tAdd 3rd node...");
+        manager.addNode(3, nodeSize, position);
         manager.connectNode(0, 3, 2);
         manager.layout();
         manager.plot("testCyclic3", plotsize);
+        this.assertAligned(manager, "left", 1);
+        this.assertQuadrant(manager, "top-right", 2);
+        this.assertQuadrant(manager, "bottom-right", 3);
 
-        manager.addNode(4, mindplot.layout.TestSuite.NODE_SIZE, position);
+        console.log("\tAdd 4th node...");
+        manager.addNode(4, nodeSize, position);
         manager.connectNode(0, 4, 3);
         manager.layout();
         manager.plot("testCyclic4", plotsize);
+        this.assertAligned(manager, "left", 1);
+        this.assertAligned(manager, "top", 2);
+        this.assertAligned(manager, "right", 3);
+        this.assertAligned(manager, "bottom", 4);
 
-        manager.addNode(5, mindplot.layout.TestSuite.NODE_SIZE, position);
+        console.log("\tAdd 5th node...");
+        manager.addNode(5, nodeSize, position);
         manager.connectNode(0, 5, 4);
         manager.layout();
         manager.plot("testCyclic5", plotsize);
+        this.assertAligned(manager, "left", 1);
+        this.assertQuadrant(manager, "top-left",2);
+        this.assertQuadrant(manager, "top-right", 3);
+        this.assertQuadrant(manager, "bottom-right", 4);
+        this.assertQuadrant(manager, "bottom-left", 5);
 
-        manager.addNode(6, mindplot.layout.TestSuite.NODE_SIZE, position);
+        console.log("\tAdd 6th node...");
+        manager.addNode(6, nodeSize, position);
         manager.connectNode(0, 6, 5);
         manager.layout();
         manager.plot("testCyclic6", plotsize);
+        this.assertAligned(manager, "left", 1);
+        this.assertQuadrant(manager, "top-left",2);
+        this.assertQuadrant(manager, "top-right", 3);
+        this.assertAligned(manager, "right", 4);
+        this.assertQuadrant(manager, "bottom-right", 5);
+        this.assertQuadrant(manager, "bottom-left", 6);
 
-//        manager.addNode(7, mindplot.layout.TestSuite.NODE_SIZE, position);
-//        manager.addNode(8, mindplot.layout.TestSuite.NODE_SIZE, position);
-//        manager.addNode(9, mindplot.layout.TestSuite.NODE_SIZE, position);
+//        manager.addNode(7, nodeSize, position);
+//        manager.addNode(8, nodeSize, position);
+//        manager.addNode(9, nodeSize, position);
 //        manager.connectNode(3, 7, 0)
 //        manager.connectNode(7, 8, 0)
 //        manager.connectNode(7, 9, 1);
 //        manager.layout();
 //        manager.plot("testCyclic7", plotsize);
-//
-//        manager.addNode(10, mindplot.layout.TestSuite.NODE_SIZE, position);
-//        manager.addNode(11, mindplot.layout.TestSuite.NODE_SIZE, position);
-//        manager.addNode(12, mindplot.layout.TestSuite.NODE_SIZE, position);
+
+//        manager.addNode(10, nodeSize, position);
+//        manager.addNode(11, nodeSize, position);
+//        manager.addNode(12, nodeSize, position);
 //        manager.connectNode(6, 10, 0)
 //        manager.connectNode(10, 11, 0)
 //        manager.connectNode(10, 12, 1);
 //        manager.layout();
 //        manager.plot("testCyclic8", plotsize);
-//
-//        manager.addNode(13, mindplot.layout.TestSuite.NODE_SIZE, position);
+
+//        manager.addNode(13, nodeSize, position);
 //        manager.connectNode(0, 13, 4);
 //        manager.layout();
 //        manager.plot("testCyclic9", {width:1000, height:400});
@@ -91,7 +119,7 @@ mindplot.layout.CyclicTestSuite = new Class({
 //        // Check orders have shifted accordingly
 //        $assert(manager.find(5).getOrder() == 6, "Node 5 should have order 6");
 //
-//        manager.addNode(14, mindplot.layout.TestSuite.NODE_SIZE, position);
+//        manager.addNode(14, nodeSize, position);
 //        manager.connectNode(0, 14, 5);
 //        manager.layout();
 //        manager.plot("testCyclic10", {width:1000, height:400});
@@ -99,7 +127,7 @@ mindplot.layout.CyclicTestSuite = new Class({
 //        // Check orders have shifted accordingly
 //        $assert(manager.find(6).getOrder() == 7, "Node 6 should have order 7");
 //
-//        manager.addNode(15, mindplot.layout.TestSuite.NODE_SIZE, position);
+//        manager.addNode(15, nodeSize, position);
 //        manager.connectNode(0, 15, 4);
 //        manager.layout();
 //        manager.plot("testCyclic11", {width:1000, height:400});
@@ -108,7 +136,7 @@ mindplot.layout.CyclicTestSuite = new Class({
 //        $assert(manager.find(13).getOrder() == 6, "Node 13 should have order 6");
 //        $assert(manager.find(5).getOrder() == 8, "Node 5 should have order 8");
 //
-//        manager.addNode(16, mindplot.layout.TestSuite.NODE_SIZE, position);
+//        manager.addNode(16, nodeSize, position);
 //        manager.connectNode(0, 16, 25);
 //        manager.layout();
 //        manager.plot("testCyclic12", {width:1000, height:400});
@@ -116,9 +144,9 @@ mindplot.layout.CyclicTestSuite = new Class({
 //        // Check orders have shifted accordingly
 //        $assert(manager.find(16).getOrder() == 9, "Node 16 should have order 9");
 //
-//        manager.addNode(17, mindplot.layout.TestSuite.NODE_SIZE, position);
-//        manager.addNode(18, mindplot.layout.TestSuite.NODE_SIZE, position);
-//        manager.addNode(19, mindplot.layout.TestSuite.NODE_SIZE, position);
+//        manager.addNode(17, nodeSize, position);
+//        manager.addNode(18, nodeSize, position);
+//        manager.addNode(19, nodeSize, position);
 //        manager.connectNode(0, 17, 11);
 //        manager.connectNode(0, 18, 13);
 //        manager.connectNode(0, 19, 10);
@@ -153,7 +181,7 @@ mindplot.layout.CyclicTestSuite = new Class({
 //        $assert(manager.find(12).getPosition().x < manager.find(10).getPosition().x,
 //            "children of 1st level odd order nodes must be to the left");
 
-        console.log("OK!\n\n");
+        console.log("All OK!\n\n");
     },
 
     testCyclicPredict: function() {
@@ -161,16 +189,16 @@ mindplot.layout.CyclicTestSuite = new Class({
         var position = {x:0, y:0};
         var manager = new mindplot.layout.LayoutManager(0, mindplot.layout.TestSuite.ROOT_NODE_SIZE);
 
-        manager.addNode(1, mindplot.layout.TestSuite.NODE_SIZE, position);
-        manager.addNode(2, mindplot.layout.TestSuite.NODE_SIZE, position);
-        manager.addNode(3, mindplot.layout.TestSuite.NODE_SIZE, position);
-        manager.addNode(4, mindplot.layout.TestSuite.NODE_SIZE, position);
-        manager.addNode(5, mindplot.layout.TestSuite.NODE_SIZE, position);
-        manager.addNode(7, mindplot.layout.TestSuite.NODE_SIZE, position);
-        manager.addNode(8, mindplot.layout.TestSuite.NODE_SIZE, position);
-        manager.addNode(9, mindplot.layout.TestSuite.NODE_SIZE, position);
-        manager.addNode(10, mindplot.layout.TestSuite.NODE_SIZE, position);
-        manager.addNode(11, mindplot.layout.TestSuite.NODE_SIZE, position);
+        manager.addNode(1, nodeSize, position);
+        manager.addNode(2, nodeSize, position);
+        manager.addNode(3, nodeSize, position);
+        manager.addNode(4, nodeSize, position);
+        manager.addNode(5, nodeSize, position);
+        manager.addNode(7, nodeSize, position);
+        manager.addNode(8, nodeSize, position);
+        manager.addNode(9, nodeSize, position);
+        manager.addNode(10, nodeSize, position);
+        manager.addNode(11, nodeSize, position);
 
         manager.connectNode(0,1,0);
         manager.connectNode(0,2,1);
@@ -253,7 +281,7 @@ mindplot.layout.CyclicTestSuite = new Class({
         $assert(prediction3.order == 5, "Prediction order should be 5");
 
         console.log("\tPredict nodes added with no position:");
-        manager.addNode(6, mindplot.layout.TestSuite.NODE_SIZE, prediction3.position);
+        manager.addNode(6, nodeSize, prediction3.position);
         manager.connectNode(0,6,prediction3.order);
         manager.layout();
         var graph4 = manager.plot("testCyclicPredict4", {width:1000, height:400});
@@ -287,7 +315,7 @@ mindplot.layout.CyclicTestSuite = new Class({
         var manager = new mindplot.layout.LayoutManager(0, mindplot.layout.TestSuite.ROOT_NODE_SIZE);
 
         // Graph 1
-        manager.addNode(1, mindplot.layout.TestSuite.NODE_SIZE, position).connectNode(0,1,0);
+        manager.addNode(1, nodeSize, position).connectNode(0,1,0);
         manager.layout();
         var graph1 = manager.plot("testCyclicNodeDragPredict1", {width:800, height:400});
 
@@ -353,7 +381,7 @@ mindplot.layout.CyclicTestSuite = new Class({
         // Graph 3
         manager.disconnectNode(1);
         manager.connectNode(0, 1, 0);
-        manager.addNode(2, mindplot.layout.TestSuite.NODE_SIZE, position).connectNode(0,2,2);
+        manager.addNode(2, nodeSize, position).connectNode(0,2,2);
         manager.layout();
         var graph3 = manager.plot("testCyclicNodeDragPredict3", {width:800, height:400});
 
@@ -389,5 +417,33 @@ mindplot.layout.CyclicTestSuite = new Class({
         $assert(prediction3e.order == manager.find(1).getOrder(), "Prediction order should be the same as node 1");
 
         console.log("OK!\n\n");
+    },
+
+    assertQuadrant: function(manager, quadrant, nodeId) {
+        var test = false;
+        if (quadrant == "top-right") {
+            test = manager.find(nodeId).getPosition().x > 0 && manager.find(nodeId).getPosition().y < 0;
+        } else if (quadrant == "bottom-right") {
+            test = manager.find(nodeId).getPosition().x > 0 && manager.find(nodeId).getPosition().y > 0;
+        } else if (quadrant == "bottom-left") {
+            test = manager.find(nodeId).getPosition().x < 0 && manager.find(nodeId).getPosition().y > 0;
+        } else if (quadrant == "top-left") {
+            test = manager.find(nodeId).getPosition().x < 0 && manager.find(nodeId).getPosition().y < 0;
+        }
+        $assert(test, "Node " + nodeId + " must be in the " + quadrant + " quadrant");
+    },
+
+    assertAligned: function(manager, direction, nodeId) {
+        var test = false;
+        if (direction == "top") {
+            test = manager.find(nodeId).getPosition().x == manager.find(0).getPosition().x && manager.find(nodeId).getPosition().y < manager.find(0).getPosition().y;
+        } else if (direction == "right") {
+            test = manager.find(nodeId).getPosition().x > manager.find(0).getPosition().x && manager.find(nodeId).getPosition().y == manager.find(0).getPosition().y;
+        } else if (direction == "bottom") {
+            test = manager.find(nodeId).getPosition().x == manager.find(0).getPosition().x && manager.find(nodeId).getPosition().y > manager.find(0).getPosition().y;
+        } else if ("left") {
+            test = manager.find(nodeId).getPosition().x < manager.find(0).getPosition().x && manager.find(nodeId).getPosition().y == manager.find(0).getPosition().y;
+        }
+        $assert(test, "Node " + nodeId + " must be aligned to the " +  direction + " of the root node");
     }
 });
