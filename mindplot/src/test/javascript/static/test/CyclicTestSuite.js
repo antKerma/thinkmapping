@@ -120,6 +120,16 @@ mindplot.layout.CyclicTestSuite = new Class({
         this.assertToThe(manager, "left", 1, 13);
         this.assertToThe(manager, "left", 1, 14);
 
+        manager.addNode(15, nodeSize, position);
+        manager.addNode(16, nodeSize, position);
+        manager.addNode(17, nodeSize, position);
+        manager.connectNode(4, 15, 3);
+        manager.connectNode(4, 16, 4);
+        manager.connectNode(4, 17, 5);
+        manager.layout();
+        manager.plot("testCyclic8", plotsize);
+        $assert(false, "Branches overlap!!!");
+
 //        manager.addNode(10, nodeSize, position);
 //        manager.addNode(11, nodeSize, position);
 //        manager.addNode(12, nodeSize, position);
