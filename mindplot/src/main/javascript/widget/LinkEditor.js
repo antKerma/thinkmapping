@@ -44,7 +44,8 @@ mindplot.widget.LinkEditor = new Class({
 
                 this.fx.start({
                     'margin-top':[-200, -100],
-                    opacity:[0, 1]
+                    opacity:[0, 1],
+                    'padding-bottom' : 60
                 }).chain(function () {
                     this.fireEvent('show');
                 }.bind(this));
