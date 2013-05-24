@@ -256,11 +256,6 @@ mindplot.persistence.XMLSerializer_Pela = new Class({
 
         var topic = mindmap.createNode(type, id);
 
-        // Set text property is it;s defined...
-        var text = domElem.getAttribute('text');
-        if ($defined(text) && text) {
-            topic.setText(text);
-        }
 
         var fontStyle = domElem.getAttribute('fontStyle');
         if ($defined(fontStyle) && fontStyle) {
@@ -361,6 +356,7 @@ mindplot.persistence.XMLSerializer_Pela = new Class({
                     // Create a new element ....
                     var featureType = child.tagName;
                     var feature = mindplot.TopicFeature.createModel(featureType, attributes);
+                    
                     topic.addFeature(feature);
 
                 } else if (child.tagName == "text") {
@@ -369,6 +365,14 @@ mindplot.persistence.XMLSerializer_Pela = new Class({
                 }
             }
         }
+
+
+        // Set text property is it;s defined...
+        var text = domElem.getAttribute('text');
+        if ($defined(text) && text) {
+            topic.setText(text);
+        }
+
         return topic;
     },
 

@@ -37,6 +37,7 @@ mindplot.Topic = new Class({
         if (!this.isReadOnly()) {
             this._registerEvents();
         }
+        
     },
 
     _registerEvents:function () {
@@ -45,6 +46,11 @@ mindplot.Topic = new Class({
 
         // Prevent click on the topics being propagated ...
         this.addEvent('click', function (event) {
+
+            //check if it is link
+            if(event.target.parentNode!=null && event.target.parentNode.tagName=="a"){
+                window.open(event.target.parentNode.getAttribute('xlink:href'));
+            }            
             event.stopPropagation();
         });
 
@@ -320,7 +326,6 @@ mindplot.Topic = new Class({
     getRelationships:function () {
         return this._relationships;
     },
-
     _buildTextShape:function (readOnly) {
         var result = new web2d.Text();
         var family = this.getFontFamily();
@@ -452,7 +457,14 @@ mindplot.Topic = new Class({
 
     _setText:function (text, updateModel) {
         var textShape = this.getTextShape();
-        textShape.setText(text == null ? this._defaultText() : text);
+        var url=null;
+
+        var links = this.getModel().findFeatureByType(mindplot.TopicFeature.Link.id);
+        if(links.length>0){
+            url= links[0].getUrl();    
+        }
+        
+        textShape.setText(text == null ? this._defaultText() : text,url);
 
         if ($defined(updateModel) && updateModel) {
             var model = this.getModel();
@@ -466,6 +478,7 @@ mindplot.Topic = new Class({
             text = null;
         }
 
+
         this._setText(text, true);
         this._adjustShapes();
     },
@@ -478,7 +491,6 @@ mindplot.Topic = new Class({
         }
         return result;
     },
-
     setBackgroundColor:function (color) {
         this._setBackgroundColor(color, true);
     },
@@ -702,6 +714,7 @@ mindplot.Topic = new Class({
 
     showLinkEditor:function () {
 
+        var self = this;
         var topicId = this.getId();
         var model = this.getModel();
         var editorModel = {
@@ -729,6 +742,10 @@ mindplot.Topic = new Class({
                         dispatcher.addFeatureToTopic(topicId, mindplot.TopicFeature.Link.id, {url:value});
                     }
                 }
+
+                //update text to print url
+                var text = model.getText();
+                self.setText(text);
             }
         };
 
