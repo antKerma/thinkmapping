@@ -27,8 +27,8 @@ web2d.Text = new Class({
         return "Text";
     },
 
-    setText  : function(text) {
-        this._peer.setText(text);
+    setText  : function(text,url) {
+        this._peer.setText(text,url);
     },
 
     setTextAlignment : function(align) {
