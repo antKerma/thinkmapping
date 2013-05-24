@@ -128,7 +128,21 @@ mindplot.layout.CyclicTestSuite = new Class({
         manager.connectNode(4, 17, 5);
         manager.layout();
         manager.plot("testCyclic8", plotsize);
-        $assert(false, "Branches overlap!!!");
+
+        var treeSet = manager._treeSet;
+        treeSet._rootNodes.each(function(rootNode) {
+            var heightById = rootNode.getSorter().computeChildrenIdByHeights(treeSet, rootNode);
+            console.log(heightById);
+            console.log(this._assertBranchCollision(treeSet, rootNode, heightById));
+        }, this);
+//        $assert(false, "Branches overlap!!!");
+
+        var allNodes = this._getAllNodes(treeSet._rootNodes[0]);
+        for(var i=0;i<allNodes.length;i++){
+            for(var j=0;j<allNodes.length;j++){
+
+            }
+        }
 
 //        manager.addNode(10, nodeSize, position);
 //        manager.addNode(11, nodeSize, position);
@@ -513,5 +527,78 @@ mindplot.layout.CyclicTestSuite = new Class({
             test = manager.find(nodeB).getPosition().x < manager.find(nodeA).getPosition().x;
         }
         $assert(test, "Node " + nodeB + " must be to the " + direction + " of node " + nodeA);
+    },
+
+    assertBranchCollision: function(treeSet, node, heightById) {
+        var children = treeSet.getChildren(node);
+        var childOfRootNode = treeSet._rootNodes.contains(node);
+
+        children.each(function(child) {
+            var height = heightById[child.getId()];
+            var siblings = treeSet.getSiblings(child);
+            if (childOfRootNode) {
+                siblings = siblings.filter(function(sibling) {
+                    return (child.getOrder() % 2) == (sibling.getOrder() % 2);
+                })
+            }
+            siblings.each(function(sibling) {
+                this._branchesOverlap(child, sibling, heightById);
+            }, this);
+        }, this);
+
+        children.each(function(child) {
+            this._assertBranchCollision(treeSet, child, heightById);
+        }, this)
+    },
+    _assertBranchCollision: function(treeSet, node, heightById) {
+        var children = treeSet.getChildren(node);
+        var childOfRootNode = treeSet._rootNodes.contains(node);
+        console.log(childOfRootNode);
+
+        children.each(function(child) {
+            var height = heightById[child.getId()];
+            var siblings = treeSet.getSiblings(child);
+//            if (childOfRootNode) {
+//                siblings = siblings.filter(function(sibling) {
+//                    return (child.getOrder() % 2) == (sibling.getOrder() % 2);
+//                })
+//            }
+            siblings.each(function(sibling) {
+                this._branchesOverlap(child, sibling, heightById);
+            }, this);
+        }, this);
+
+        children.each(function(child) {
+            this._assertBranchCollision(treeSet, child, heightById);
+        }, this);
+
+
+    },
+    _branchesOverlap:function (branchA, branchB, heightById) {
+        console.log('branch overlaps');
+        // a branch doesn't really overlap with itself
+        if (branchA == branchB) {
+            return false;
+        }
+
+        var topA = branchA.getPosition().y - heightById[branchA.getId()] / 2;
+        var bottomA = branchA.getPosition().y + heightById[branchA.getId()] / 2;
+        var topB = branchB.getPosition().y - heightById[branchB.getId()] / 2;
+        var bottomB = branchB.getPosition().y + heightById[branchB.getId()] / 2;
+
+        return !(topA >= bottomB || bottomA <= topB);
+    }      ,
+    _getAllNodes:function(rootNode){
+        var result=[];
+        console.log(rootNode);
+        console.log('children');
+        console.log(rootNode._children);
+        for(var i=0;i<rootNode._children.length;i++){
+            var child = rootNode._children[i];
+            result.push.apply(result,this._getAllNodes(child));
+        }
+        result.push(rootNode);
+        return result;
     }
+
 });
