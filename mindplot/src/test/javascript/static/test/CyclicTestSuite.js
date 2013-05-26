@@ -22,16 +22,19 @@ mindplot.layout.CyclicTestSuite = new Class({
         $("cyclicTest").setStyle("display","block");
 
         this.testCyclic();
-//        this.testCyclicPredict();
 //        this.testCyclicNodeDragPredict();
+//        this.testCyclicPredict();
     },
 
     testCyclic: function() {
         console.log("testCyclic:");
         var position = {x:0, y:0};
-        var plotsize = {width:1000, height:400};
+        var plotsize = {width:1000, height:1000};
         var rootNodeSize = {width:120, height:40}, nodeSize = {width:80, height:30};
         var manager = new mindplot.layout.LayoutManager(0, rootNodeSize);
+
+        var treeSet = manager._treeSet;
+
 
         console.log("\tAdd 1st node...");
         manager.addNode(1, nodeSize, position);
@@ -126,23 +129,95 @@ mindplot.layout.CyclicTestSuite = new Class({
         manager.connectNode(4, 15, 3);
         manager.connectNode(4, 16, 4);
         manager.connectNode(4, 17, 5);
+        manager.addNode(18, nodeSize, position);
+        manager.addNode(19, nodeSize, position);
+        manager.addNode(20, nodeSize, position);
+        manager.addNode(21, nodeSize, position);
+        manager.addNode(22, nodeSize, position);
+        manager.addNode(23, nodeSize, position);
+        manager.connectNode(5, 18, 0);
+        manager.connectNode(5, 19, 1);
+        manager.connectNode(5, 20, 2);
+        manager.connectNode(5, 21, 3);
+        manager.connectNode(5, 22, 4);
+        manager.connectNode(5, 23, 5);
+        manager.addNode(24, nodeSize, position);
+        manager.addNode(25, nodeSize, position);
+        manager.addNode(26, nodeSize, position);
+        manager.addNode(27, nodeSize, position);
+        manager.addNode(28, nodeSize, position);
+        manager.addNode(29, nodeSize, position);
+
+        manager.connectNode(1, 24, 0);
+        manager.connectNode(1, 25, 1);
+        manager.connectNode(1, 26, 2);
+        manager.connectNode(1, 27, 3);
+        manager.connectNode(1, 28, 4);
+        manager.connectNode(1, 29, 5);
+
+
         manager.layout();
         manager.plot("testCyclic8", plotsize);
 
+        console.log('adding node 7');
+        manager.addNode(30, nodeSize, position);
+        manager.connectNode(0,30,6);
+        manager.layout();
+        manager.plot("testCyclic9", plotsize);
+        this._checkNodeOverlaps(treeSet);
+
+
+        console.log('adding node 8');
+        manager.addNode(31, nodeSize, position);
+        manager.connectNode(0,31,7);
+        manager.layout();
+        manager.plot("testCyclic10", plotsize);
+        this._checkNodeOverlaps(treeSet);
+
+        console.log('adding node 9');
+        manager.addNode(32, nodeSize, position);
+        manager.addNode(33, nodeSize, position);
+        manager.addNode(34, nodeSize, position);
+        manager.addNode(35, nodeSize, position);
+
+        manager.connectNode(0,32,7);
+        manager.connectNode(32,33,0);
+        manager.connectNode(32,34,1);
+        manager.connectNode(32,35,1);
+        manager.layout();
+        manager.plot("testCyclic11", plotsize);
+        this._checkNodeOverlaps(treeSet);
+
+        manager.addNode(36, nodeSize, position);
+        manager.addNode(37, nodeSize, position);
+        manager.addNode(38, nodeSize, position);
+        manager.addNode(39, nodeSize, position);
+        manager.addNode(40, nodeSize, position);
+        manager.addNode(41, nodeSize, position);
+        manager.connectNode(0,36,8);
+        manager.connectNode(0,37,9);
+        manager.connectNode(0,38,10);
+        manager.connectNode(0,39,11);
+        manager.connectNode(0,40,12);
+        manager.connectNode(0,41,13);
+        manager.layout();
+
+
+        manager.plot("testCyclic12", plotsize);
+
+
+        this._checkNodeOverlaps(treeSet);
+                            1
         var treeSet = manager._treeSet;
+
+
+
         treeSet._rootNodes.each(function(rootNode) {
             var heightById = rootNode.getSorter().computeChildrenIdByHeights(treeSet, rootNode);
             console.log(heightById);
-            console.log(this._assertBranchCollision(treeSet, rootNode, heightById));
         }, this);
 //        $assert(false, "Branches overlap!!!");
 
-        var allNodes = this._getAllNodes(treeSet._rootNodes[0]);
-        for(var i=0;i<allNodes.length;i++){
-            for(var j=0;j<allNodes.length;j++){
-
-            }
-        }
 
 //        manager.addNode(10, nodeSize, position);
 //        manager.addNode(11, nodeSize, position);
@@ -553,7 +628,6 @@ mindplot.layout.CyclicTestSuite = new Class({
     _assertBranchCollision: function(treeSet, node, heightById) {
         var children = treeSet.getChildren(node);
         var childOfRootNode = treeSet._rootNodes.contains(node);
-        console.log(childOfRootNode);
 
         children.each(function(child) {
             var height = heightById[child.getId()];
@@ -590,15 +664,58 @@ mindplot.layout.CyclicTestSuite = new Class({
     }      ,
     _getAllNodes:function(rootNode){
         var result=[];
-        console.log(rootNode);
-        console.log('children');
-        console.log(rootNode._children);
         for(var i=0;i<rootNode._children.length;i++){
             var child = rootNode._children[i];
             result.push.apply(result,this._getAllNodes(child));
         }
         result.push(rootNode);
         return result;
+    },
+    _getCorners: function(pos,size){
+        var centerx=pos.x;
+        var centery=pos.y;
+        var upperleft={x:pos.x - (size.width/2.0),y: pos.y-(size.height/2.0)};
+        var upperRight={x:pos.x + (size.width/2.0),y: pos.y-(size.height/2.0)};
+        var lowerRight={x:pos.x + (size.width/2.0),y: pos.y+(size.height/2.0)};
+        var lowerLeft={x:pos.x - (size.width/2.0),y: pos.y+(size.height/2.0)};
+        return {ul:upperleft,lr:lowerRight,ll:lowerLeft,ur:upperRight};
+    },
+    _pointInCorner: function(pos,corners){
+    /*
+    console.log('checking ');
+    console.log(pos);
+    console.log('in');
+    console.log(corners);
+    console.log(pos.y);
+    console.log(corners.ul.y);
+    console.log(pos.y>corners.ul.y);
+    */
+        if(pos.x>=corners.ul.x && pos.x<=corners.lr.x && pos.y<=corners.lr.y && pos.y>=corners.ul.y){
+            return true;
+        }
+        return false;
+    },
+    _nodeOverlapsNode:function(node1,node2){
+        var corners1=this._getCorners(node1.getPosition(),node1.getSize());
+        var corners2=this._getCorners(node2.getPosition(),node2.getSize());
+        for(var corner in corners1){
+        $assert(
+                    !this._pointInCorner(corners1[corner],corners2),
+                    "nodes must not overlap-" + node1.getId() + ' ' + node2.getId()
+                );
+        }
+    },
+    _checkNodeOverlaps:function(treeSet){
+            var allNodes = this._getAllNodes(treeSet._rootNodes[0]);
+            for(var i=0;i<allNodes.length;i++){
+                var node=allNodes[i];
+                for(var j=0;j<allNodes.length;j++){
+                    var anotherNode= allNodes[j];
+                    if(node.getId()!=anotherNode.getId()){
+                        this._nodeOverlapsNode(node,anotherNode);
+                    }
+                }
+            }
     }
 
 });

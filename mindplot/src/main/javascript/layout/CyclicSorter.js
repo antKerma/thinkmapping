@@ -175,7 +175,54 @@ mindplot.layout.CyclicSorter = new Class({
             offsets[node.id] = { x: xOffset, y: yOffset };
         }
 
-        offsets[node.id] = { x: xOffset, y: yOffset };
+        //adjust offset to childrens height
+
+        //separate by sides
+        var sides=this._getSides(nodes,offsets);
+        //sort each side from upper nodes to lower nodes
+        var rightNodes=sides.right.sort(function(a,b){return offsets[a.id].y>offsets[b.id].y});
+        var leftNodes=sides.left.sort(function(a,b){return offsets[a.id].y>offsets[b.id].y});
+
+
+        //separate in quadrants, each quadrants is sorted from the node closest to y=0
+        var rightQuadrants=this._getQuadrants(rightNodes);
+        var leftQuadrants=this._getQuadrants(leftNodes);
+
+        //first set the position of pivots
+        if(rightNodes.length > 3 && (rightNodes.length % 2)==0){
+            console.log('fixing middle nodes');
+            console.log(rightNodes);
+            console.log((rightNodes.length));
+            console.log((rightNodes.length % 2)==0);
+            var index=Math.floor(rightNodes.length/2)-1;
+            var pivot1=rightNodes[index];
+            var pivot2=rightNodes[index+1];
+            this._checkHeightForPivot(pivot1,pivot2,offsets);
+        }
+
+        if(leftNodes.length > 3 && leftNodes.length % 2 ==0){
+                    var index=Math.floor(leftNodes.length/2)-1;
+                    var pivot1=leftNodes[index];
+                    var pivot2=leftNodes[index+1];
+                    this._checkHeightForPivot(pivot1,pivot2,offsets);
+        }
+
+        //separate and sort in quadrants
+        //right side
+        //get middle node
+        console.log('checking upperright');
+        this._checkHeight(rightQuadrants.upper.reverse(),0,offsets,-1);
+        console.log(rightQuadrants.upper);
+        console.log('checking upperleft');
+        this._checkHeight(leftQuadrants.upper.reverse(),0,offsets,-1);
+        console.log(leftQuadrants.upper);
+        console.log('checking rightlower');
+        console.log(rightQuadrants.lower);
+        this._checkHeight(rightQuadrants.lower,0,offsets,1);
+        console.log('checking leftlower');
+        console.log(leftQuadrants.lower);
+        this._checkHeight(leftQuadrants.lower,0,offsets,1);
+
 
         return offsets;
     },
@@ -242,6 +289,90 @@ mindplot.layout.CyclicSorter = new Class({
 
     _getVerticalPadding:function () {
         return mindplot.layout.BalancedSorter.INTERNODE_VERTICAL_PADDING;
+    },
+    _checkHeight: function(quadrantNodes,currentNode,offsets,direction){
+
+
+        if(quadrantNodes.length<=1)
+            return;
+
+        var node=quadrantNodes[currentNode];
+        var nextNode=quadrantNodes[currentNode+1];
+
+        console.log('checking height ' + node.id  + ' ' + nextNode.id);
+
+        var distanceToNextNode=this._getDistanceToNode(node,nextNode,offsets);
+        var distanceDirection= distanceToNextNode/ Math.abs(distanceToNextNode);
+
+        if(distanceDirection!= direction || Math.abs(distanceToNextNode)<(node.height/2.0 + nextNode.height/2.0)){
+            console.log('adjust ' + nextNode.id + ' ' + node.id);
+            offsets[nextNode.id].y=offsets[node.id].y +((node.height/2.0 + nextNode.height/2.0)*direction);
+        }
+        //correct next
+        if(currentNode+2<quadrantNodes.length){
+            this._checkHeight(quadrantNodes,currentNode+1,offsets,direction);
+        }
+
+        return;
+    },
+    _checkHeightForPivot: function(node,nextNode,offsets){
+
+        var distanceToNextNode=this._getDistanceToNode(node,nextNode,offsets);
+        if(distanceToNextNode<(node.height/2.0 + nextNode.height/2.0)){
+            //we move apart the two nodes half the distance each.
+            console.log('adjust middle nodes ' + node.id + ' ' + nextNode.id);
+            offsets[node.id].y=offsets[node.id].y +(0.5*(node.height/2.0 + nextNode.height/2.0)*-1);
+            offsets[nextNode.id].y=offsets[nextNode.id].y +(0.5*(node.height/2.0 + nextNode.height/2.0)*1);
+        }
+
+        return;
+    },
+    _getDistanceToNode:function(node,nextNode,offsets){
+        var pos1=offsets[node.id].y;
+        var pos2=offsets[nextNode.id].y;
+
+        return pos2-pos1;
+    },
+    _getSides: function(nodes,offsets,treeSet){
+        var rightNodes=[];
+        var leftNodes=[];
+         //separate by sides
+        for (var i=0; i<nodes.length; i++) {
+                    var node = nodes[i];
+                    //filter by side
+                    var side = offsets[node.id].x >= 0? 1:0;
+                    if(side){
+                        rightNodes.push(node);
+                    }else{
+                        leftNodes.push(node);
+                    }
+        }
+
+        return {right:rightNodes,left:leftNodes};
+    },
+    _getQuadrants: function(sideNodes){
+        var pairNodes=(sideNodes.length % 2) ==0;
+        var upperQuadrant=[];
+        var lowerQuadrant=[];
+        var switchQ=false;
+        var pivotNode=sideNodes[Math.floor(sideNodes.length/2)];
+        for (var i=0; i<sideNodes.length; i++) {
+            if(!switchQ){
+                if(sideNodes[i].id!=pivotNode.id){
+                    upperQuadrant.push(sideNodes[i]);
+                }else{
+                    if(!pairNodes)
+                        upperQuadrant.push(sideNodes[i]);
+                    switchQ=true;
+                    lowerQuadrant.push(sideNodes[i]);
+                }
+            }else{
+                lowerQuadrant.push(sideNodes[i]);
+            }
+
+        }
+
+        return {upper:upperQuadrant,lower:lowerQuadrant};
     }
 });
 
