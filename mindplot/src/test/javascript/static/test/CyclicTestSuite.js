@@ -205,6 +205,23 @@ mindplot.layout.CyclicTestSuite = new Class({
 
         manager.plot("testCyclic12", plotsize);
 
+        manager.addNode(42, nodeSize, position);
+        manager.addNode(43, nodeSize, position);
+        manager.addNode(44, nodeSize, position);
+        manager.addNode(45, nodeSize, position);
+        manager.addNode(46, nodeSize, position);
+        manager.addNode(47, nodeSize, position);
+        manager.connectNode(0,42,14);
+        manager.connectNode(0,43,15);
+        manager.connectNode(0,44,16);
+        manager.connectNode(0,45,17);
+        manager.connectNode(0,46,18);
+        manager.connectNode(0,47,19);
+
+
+        manager.layout();
+        manager.plot("testCyclic13", plotsize);
+
 
         this._checkNodeOverlaps(treeSet);
                             1

@@ -163,11 +163,15 @@ mindplot.layout.CyclicSorter = new Class({
             var xOffset = 0, yOffset = 0;
             var vector = self._getDirectionVector(self._getAngle(node.order, children.length));
 
+            //radius as a function of number of nodes and width
+            var radius=this._getRadius(nodes);
+
             // xOffset
-            xOffset = Math.round(mindplot.layout.CyclicSorter.BASE_RADIUS * vector.x);
+            xOffset = Math.round(radius * vector.x);
+
 
             // yOffset
-            yOffset = Math.round(mindplot.layout.CyclicSorter.BASE_RADIUS * vector.y);
+            yOffset = Math.round(radius * vector.y);
 
             // Add to offsets object
             $assert(!isNaN(xOffset), "xOffset can not be null");
@@ -190,10 +194,6 @@ mindplot.layout.CyclicSorter = new Class({
 
         //first set the position of pivots
         if(rightNodes.length > 3 && (rightNodes.length % 2)==0){
-            console.log('fixing middle nodes');
-            console.log(rightNodes);
-            console.log((rightNodes.length));
-            console.log((rightNodes.length % 2)==0);
             var index=Math.floor(rightNodes.length/2)-1;
             var pivot1=rightNodes[index];
             var pivot2=rightNodes[index+1];
@@ -210,18 +210,38 @@ mindplot.layout.CyclicSorter = new Class({
         //separate and sort in quadrants
         //right side
         //get middle node
-        console.log('checking upperright');
         this._checkHeight(rightQuadrants.upper.reverse(),0,offsets,-1);
-        console.log(rightQuadrants.upper);
-        console.log('checking upperleft');
         this._checkHeight(leftQuadrants.upper.reverse(),0,offsets,-1);
-        console.log(leftQuadrants.upper);
-        console.log('checking rightlower');
-        console.log(rightQuadrants.lower);
         this._checkHeight(rightQuadrants.lower,0,offsets,1);
-        console.log('checking leftlower');
-        console.log(leftQuadrants.lower);
         this._checkHeight(leftQuadrants.lower,0,offsets,1);
+
+        //correct nodes to close to the Y-axis
+//        if(nodes.length>10){
+//            for (var i=0; i<nodes.length; i++) {
+//                var node=nodes[i];
+//                var xOffset = offsets[node.id].x;
+//                var sign = (xOffset>0)? 1 : -1 ;
+//                var limitSign = xOffset - (node.width/2)*sign;
+//                limitSign=limitSign/Math.abs(limitSign);
+//
+//                if(sign!=limitSign) {
+//                    //minimum distance from Y-Axis
+//                    xOffset=(mindplot.layout.CyclicSorter.INTERNODE_HORIZONTAL_PADDING/2) + node.width/2*sign;
+//                }
+//                offsets[node.id].x = xOffset;
+//            }
+//        }
+//        for (var i=0; i<nodes.length; i++) {
+//            var sign = (xOffset>0)? 1 : -1 ;
+//            var limitSign = xOffset - (node.width/2)*sign;
+//            limitSign=limitSign/Math.abs(limitSign);
+//
+//            if(sign!=limitSign) {
+//                xOffset=node.width/2*sign;
+//            }
+//
+//        }
+
 
 
         return offsets;
@@ -292,6 +312,7 @@ mindplot.layout.CyclicSorter = new Class({
     },
     _checkHeight: function(quadrantNodes,currentNode,offsets,direction){
 
+        console.log(quadrantNodes);
 
         if(quadrantNodes.length<=1)
             return;
@@ -299,13 +320,13 @@ mindplot.layout.CyclicSorter = new Class({
         var node=quadrantNodes[currentNode];
         var nextNode=quadrantNodes[currentNode+1];
 
-        console.log('checking height ' + node.id  + ' ' + nextNode.id);
 
         var distanceToNextNode=this._getDistanceToNode(node,nextNode,offsets);
         var distanceDirection= distanceToNextNode/ Math.abs(distanceToNextNode);
 
         if(distanceDirection!= direction || Math.abs(distanceToNextNode)<(node.height/2.0 + nextNode.height/2.0)){
-            console.log('adjust ' + nextNode.id + ' ' + node.id);
+            console.log('adjust node' + nextNode.id + ' ' + node.id);
+            console.log('direction' + direction);
             offsets[nextNode.id].y=offsets[node.id].y +((node.height/2.0 + nextNode.height/2.0)*direction);
         }
         //correct next
@@ -320,7 +341,6 @@ mindplot.layout.CyclicSorter = new Class({
         var distanceToNextNode=this._getDistanceToNode(node,nextNode,offsets);
         if(distanceToNextNode<(node.height/2.0 + nextNode.height/2.0)){
             //we move apart the two nodes half the distance each.
-            console.log('adjust middle nodes ' + node.id + ' ' + nextNode.id);
             offsets[node.id].y=offsets[node.id].y +(0.5*(node.height/2.0 + nextNode.height/2.0)*-1);
             offsets[nextNode.id].y=offsets[nextNode.id].y +(0.5*(node.height/2.0 + nextNode.height/2.0)*1);
         }
@@ -373,7 +393,21 @@ mindplot.layout.CyclicSorter = new Class({
         }
 
         return {upper:upperQuadrant,lower:lowerQuadrant};
-    }
+    },
+    _getRadius: function(nodes){
+        var radius=mindplot.layout.CyclicSorter.BASE_RADIUS;
+        //var factor= (Math.sqrt(3*nodes.length)/5 +1);
+        console.log('factor');
+        //console.log(factor);
+        //radius*=factor;
+        var maxWidth=0;
+        return radius;
+    },
+//        for(var i=0;i<nodes.length;i++){
+//            if(nodes[i].width>maxWidth){
+//                 maxWidth=nodes[i].width;
+//            }
+//        }
 });
 
 mindplot.layout.CyclicSorter.INTERNODE_VERTICAL_PADDING = 0;
