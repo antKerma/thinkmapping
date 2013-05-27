@@ -396,10 +396,10 @@ mindplot.layout.CyclicSorter = new Class({
     },
     _getRadius: function(nodes){
         var radius=mindplot.layout.CyclicSorter.BASE_RADIUS;
-        //var factor= (Math.sqrt(3*nodes.length)/5 +1);
-        console.log('factor');
+        var factor= (Math.sqrt(3*nodes.length)/5 +1);
+//        console.log('factor');
         //console.log(factor);
-        //radius*=factor;
+        radius*=factor;
         var maxWidth=0;
         return radius;
     },
