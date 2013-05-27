@@ -64,6 +64,9 @@
             <li class="redo">
                 <div id="redoEdition"><a href="#"><spring:message code="TOOLABR_REDO"></spring:message></a></div>
             </li>
+            <li class="link">
+                <div id="topicLink"><a href="#">Link</a></div>
+            </li>
         </ul>
     </div>
     <div class="edition-mid-container">&nbsp;</div>
