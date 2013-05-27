@@ -39,7 +39,7 @@ web2d.peer.svg.TextPeer = new Class({
         return $defined(this._textAlign) ? this._textAlign : 'left';
     },
 
-    setText  : function(text) {
+    setText  : function(text,url) {
         // Remove all previous nodes ...
         while (this._native.firstChild) {
             this._native.removeChild(this._native.firstChild);
@@ -49,12 +49,21 @@ web2d.peer.svg.TextPeer = new Class({
         if (text) {
             var lines = text.split('\n');
             lines.forEach(function(line) {
-                var tspan = window.document.createElementNS(this.svgNamespace, 'tspan');
-                tspan.setAttribute('dy', '1em');
-                tspan.setAttribute('x', this.getPosition().x);
+            var tspan = window.document.createElementNS(this.svgNamespace, 'tspan');
+            tspan.setAttribute('dy', '1em');
+            tspan.setAttribute('x', this.getPosition().x);
 
-                tspan.textContent = line.length == 0 ? " " : line;
+            tspan.textContent = line.length == 0 ? " " : line;
+            //if text has url, enclose into an <a> tag
+            if(url){
+                var link=window.document.createElementNS(this.svgNamespace, 'a');
+                link.setAttribute('xlink:href',url);
+                link.appendChild(tspan);
+                this._native.appendChild(link);
+            }else{
                 this._native.appendChild(tspan);
+            }
+            
             }.bind(this));
         }
     },
@@ -62,7 +71,6 @@ web2d.peer.svg.TextPeer = new Class({
     getText  : function() {
         return this._text;
     },
-
     setPosition  : function(x, y) {
         this._position = {x:x, y:y};
         this._native.setAttribute('y', y);
