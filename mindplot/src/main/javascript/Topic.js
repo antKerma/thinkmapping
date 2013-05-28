@@ -594,8 +594,6 @@ mindplot.Topic = new Class({
                 }
                 topic.setOnFocus(value);
 
-                console.log('focus');
-                console.log(topic)
             }
 
             var eventDispatcher = this._getTopicEventDispatcher();

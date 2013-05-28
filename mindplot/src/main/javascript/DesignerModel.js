@@ -112,8 +112,48 @@ mindplot.DesignerModel = new Class({
         }
         return result;
     },
+    filterSelectionUnconnected:function(){
+        var topics=this.filterSelectedTopics();
+        var result=[];
 
+        if(topics==null || topics.length<2){
+            return topics;
+        }else{
+            result=topics.slice(0);
+        }
 
+        var topicsModel = topics.map(function(a){
+            return a.getModel();
+        });
+
+        for(var i=0;i<topics.length;i++){
+            var matches=this._getMatchingAncestors(topics[i].getModel(),topicsModel);
+            result=result.filter(function(a){
+                for(var j=0;j<matches.length;j++){
+                    if(matches[j].getId()== a.getId())
+                        return false;
+                }
+                return true;
+            });
+        }
+
+        return result;
+    },
+    _getMatchingAncestors: function(node,ancestors){
+        var result=[];
+        var selectedNode=node;
+        while(selectedNode.getParent()!=null){
+            var parent=selectedNode.getParent();
+            for(var i=0;i<ancestors.length;i++) {
+                if(parent.getId()==ancestors[i].getId()){
+                    result.push(ancestors[i]);
+                }
+            }
+            selectedNode = parent;
+        }
+        return result;
+
+    },
     selectedTopic:function () {
         var topics = this.filterSelectedTopics();
         return (topics.length > 0) ? topics[0] : null;

@@ -30,25 +30,31 @@ mindplot.DragConnector = new Class({
         var topics = this._designerModel.getTopics();
 
         // Must be disconnected from their current connection ?.
-        var candidates = this._searchConnectionCandidates(dragTopic);
+        var candidates = this._searchConnectionCandidates(dragTopic,selectedNodes);
         var currentConnection = dragTopic.getConnectedToTopic();
 
+        var self=this;
+        selectedNodes.map(function(node){
+            var currentConnection = node.getConnectedToTopic();
+            if (currentConnection && ((candidates.length == 0) || candidates[0] != currentConnection)) {
+                //only allow disconnection when no candidates available and selection is only one node
+                if (selectedNodes.length == 1) {
+                    dragTopic.disconnect(self._workspace);
+                }else if(candidates.length>0) {
+                    dragTopic.disconnect(self._workspace);
+                }
+            }
 
-        if (currentConnection && (candidates.length == 0 || candidates[0] != currentConnection)) {
-            dragTopic.disconnect(this._workspace);
-        }
 
-        // Finally, connect nodes ...
-        if (!dragTopic.isConnected() && candidates.length > 0) {
-            console.log(selectedNodes.length);
-            selectedNodes.map(function(node){
+            if (!node.isConnected() && candidates.length > 0) {
+            // dragTopic.connectTo(candidates[0]);
+            // Finally, connect nodes ...
                 node.connectTo(candidates[0]);
-            });
-//           dragTopic.connectTo(candidates[0]);
-        }
+            }
+        });
     },
 
-    _searchConnectionCandidates:function (dragTopic) {
+    _searchConnectionCandidates:function (dragTopic,selectedNodes) {
         var topics = this._designerModel.getTopics();
         var draggedNode = dragTopic.getDraggedTopic();
 
@@ -69,6 +75,24 @@ mindplot.DragConnector = new Class({
             result = result && !draggedNode.isChildTopic(topic);
             return result;
         });
+
+        //if multiples node selected, filter nodes for all of them
+        if(selectedNodes.length>1){
+            var draggedTopics = selectedNodes.map(function(a){
+                return a.getDraggedTopic();
+            });
+            for(var i=0;i<draggedTopics.length;i++) {
+                var draggedNode = draggedTopics[i];
+                topics = topics.filter(function (topic) {
+                    var result = draggedNode != topic;
+                    result = result && topic != draggedNode;
+                    result = result && !topic.areChildrenShrunken() && !topic.isCollapsed();
+                    result = result && !draggedNode.isChildTopic(topic);
+                    return result;
+                });
+            }
+        }
+
 
         // Filter all the nodes that are outside the vertical boundary:
         //  * The node is to out of the x scope

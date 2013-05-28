@@ -28,7 +28,6 @@ mindplot.DragManager = new Class({
     },
 
     add : function(node) {
-        console.log('add drag manager');
         // Add behaviour ...
         var workspace = this._workspace;
         var screen = workspace.getScreenManager();
@@ -79,7 +78,6 @@ mindplot.DragManager = new Class({
             if (!this._isDragInProcess) {
                 // Execute Listeners ..
                 var startDragListener = dragManager._listeners['startdragging'];
-                console.log('start draggin..');
                 //for each selected node ...
                 startDragListener(event, dragNode);
 
