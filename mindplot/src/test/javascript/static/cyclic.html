@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+
+<html>
+<head>
+    <script type='text/javascript' src='../../../main/javascript/libraries/mootools/mootools-core-1.4.5-full-nocompat.js'></script>
+    <script type='text/javascript' src='../../../../../core-js/target/classes/core.js'></script>
+
+    <script type='text/javascript' src='../../../main/javascript/header.js'></script>
+    <script type='text/javascript' src='../../../main/javascript/layout/Node.js'></script>
+    <script type='text/javascript' src='../../../main/javascript/layout/RootedTreeSet.js'></script>
+
+    <script type='text/javascript' src='../../../main/javascript/layout/LayoutManager.js'></script>
+    <script type='text/javascript' src='../../../main/javascript/layout/ChildrenSorterStrategy.js'></script>
+    <script type='text/javascript' src='../../../main/javascript/layout/AbstractBasicSorter.js'></script>
+    <script type='text/javascript' src='../../../main/javascript/layout/SymmetricSorter.js'></script>
+    <script type='text/javascript' src='../../../main/javascript/layout/GridSorter.js'></script>
+    <script type='text/javascript' src='../../../main/javascript/layout/CyclicSorter.js'></script>
+    <script type='text/javascript' src='../../../main/javascript/layout/BalancedSorter.js'></script>
+    <script type='text/javascript' src='../../../main/javascript/layout/OriginalLayout.js'></script>
+    <script type='text/javascript' src='../../../main/javascript/layout/ChangeEvent.js'></script>
+
+    <script type="text/javascript" src="test/raphael-min.js"></script>
+    <script type="text/javascript" src="test/raphael-plugins.js"></script>
+
+    <script type='text/javascript' src='test/TestSuite.js'></script>
+    <script type='text/javascript' src='test/CyclicTestSuite.js'></script>
+
+    <script type='text/javascript'>
+        window.addEvent('domready', function() {
+            var cyclicTest = new mindplot.layout.CyclicTestSuite();
+        })
+    </script>
+
+    <style type="text/css">
+        div.col {
+            float: left;
+            margin-right: 20px;
+        }
+        div.col.last {
+            float: none;
+        }
+    </style>
+
+</head>
+<body>
+
+<div id="cyclicTest" style="display: none; width: 1000px; margin: 0 auto;">
+    <h1>Cyclic Sorter Tests</h1>
+
+    <h3>testCyclic:</h3>
+    <div id="testCyclic1" class="col"></div>
+    <div id="testCyclic2" class="col"></div>
+    <div id="testCyclic3" class="col last"></div>
+    <div id="testCyclic4" class="col"></div>
+    <div id="testCyclic5" class="col"></div>
+    <div id="testCyclic6" class="col last"></div>
+    <div id="testCyclic7" class="col"></div>
+    <div id="testCyclic8" class="col last"></div>
+    <div id="testCyclic9" class="col last"></div>
+    <div id="testCyclic10" class="col last"></div>
+    <div id="testCyclic11" class="col last"></div>
+    <div id="testCyclic12" class="col last"></div>
+    <div id="testCyclic13" class="col last"></div>
+
+    <h3>testCyclicPredict:</h3>
+    <div id="testCyclicPredict1"></div>
+    <div id="testCyclicPredict2"></div>
+    <div id="testCyclicPredict3"></div>
+    <div id="testCyclicPredict4"></div>
+    <div id="testCyclicPredict5"></div>
+
+    <h3>testCyclicNodeDragPredict</h3>
+    <div id="testCyclicNodeDragPredict1"></div>
+    <div id="testCyclicNodeDragPredict2"></div>
+    <div id="testCyclicNodeDragPredict3"></div>
+</div>
+
+</body>
+</html>

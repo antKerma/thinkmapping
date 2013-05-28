@@ -27,7 +27,7 @@ mindplot.layout.OriginalLayout = new Class({
         $assert(type, "type can not be null");
 
         var strategy = type === 'root' ?
-            mindplot.layout.OriginalLayout.BALANCED_SORTER :
+            mindplot.layout.OriginalLayout.CYCLIC_SORTER :
             mindplot.layout.OriginalLayout.SYMMETRIC_SORTER;
         return new mindplot.layout.Node(id, size, position, strategy);
     },
@@ -235,6 +235,7 @@ mindplot.layout.OriginalLayout = new Class({
 
 mindplot.layout.OriginalLayout.SYMMETRIC_SORTER = new mindplot.layout.SymmetricSorter();
 mindplot.layout.OriginalLayout.BALANCED_SORTER = new mindplot.layout.BalancedSorter();
+mindplot.layout.OriginalLayout.CYCLIC_SORTER = new mindplot.layout.CyclicSorter();
 
 
 
