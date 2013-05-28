@@ -312,8 +312,6 @@ mindplot.layout.CyclicSorter = new Class({
     },
     _checkHeight: function(quadrantNodes,currentNode,offsets,direction){
 
-        console.log(quadrantNodes);
-
         if(quadrantNodes.length<=1)
             return;
 
