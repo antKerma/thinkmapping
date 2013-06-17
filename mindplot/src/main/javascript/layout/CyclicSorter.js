@@ -23,6 +23,127 @@ mindplot.layout.CyclicSorter = new Class({
 
     },
 
+    predictCycle: function(graph, parent, node, position, free){
+        console.log('predict cycle');
+        console.log('position');
+        console.log(position);
+        var rootNode = graph.getRootNode(parent);
+
+        // If it is a dragged node...
+        if (node) {
+            console.log('is dragged node');
+            $assert($defined(position), "position cannot be null for predict in dragging");
+            var nodeDirection = this._getRelativeDirection(rootNode.getPosition(), node.getPosition());
+            var positionDirection = this._getRelativeDirection(rootNode.getPosition(), position);
+            var siblings = graph.getSiblings(node);
+
+            var sameParent = parent == graph.getParent(node);
+            if (siblings.length == 0 && nodeDirection == positionDirection && sameParent) {
+                console.log('predict dragged node');
+                return [node.getOrder(), node.getPosition()];
+            }
+        }
+
+
+        if (!position ) {
+            console.log('position');
+            var right = this._getChildrenForOrder(parent, graph, 0);
+            var left = this._getChildrenForOrder(parent, graph, 1);
+        }
+
+
+        var order = position ? (position.x > rootNode.getPosition().x ? 0 : 1) : ((right.length - left.length) > 0 ? 1 : 0);
+        var direction = order % 2 == 0 ? 1 : -1;
+//        if((node==null) && parent.getId()==rootNode.getId()){
+//            var children = this._getChildrenForOrder(parent, graph, order);
+//            var vector=self._getDirectionVector(self._getAngle(node.order, children.length));
+//            direction=vector.x>0?-1:1;
+//        }
+
+        // Exclude the dragged node (if set)
+
+        var children = this._getSortedChildren(graph, parent).filter(function (child) {
+//            var signTest = true
+//            if(position){
+//                var sign = position.x >0;
+//                var childSign= child.getPosition().x > 0 ? true: false;
+//               signTest= (sign==childSign);
+//            }
+            return child != node;
+        });
+
+        if(position){
+           var positionAngle =Math.atan(position.y / position.x) * 180 / Math.PI;
+           console.log(positionAngle);
+        }
+
+        //get children from same side;
+        children.map(function(d){
+            var angle = Math.atan(d.getPosition().y / d.getPosition().x);
+            var angleInRads = angle * 180 / Math.PI;
+            d['angle'] = angleInRads;
+        });
+
+        // No children?
+        if (children.length == 0) {
+            console.log('predict no children');
+            return [order, {x:parent.getPosition().x + direction * (parent.getSize().width / 2 + mindplot.layout.BalancedSorter.INTERNODE_HORIZONTAL_PADDING * 2), y:parent.getPosition().y}];
+        }
+
+        // Try to fit within ...
+        var result = null;
+        var last = children.getLast();
+        position = position || {x:last.getPosition().x, y:last.getPosition().y + 1};
+        var candidates=[];
+        console.log('children size : ' + children.length);
+        children.sort(function(a,b){
+            return a['angle']-b['angle'];
+        });
+
+        var before=null;
+        var after = null;
+        var initialSign = (children[0].angle - positionAngle)/Math.abs((children[0].angle - positionAngle));
+        for(var i=0;i<children.length;i++){
+            console.log('child id' + children[i].getId());
+            console.log('child angle' + children[i]['angle']);
+            result = [0, {x:children[i].getPosition().x,y:children[i].getPosition().y}];
+            var sign = (children[i].angle - positionAngle)/Math.abs((children[i].angle - positionAngle));
+            if(positionAngle> children[i].angle) {
+                before= i>=1? children[i-1]:null;
+                after = children[i];
+                console.log('position angle ' + positionAngle + " insert here");
+                console.log('before' + before);
+                console.log('after' + after);
+            }
+
+        }
+        if(after){
+            result = [0, {x:after.getPosition().x,y:after.getPosition().y}];
+        }
+//        children.each(function (child, index) {
+//            var cpos = child['angle']
+//            if (position.y > cpos.y) {
+//                yOffset = child == last ?
+//                    child.getSize().height + mindplot.layout.BalancedSorter.INTERNODE_VERTICAL_PADDING * 2 :
+//                    (children[index + 1].getPosition().y - child.getPosition().y) / 2;
+//                result = [child.getOrder() + 2, {x:cpos.x, y:cpos.y + yOffset}];
+//                console.log('predict within ' + result[1].x + "," + result[1].y);
+//            }
+//        });
+//
+//        // Position wasn't below any node, so it must be inserted above
+//        if (!result) {
+//            var first = children[0];
+//            result = [position.x > 0 ? 0 : 1, {
+//                x:first.getPosition().x,
+//                y:first.getPosition().y - first.getSize().height - mindplot.layout.BalancedSorter.INTERNODE_VERTICAL_PADDING * 2
+//            }];
+//        }
+
+        console.log('predict normal');
+        return result;
+    },
+
     predict:function (graph, parent, node, position, free) {
 
 
@@ -42,6 +163,7 @@ mindplot.layout.CyclicSorter = new Class({
                 (position.x >= limitXPos ? position.x : limitXPos) :
                 (position.x <= limitXPos ? position.x : limitXPos);
 
+            console.log('predict free node');
             return [0, {x:xPos, y:position.y}];
         }
 
@@ -50,7 +172,9 @@ mindplot.layout.CyclicSorter = new Class({
             position=null;
         }
 
-
+        if(parent.getId()==rootNode.getId()){
+            return this.predictCycle(graph,parent,node,position,free);
+        }
 
             //fix for first layer nodes
 //        if(parent.getId()==rootNode.getId()){
@@ -62,6 +186,7 @@ mindplot.layout.CyclicSorter = new Class({
 
         // If it is a dragged node...
         if (node) {
+            console.log('is dragged node');
             $assert($defined(position), "position cannot be null for predict in dragging");
             var nodeDirection = this._getRelativeDirection(rootNode.getPosition(), node.getPosition());
             var positionDirection = this._getRelativeDirection(rootNode.getPosition(), position);
@@ -69,12 +194,14 @@ mindplot.layout.CyclicSorter = new Class({
 
             var sameParent = parent == graph.getParent(node);
             if (siblings.length == 0 && nodeDirection == positionDirection && sameParent) {
+                console.log('predict dragged node');
                 return [node.getOrder(), node.getPosition()];
             }
         }
 
 
         if (!position ) {
+            console.log('position');
             var right = this._getChildrenForOrder(parent, graph, 0);
             var left = this._getChildrenForOrder(parent, graph, 1);
         }
@@ -95,6 +222,7 @@ mindplot.layout.CyclicSorter = new Class({
 
         // No children?
         if (children.length == 0) {
+            console.log('predict dragged node');
             return [order, {x:parent.getPosition().x + direction * (parent.getSize().width / 2 + mindplot.layout.BalancedSorter.INTERNODE_HORIZONTAL_PADDING * 2), y:parent.getPosition().y}];
         }
 
@@ -109,6 +237,7 @@ mindplot.layout.CyclicSorter = new Class({
                     child.getSize().height + mindplot.layout.BalancedSorter.INTERNODE_VERTICAL_PADDING * 2 :
                     (children[index + 1].getPosition().y - child.getPosition().y) / 2;
                 result = [child.getOrder() + 2, {x:cpos.x, y:cpos.y + yOffset}];
+                console.log('predict within');
             }
         });
 
@@ -120,6 +249,8 @@ mindplot.layout.CyclicSorter = new Class({
                 y:first.getPosition().y - first.getSize().height - mindplot.layout.BalancedSorter.INTERNODE_VERTICAL_PADDING * 2
             }];
         }
+
+        console.log('predict normal');
         return result;
     },
 
@@ -129,7 +260,9 @@ mindplot.layout.CyclicSorter = new Class({
 
 
         if(rootNode.getId()==parent.getId()){
+            console.log('using order' + order);
             child.setOrder(children.length);
+            console.log('real order' + children.length);
             return;
         }
 
