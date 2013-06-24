@@ -92,10 +92,6 @@ mindplot.CentralTopic = new Class({
         };
     },
 
-    getShrinkConnector:function () {
-        return null;
-    },
-
     workoutOutgoingConnectionPoint:function (targetPosition) {
         $assert(targetPosition, 'targetPoint can not be null');
         var pos = this.getPosition();
