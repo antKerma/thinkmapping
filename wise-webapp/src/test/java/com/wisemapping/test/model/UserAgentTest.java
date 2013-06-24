@@ -10,6 +10,9 @@ public class UserAgentTest {
 
     public void isBrowserSupported() {
 
+        final SupportedUserAgent firefox21 = SupportedUserAgent.create("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0");
+        Assert.assertEquals(firefox21.isBrowserSupported(), true);
+
         final SupportedUserAgent firefox15 = SupportedUserAgent.create("Mozilla/5.0 (Windows NT 6.1; rv:15.0) Gecko/20120716 Firefox/15");
         Assert.assertEquals(firefox15.isBrowserSupported(), true);
 
