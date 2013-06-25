@@ -58,7 +58,8 @@ mindplot.layout.CyclicSorter = new Class({
 //        }
 
         // Exclude the dragged node (if set)
-
+        var excludeDraggedNode = false;
+        var excludedOrder = null;
         var children = this._getSortedChildren(graph, parent).filter(function (child) {
 //            var signTest = true
 //            if(position){
@@ -66,11 +67,17 @@ mindplot.layout.CyclicSorter = new Class({
 //                var childSign= child.getPosition().x > 0 ? true: false;
 //               signTest= (sign==childSign);
 //            }
+        	if(child!=node){
+        		excludeDraggedNode = true;
+        		excludedOrder = node?node.getOrder():null;
+        	}
             return child!=node;
         });
 
         console.log('children size');
         console.log(children.length);
+
+        var totalLen = children.length + (excludeDraggedNode?1:0);
         
         if(position){
            var positionAngle =Math.atan(position.y / position.x) * 180 / Math.PI;
@@ -80,10 +87,28 @@ mindplot.layout.CyclicSorter = new Class({
 
         //get children from same side;
         children.map(function(d){
+        	console.log('calcuting angle for order: ' + d.getOrder());
+        	console.log('position ');console.log(d.getPosition());
+        	var angle = Math.atan(d.getPosition().y / d.getPosition().x);
+        	var angleInRads = angle * 180 / Math.PI;
         	var childSign= d.getPosition().x > 0 ? true: false;
-            var angle = Math.atan(d.getPosition().y / d.getPosition().x);
-            var angleInRads = angle * 180 / Math.PI;
-            angleInRads+=(childSign>0?180:0)
+        	angleInRads+=(childSign>0?180:0)
+        	if(d.getPosition().x==0){
+        		if(d.getPosition().y>0){
+        			angleInRads = 270;
+        		}else{
+        			angleInRads = 90;
+        		}
+        	}
+        	
+        	if(d.getPosition().y==0){
+        		if(d.getPosition().x>0){
+        			angleInRads = 180;
+        		}else{
+        			angleInRads = 0;
+        		}
+        	}
+            console.log(angleInRads);
             d['angle'] = angleInRads;
         });
 
@@ -101,20 +126,13 @@ mindplot.layout.CyclicSorter = new Class({
             return a['angle']-b['angle'];
         });
         
-        
-        if(children.length==4){
-        	//get quadrant
-        	if(position.x> 0 && position.y>0){
-                result = [0, {x:children[1].getPosition().x,y:children[2].getPosition().y}];
-        	}else if(position.x>0 && position.y<=0){
-                result = [1, {x:children[2].getPosition().x,y:children[3].getPosition().y}];
-        	}else if(position.x<=0 && position.y>0){
-                result = [2, {x:children[0].getPosition().x,y:children[1].getPosition().y}];
-        	}else if(position.x<=0 && position.y<=0){
-                result = [3, {x:children[3].getPosition().x,y:children[1].getPosition().y}];
-        	}
-        	
+        console.log('sorted children');
+        for(var i=0; i< children.length; i++){
+        	var child=children[i];
+        	console.log('children order' + child.getOrder() + " angle" + child.angle + " position x:" + child.getPosition().x + '  y:' + child.getPosition().y );
         }
+        
+        
 
         var found = false;
         var before=null;
@@ -127,39 +145,48 @@ mindplot.layout.CyclicSorter = new Class({
             if(sign!=initialSign) {
                 before= i>=1? children[i-1]:children[0];
                 after = children[i];
-                console.log('before ' + before.angle);
-                console.log(before.getId())
-                console.log('after ' + after.angle);
-                console.log(after.getId())
-                console.log('angle ' + positionAngle);
+//                console.log('before ' + before.angle);
+//                console.log(before.getId())
+//                console.log('after ' + after.angle);
+//                console.log(after.getId())
+//                console.log('angle ' + positionAngle);
                 found=true;
                 break;
             }else{
             	before=children[i];
             }
         }
-        
+
+        if(!found){
+        	after=children[0];
+        }
        
         if(after && before){
-        	console.log("found");
+//        	console.log("found");
         	console.log('after position');
         	console.log(after.getPosition());
-        	console.log('after angle');
-        	console.log(after.angle);
+//        	console.log('after angle');
+//        	console.log(after.angle);
         	console.log('before position');
         	console.log(before.getPosition());
-        	console.log('before angle');
-        	console.log(before.angle);
+//        	console.log('before angle');
+//        	console.log(before.angle);
             xAvg = (after.getPosition().x + before.getPosition().x)/2;
             yAvg = (after.getPosition().y + before.getPosition().y)/2;
             console.log("yavg" + yAvg);
             console.log("xavg" + xAvg);
-            var newOrder = after.getPosition().x > 0? after.getOrder(): after.getOrder();
+            var newOrder = after.getOrder();
             //strange behaviour workaround
-            if(children.length==4){
-            	yAvg=yAvg;
+//            if(children.length==4){
+//            	console.log('inverting');
+//            	result = [newOrder, {x:-110,y:-110}];
+//            	return result;
+//            }
+            if(before.getOrder()+1 == after.getOrder()-1){
+            	newOrder = excludedOrder;
             }
             result = [newOrder, {x:xAvg,y:yAvg}];
+            console.log(result);
             return result;
         }
         
@@ -172,17 +199,17 @@ mindplot.layout.CyclicSorter = new Class({
             return [after.getOrder()+1,{x:xAvg,y:yAvg}];
             
         	// could be larger or shorter than all
-        	if(initialSign>=0){
-        		child = children[0];
-        		xAvg = (child.getPosition().x)/2;
-        		yAvg = (child.getPosition().y);
-        		result = [child.getOrder(), {x:xAvg,y:yAvg}];
-        	}else if(initialSign<0){
-        		var child = children[children.length-1];
-        		xAvg = (child.getPosition().x)/2;
-        		yAvg = (child.getPosition().y);
-        		result = [child.getOrder(), {x:xAvg,y:yAvg}];
-        	}
+//        	if(initialSign>=0){
+//        		child = children[0];
+//        		xAvg = (child.getPosition().x)/2;
+//        		yAvg = (child.getPosition().y);
+//        		result = [child.getOrder(), {x:xAvg,y:yAvg}];
+//        	}else if(initialSign<0){
+//        		var child = children[children.length-1];
+//        		xAvg = (child.getPosition().x)/2;
+//        		yAvg = (child.getPosition().y);
+//        		result = [child.getOrder(), {x:xAvg,y:yAvg}];
+//        	}
         }
 
         return result;
@@ -291,12 +318,15 @@ mindplot.layout.CyclicSorter = new Class({
         var rootNode = treeSet.getRootNode(parent);
         var children = this._getSortedChildren(treeSet, rootNode);
 
-        if(child.getOrder()<order){
-        	order=order-1;
-        }
+        
         
         //cyclesort case
         if(rootNode.getId()==parent.getId()){
+        	
+        	if(child.getOrder()<order){
+            	order=order-1;
+            }
+        	
         	for (var i = 0; i < children.length; i++) {
                 var node = children[i];
                 console.log("node id: " + node.getId() + " was order: " + node.getOrder());
@@ -395,6 +425,8 @@ mindplot.layout.CyclicSorter = new Class({
             var node = nodes[i];
             var xOffset = 0, yOffset = 0;
             var vector = self._getDirectionVector(self._getAngle(node.order, children.length));
+            
+//            console.log('node order:' + node.order + " position " + node.position + 'angle:' + self._getAngle(node.order, children.length));
 
             //radius as a function of number of nodes and width
             var radius=this._getRadius(nodes);
