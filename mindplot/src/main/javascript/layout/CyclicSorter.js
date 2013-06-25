@@ -159,18 +159,20 @@ mindplot.layout.CyclicSorter = new Class({
             if(before.getOrder()+1 == after.getOrder()-1){
             	newOrder = excludedOrder;
             }
+            newOrder= newOrder +((!found && !excludeDraggedNode)?1:0);
             result = [newOrder, {x:xAvg,y:yAvg}];
+           
             return result;
         }
         
-        if(!found){
-        	before=children[0];
-        	after = children[children.length-1];
-        	xAvg = (after.getPosition().x + before.getPosition().x)/2;
-            yAvg = (after.getPosition().y + before.getPosition().y)/2;
-            return [after.getOrder()+1,{x:xAvg,y:yAvg}];
-            
-        }
+//        if(!found){
+//        	before=children[0];
+//        	after = children[children.length-1];
+//        	xAvg = (after.getPosition().x + before.getPosition().x)/2;
+//            yAvg = (after.getPosition().y + before.getPosition().y)/2;
+//            return [after.getOrder()+1,{x:xAvg,y:yAvg}];
+//            
+//        }
 
         return result;
     },
