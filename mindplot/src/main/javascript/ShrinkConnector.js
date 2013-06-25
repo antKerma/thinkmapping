@@ -21,6 +21,7 @@ mindplot.ShirinkConnector = new Class({
 
         var ellipse = new web2d.Elipse(mindplot.Topic.prototype.INNER_RECT_ATTRIBUTES);
         this._ellipse = ellipse;
+        this._topic = topic;
         ellipse.setFill('rgb(62,118,179)');
 
         ellipse.setSize(mindplot.Topic.CONNECTOR_WIDTH, mindplot.Topic.CONNECTOR_WIDTH);
@@ -94,7 +95,11 @@ mindplot.ShirinkConnector = new Class({
     },
 
     setPosition: function(x, y) {
-        this._ellipse.setPosition(x, y);
+        var xPos = x, yPos = y;
+        if (this._topic.getTopicType() == "CentralTopic") {
+            xPos -= this._topic.getOuterShape().getSize().width;
+        }
+        this._ellipse.setPosition(xPos, yPos);
     },
 
     moveToBack: function() {
