@@ -58,12 +58,6 @@ mindplot.layout.CyclicSorter = new Class({
         var excludeDraggedNode = false;
         var excludedOrder = null;
         var children = this._getSortedChildren(graph, parent).filter(function (child) {
-//            var signTest = true
-//            if(position){
-//                var sign = position.x >0;
-//                var childSign= child.getPosition().x > 0 ? true: false;
-//               signTest= (sign==childSign);
-//            }
         	if(child!=node){
         		excludeDraggedNode = true;
         		excludedOrder = node?node.getOrder():null;
@@ -154,13 +148,25 @@ mindplot.layout.CyclicSorter = new Class({
         if(after && before){
             xAvg = (after.getPosition().x + before.getPosition().x)/2;
             yAvg = (after.getPosition().y + before.getPosition().y)/2;
+            var vectorModule = Math.sqrt((xAvg*xAvg) + (yAvg*yAvg));
+            var directionVector = {x:xAvg, y:yAvg};
+            if(vectorModule>0) {
+                directionVector = {x: xAvg/vectorModule, y:yAvg/vectorModule};
+            }
+
+
+            var radius=this._getRadius(children);
+            var predictVector = {x: directionVector.x*radius, y: directionVector.y*radius};
+
+
+
             var newOrder = after.getOrder();
             //case trying to drag a node to its position
             if(before.getOrder()+1 == after.getOrder()-1){
             	newOrder = excludedOrder;
             }
             newOrder= newOrder +((!found && !excludeDraggedNode)?1:0);
-            result = [newOrder, {x:xAvg,y:yAvg}];
+            result = [newOrder, {x:predictVector.x,y:predictVector.y}];
            
             return result;
         }
