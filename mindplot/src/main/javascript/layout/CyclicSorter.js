@@ -26,6 +26,7 @@ mindplot.layout.CyclicSorter = new Class({
     predictCycle: function(graph, parent, node, position, free){
         var rootNode = graph.getRootNode(parent);
 
+
         // If it is a dragged node...
         if (node) {
             $assert($defined(position), "position cannot be null for predict in dragging");
@@ -111,11 +112,7 @@ mindplot.layout.CyclicSorter = new Class({
             return a['angle']-b['angle'];
         });
         
-        for(var i=0; i< children.length; i++){
-        	var child=children[i];
-        }
-        
-        
+
 
         var found = false;
         var before=null;
@@ -128,11 +125,6 @@ mindplot.layout.CyclicSorter = new Class({
             if(sign!=initialSign) {
                 before= i>=1? children[i-1]:children[0];
                 after = children[i];
-//                console.log('before ' + before.angle);
-//                console.log(before.getId())
-//                console.log('after ' + after.angle);
-//                console.log(after.getId())
-//                console.log('angle ' + positionAngle);
                 found=true;
                 break;
             }else{
@@ -161,13 +153,16 @@ mindplot.layout.CyclicSorter = new Class({
 
 
             var newOrder = after.getOrder();
+            if(after.getOrder()>excludedOrder) {
+                newOrder = newOrder-1;
+            }
             //case trying to drag a node to its position
             if(before.getOrder()+1 == after.getOrder()-1){
             	newOrder = excludedOrder;
             }
+
             newOrder= newOrder +((!found && !excludeDraggedNode)?1:0);
             result = [newOrder, {x:predictVector.x,y:predictVector.y}];
-           
             return result;
         }
         
@@ -282,21 +277,37 @@ mindplot.layout.CyclicSorter = new Class({
         
         //cyclesort case
         if(rootNode.getId()==parent.getId()){
-        	
-        	if(child.getOrder()<order){
-            	order=order-1;
+
+
+            //case is new node
+            if(child.getOrder()==null){
+                var order=0;
+                if(children.length>0) {
+                    order=children[children.length-1].getOrder()+1;
+                }
+                child.setOrder(order);
+                return;
             }
-        	
+
+//
+//        	if( child.getOrder()<order){
+//            	order=order-1;
+//            }
+
+
         	for (var i = 0; i < children.length; i++) {
                 var node = children[i];
                 if(node.getId()!=child.getId()){
 	                max = Math.max(max, node.getOrder());
+                    //de donde inserto en adelante les subo 1 el orden
 	                if (node.getOrder() >= order) {
+
 	                    max = Math.max(max, node.getOrder() + 1);
 	                    node.setOrder(node.getOrder() + 1);
 	                }
                 }
             }
+
             child.setOrder(order);
             return;
         }
