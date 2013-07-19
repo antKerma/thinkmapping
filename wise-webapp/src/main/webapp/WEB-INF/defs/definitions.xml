@@ -147,6 +147,12 @@
         <put-attribute name="body" value="/jsp/mindmapPublish.jsp"/>
     </definition>
 
+    <definition name="mindmapSaveAs" extends="dialogFullTemplate">
+        <put-attribute name="title" value=""/>
+        <put-attribute name="details" value=""/>
+        <put-attribute name="body" value="/jsp/mindmapSaveAs.jsp"/>
+    </definition>
+
     <definition name="mindmapShare" extends="dialogTemplate">
         <put-attribute name="title" value=""/>
         <put-attribute name="details" value=""/>

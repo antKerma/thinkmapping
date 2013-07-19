@@ -115,6 +115,14 @@ public class MindmapController {
         return "mindmapPublishFull";
     }
 
+    @RequestMapping(value = "maps/{id}/saveas")
+    public String showSaveAsPage(@PathVariable int id, @NotNull Model model) {
+        final Mindmap mindmap = findMindmap(id);
+        model.addAttribute("mindmap", mindmap);
+        model.addAttribute("baseUrl", siteBaseUrl);
+        return "mindmapSaveAs";
+    }
+
     @RequestMapping(value = "maps/{id}/history", method = RequestMethod.GET)
     public String showHistoryPage(@PathVariable int id, @NotNull Model model) {
         model.addAttribute("mindmapId", id);
