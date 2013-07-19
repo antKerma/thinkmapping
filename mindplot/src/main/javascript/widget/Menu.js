@@ -451,7 +451,7 @@ mindplot.widget.Menu = new Class({
                     {'class':'modalDialog saveAsModalDialog',
                         closeButton:true,
                         destroyOnClose:true,
-                        title:$msg('SAVE_AS')
+                        title:$msg('TOOLBAR_SAVE_AS')
                     });
                 reqDialog.setRequestOptions({
                     onRequest:function () {
