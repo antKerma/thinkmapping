@@ -49,22 +49,20 @@ mindplot.layout.CyclicSorter = new Class({
 
         var order = position ? (position.x > rootNode.getPosition().x ? 0 : 1) : ((right.length - left.length) > 0 ? 1 : 0);
         var direction = order % 2 == 0 ? 1 : -1;
-//        if((node==null) && parent.getId()==rootNode.getId()){
-//            var children = this._getChildrenForOrder(parent, graph, order);
-//            var vector=self._getDirectionVector(self._getAngle(node.order, children.length));
-//            direction=vector.x>0?-1:1;
-//        }
+
 
         // Exclude the dragged node (if set)
         var excludeDraggedNode = false;
         var excludedOrder = null;
         var children = this._getSortedChildren(graph, parent).filter(function (child) {
-        	if(child!=node){
+        	if(child==node){
         		excludeDraggedNode = true;
         		excludedOrder = node?node.getOrder():null;
+        		console.log(excludedOrder);
         	}
             return child!=node;
         });
+        
 
 
         var totalLen = children.length + (excludeDraggedNode?1:0);
@@ -153,7 +151,8 @@ mindplot.layout.CyclicSorter = new Class({
 
 
             var newOrder = after.getOrder();
-            if(after.getOrder()>excludedOrder) {
+            if(excludeDraggedNode && after.getOrder()>excludedOrder) {
+                console.log("adjusting -1 excludedDraggedNOde");
                 newOrder = newOrder-1;
             }
             //case trying to drag a node to its position
@@ -161,7 +160,10 @@ mindplot.layout.CyclicSorter = new Class({
             	newOrder = excludedOrder;
             }
 
-            newOrder= newOrder +((!found && !excludeDraggedNode)?1:0);
+            console.log("(!found || !excludeDraggedNode):" + (!found || !excludeDraggedNode));
+            console.log(newOrder);
+//            newOrder= newOrder +((!found && !excludeDraggedNode)?1:0);
+            console.log(newOrder);
             result = [newOrder, {x:predictVector.x,y:predictVector.y}];
             return result;
         }
