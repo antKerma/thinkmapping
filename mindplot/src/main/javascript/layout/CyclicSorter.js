@@ -58,7 +58,6 @@ mindplot.layout.CyclicSorter = new Class({
         	if(child==node){
         		excludeDraggedNode = true;
         		excludedOrder = node?node.getOrder():null;
-        		console.log(excludedOrder);
         	}
             return child!=node;
         });
@@ -152,18 +151,12 @@ mindplot.layout.CyclicSorter = new Class({
 
             var newOrder = after.getOrder();
             if(excludeDraggedNode && after.getOrder()>excludedOrder) {
-                console.log("adjusting -1 excludedDraggedNOde");
                 newOrder = newOrder-1;
             }
             //case trying to drag a node to its position
             if(before.getOrder()+1 == after.getOrder()-1){
             	newOrder = excludedOrder;
             }
-
-            console.log("(!found || !excludeDraggedNode):" + (!found || !excludeDraggedNode));
-            console.log(newOrder);
-//            newOrder= newOrder +((!found && !excludeDraggedNode)?1:0);
-            console.log(newOrder);
             result = [newOrder, {x:predictVector.x,y:predictVector.y}];
             return result;
         }
