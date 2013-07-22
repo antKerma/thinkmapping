@@ -178,6 +178,10 @@ mindplot.layout.LayoutManager = new Class({
             }
             this._collectChanges(this._treeSet.getChildren(node));
         }, this);
+    },
+
+    getTreeSet:function(){
+        return this.getTreeSet();
     }
 
 });

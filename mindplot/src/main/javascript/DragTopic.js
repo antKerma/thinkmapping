@@ -179,6 +179,10 @@ mindplot.DragTopic = new Class({
         return dragPivot.getTargetTopic();
     },
 
+    getLayoutManager:function(){
+        return this._layoutManager;
+    },
+
     isConnected:function () {
         return this.getConnectedToTopic() != null;
     },

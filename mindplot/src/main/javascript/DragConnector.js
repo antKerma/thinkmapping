@@ -58,6 +58,11 @@ mindplot.DragConnector = new Class({
         var topics = this._designerModel.getTopics();
         var draggedNode = dragTopic.getDraggedTopic();
 
+        var layoutManager = dragTopic.getLayoutManager();
+        var rootNodeId = layoutManager._treeSet._rootNodes[0].getId();
+       // var treeSet=layoutManager.getTreeSet();
+
+
         // Drag node connects to the border ...
         var dragTopicWidth = dragTopic.getSize ? dragTopic.getSize().width : 0; // Hack...
         var xMouseGap = dragTopic.getPosition().x > 0 ? 0 : dragTopicWidth;
@@ -97,11 +102,17 @@ mindplot.DragConnector = new Class({
         // Filter all the nodes that are outside the vertical boundary:
         //  * The node is to out of the x scope
         //  * The x distance greater the vertical tolerated distance
+        var self=this;
         topics = topics.filter(function (topic) {
             var tpos = topic.getPosition();
             // Center topic has different alignment than the rest of the nodes. That's why i need to divide it by two...
             var txborder = tpos.x + (topic.getSize().width / 2) * Math.sign(sPos.x);
             var distance = (sPos.x - txborder) * Math.sign(sPos.x);
+            //console.log("distance between: " + topic.getId() + " " + distance);
+            if(topic.getId()==rootNodeId){
+                var radius=self._getRadius(topic.getChildren());
+                return  (distance < 2*radius);
+            }
             return  distance > 0 && (distance < mindplot.DragConnector.MAX_VERTICAL_CONNECTION_TOLERANCE);
 
         });
@@ -133,6 +144,12 @@ mindplot.DragConnector = new Class({
 
         return Math.abs(sourcePosition.y - targetPosition.y) < targetSize.height / 2;
 
+    },
+    _getRadius: function(nodes){
+        var radius=mindplot.layout.CyclicSorter.BASE_RADIUS;
+        var factor= (Math.sqrt(3*nodes.length)/5 +1);
+        radius*=factor;
+        return radius;
     }
 
 });
