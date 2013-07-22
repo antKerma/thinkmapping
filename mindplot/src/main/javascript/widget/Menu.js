@@ -386,7 +386,7 @@ mindplot.widget.Menu = new Class({
                     {'class':'modalDialog saveAsModalDialog',
                         closeButton:true,
                         destroyOnClose:true,
-                        title:'Ssdsddsd'
+                        title: $msg('SAVE_AS')
                     });
                 reqDialog.setRequestOptions({
                     onRequest:function () {
