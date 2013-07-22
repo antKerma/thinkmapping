@@ -379,6 +379,25 @@ mindplot.widget.Menu = new Class({
             }
         }
 
+        var saveasElem = $('saveAs');
+        if (saveasElem) {
+            this._addButton('saveAs', false, false, function () {
+                var reqDialog = new MooDialog.Request('c/iframeWrapper?url=c/maps/' + mapId + "/saveas", null,
+                    {'class':'modalDialog saveAsModalDialog',
+                        closeButton:true,
+                        destroyOnClose:true,
+                        title:'Ssdsddsd'
+                    });
+                reqDialog.setRequestOptions({
+                    onRequest:function () {
+                        reqDialog.setContent($msg('LOADING'));
+                    }
+                });
+                MooDialog.Request.active = reqDialog;
+
+            });
+        }
+
         var discardElem = $('discard');
         if (discardElem) {
             this._addButton('discard', false, false, function () {
@@ -433,25 +452,6 @@ mindplot.widget.Menu = new Class({
                         closeButton:true,
                         destroyOnClose:true,
                         title:$msg('PUBLISH')
-                    });
-                reqDialog.setRequestOptions({
-                    onRequest:function () {
-                        reqDialog.setContent($msg('LOADING'));
-                    }
-                });
-                MooDialog.Request.active = reqDialog;
-
-            });
-        }
-
-        var saveasElem = $('saveAs');
-        if (saveasElem) {
-            this._addButton('saveAs', false, false, function () {
-                var reqDialog = new MooDialog.Request('c/iframeWrapper?url=c/maps/' + mapId + "/saveas", null,
-                    {'class':'modalDialog saveAsModalDialog',
-                        closeButton:true,
-                        destroyOnClose:true,
-                        title:$msg('TOOLBAR_SAVE_AS')
                     });
                 reqDialog.setRequestOptions({
                     onRequest:function () {
